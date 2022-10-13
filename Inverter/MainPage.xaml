@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Inverter.MainPage">
+
+    <Grid
+        VerticalOptions="Center"
+        MinimumHeightRequest="200"
+        MinimumWidthRequest="200">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <VerticalStackLayout
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Padding="30"
+            Spacing="25">
+            <Button Text="Sterowanie falą prostokątną" 
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Clicked="GoToRectangle"/>
+            <Button Text="Sterowanie PWM" 
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Clicked="GoToPWM"/>
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>
