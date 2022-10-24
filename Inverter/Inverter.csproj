@@ -53,7 +53,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="GenerateInverter\Views\InverterV.xaml">
+	  <MauiXaml Update="Display\Views\DisplayV.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="GenerateInverter\Views\GenerateInverterV.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\PWM.xaml">
@@ -62,6 +65,12 @@
 	  <MauiXaml Update="Pages\Rectangle.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="GenerateInverter\Views\GenerateInverterV.xaml.cs">
+	    <DependentUpon>GenerateInverterV.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

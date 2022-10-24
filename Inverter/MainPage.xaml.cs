@@ -9,11 +9,11 @@ public partial class MainPage : ContentPage
 		InitializeComponent();
 	}
 
-	private async void GoToRectangle(object sender, EventArgs e)
+	private async void CreateNewInverter(object sender, EventArgs e)
 	{
 		await Navigation.PushAsync(new InverterV());
 	}
-	private async void GoToPWM(object sender, EventArgs e)
+	private async void Configuration(object sender, EventArgs e)
 	{
 		await Navigation.PushAsync(new InverterV());
 	}

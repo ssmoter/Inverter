@@ -4,39 +4,35 @@ namespace Inverter.Data
 {
     public class FileManager
     {
-        private string _filePathInverter;
-        private string _filePathData;
+        public string FileName = @"Model";
+        public string FilePathData;
+        string path;
 
 
         public FileManager()
         {
+            path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            path += @"\Inverter";
 
-        }
-
-
-        private void DeleteFile()
-        {
-            if (System.IO.File.Exists(_filePathInverter))
+            if (!System.IO.Directory.Exists(path))
             {
-                System.IO.File.Delete(_filePathInverter);
+                System.IO.Directory.CreateDirectory(path);
             }
         }
-
-        public async void NewFile(string inverterModel)
+        public async Task<bool> NewFile(string inverterModel)
         {
-            if (System.IO.File.Exists(_filePathInverter))
-            {
-                System.IO.File.Delete(_filePathInverter);
-            }
             try
             {
-                using (System.IO.FileStream fs = System.IO.File.Create(_filePathInverter))
+                FilePathData = path + @"\" + FileName + @".cir";
+
+                using (System.IO.FileStream fs = System.IO.File.Create(FilePathData))
                 {
                     StreamWriter writer = new(fs);
                     await writer.WriteLineAsync(inverterModel);
                     writer.Close();
                     writer.Dispose();
                 }
+                return true;
             }
             catch (IOException ex)
             {
@@ -44,20 +40,21 @@ namespace Inverter.Data
             }
         }
 
-        public async Task<string> OpenFile(string OpenFilePath)
+        public async Task<string> OpenFile()
         {
-            if (!System.IO.File.Exists(_filePathData))
+            if (!System.IO.File.Exists(path + @"\" + FileName + @".out"))
             {
                 throw new IOException("Nie znaleziono pliku");
             }
             try
             {
                 string line;
-                using (StreamReader sr = new StreamReader(_filePathData, Encoding.UTF8))
+                using (StreamReader sr = new StreamReader(path + @"\" + FileName + @".out", Encoding.UTF8))
                 {
-                    line = await sr.ReadToEndAsync();
+                    line =  sr.ReadToEnd();
                 }
-                  DeleteFile();
+              //  System.IO.File.Delete(path + @"\" + FileName + @".out");
+
                 return line;
             }
             catch (IOException ex)

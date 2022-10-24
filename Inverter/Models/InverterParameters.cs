@@ -5,21 +5,21 @@ namespace Inverter.Models
     public class InverterParameters
     {
         #region ParametryFalownika
-        public double Uz { get; set; } = 100;
-        public double Fo { get; set; } = 50;
-        public double Ma { get; set; } = 0.5;
-        public double R_on { get; set; } = 0.01;
-        public double R_off { get; set; } = 100_000;
-        public double Ro { get; set; } = 10;
-        public double Lo { get; set; } = 0.003;
-        public double Eo { get; set; } = 0;
-        public double Fio { get; set; } = 0;
-        public double Fi { get; set; } = 1500;
+        public string Uz { get; set; } = "100";
+        public string Fo { get; set; } = "50";
+        public string Ma { get; set; } = "0.5";
+        public string R_on { get; set; } = "0.01";
+        public string R_off { get; set; } = "100000";
+        public string Ro { get; set; } = "10";
+        public string Lo { get; set; } = "0.003";
+        public string Eo { get; set; } = "0";
+        public string Fio { get; set; } = "0";
+        public string Fi { get; set; } = "1500";
         public int Alfa { get; set; } = 18;
         public int K { get; set; } = 0; //1 lub 0
-        public double pi
+        public string pi
         {
-            get => Math.PI;
+            get => Math.PI.ToString().Replace(',', '.');
         }
         public double Y
         {
@@ -46,22 +46,55 @@ namespace Inverter.Models
         #endregion
 
         #region Print Tran
-        public string ExtraPrintTran { get; set; }
-        public string[] DefaultPrintTran { get; set; } =
-        {
-           " I(VzP) "," I(VzN) "," I(V0) "," I(S_PA) "," I(S_PB) "," I(S_PC) "," I(S_PMA) ",
-           " I(S_PMB) "," I(S_PMC) "," I(S_NMA) "," I(S_NMB) "," I(S_NMC) "," I(S_NA) ",
-           " I(S_NB) "," I(S_NC) "," I(D_PAz) "," I(D_PBz) "," I(D_PCz) "," I(D_PMAz) ",
-           " I(D_PMBz) "," I(D_PMCz) "," I(D_NMAz) "," I(D_NMBz) "," I(D_NMCz) "," I(D_NAz) ",
-           " I(D_NBz) "," I(D_NCz) "," I(DPA) "," I(DPB) "," I(DPC) "," I(DNA) "," I(DNB) ",
-            " I(DNC) "," I(RoA) "," I(RoB) "," I(RoC) ",
-        };
+        public List<Inverter.Models.Data> ExtraPrintTran { get; set; }
+        public List<Inverter.Models.Data> DefaultPrintTran { get; private set; }
+
         #endregion
-
-
 
         public InverterParameters()
         {
+            #region PritnTran
+
+            DefaultPrintTran = new List<Data>();
+            DefaultPrintTran.Add(new Data() { DataName = "I(VzP)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(VzN)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(V0)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_PA)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_PB)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_PC)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_PMA)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_PMB)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_PMC)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_NMA)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_NMB)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_NMC)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_NA)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_NB)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(S_NC)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_PAz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_PBz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_PCz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_PMAz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_PMBz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_PMCz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_NMAz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_NMBz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_NMCz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_NAz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_NBz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(D_NCz)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(DPA)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(DPB)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(DPC)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(DNA)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(DNB)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(DNC)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(RoA)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(RoB)" });
+            DefaultPrintTran.Add(new Data() { DataName = "I(RoC)" });
+
+            #endregion
+
             StringModel = CreateNewModel();
         }
 
@@ -74,36 +107,36 @@ namespace Inverter.Models
             StringBuilder sr = new();
 
             #region Param
-
+            sr.AppendLine();
             sr.Append(".PARAM Uz=");
-            sr.AppendLine(Uz.ToString());
+            sr.AppendLine(Uz);
             sr.Append(".PARAM fo=");
-            sr.AppendLine(Fo.ToString());
+            sr.AppendLine(Fo);
             sr.Append(".PARAM ma=");
-            sr.AppendLine(Ma.ToString());
+            sr.AppendLine(Ma);
             sr.AppendLine(".PARAM UG_on=1");
             sr.AppendLine(".PARAM UG_off=0");
             sr.Append(".PARAM R_on=");
-            sr.AppendLine(R_on.ToString());
+            sr.AppendLine(R_on);
             sr.Append(".PARAM R_off=");
-            sr.AppendLine(R_off.ToString());
+            sr.AppendLine(R_off);
             sr.Append(".PARAM Ro=");
-            sr.AppendLine(Ro.ToString());
+            sr.AppendLine(Ro);
             sr.Append(".PARAM Lo=");
-            sr.AppendLine(Lo.ToString());
+            sr.AppendLine(Lo);
             sr.Append(".PARAM Eo=");
-            sr.AppendLine(Eo.ToString());
+            sr.AppendLine(Eo);
             sr.Append(".PARAM fio=");
-            sr.AppendLine(Fio.ToString());
+            sr.AppendLine(Fio);
             sr.Append(".PARAM fi=");
-            sr.AppendLine(Fi.ToString());
+            sr.AppendLine(Fi);
             sr.Append(".PARAM alfa=");
             sr.AppendLine(Alfa.ToString());
             sr.Append(".PARAM k=");
             sr.AppendLine(K.ToString());
-            sr.AppendLine(".PARAM y=alfa/90");
+            sr.AppendLine(".PARAM y={alfa/90}");
             sr.Append(".PARAM pi=");
-            sr.AppendLine(Math.PI.ToString());
+            sr.AppendLine(pi);
 
             #endregion
 
@@ -127,6 +160,8 @@ namespace Inverter.Models
             #region Options
             sr.AppendLine();
             sr.Append(".OPTIONS itl4=200  reltol=0.03  numdgt=16  node");
+            sr.AppendLine();
+
             #endregion
 
             #region Probe
@@ -140,21 +175,27 @@ namespace Inverter.Models
             #endregion
 
             #region Print Train
+
             sr.AppendLine();
             sr.Append(".PRINT TRAN ");
-            for (int i = 0; i < DefaultPrintTran.Length; i++)
+            for (int i = 0; i < DefaultPrintTran.Count; i++)
             {
                 if (i % 5 == 0)
                 {
                     sr.AppendLine();
+                    sr.Append("+ ");
                 }
-                sr.Append(DefaultPrintTran[i]);
+                sr.Append(" " + DefaultPrintTran[i].DataName + " ");
             }
-            if (!string.IsNullOrEmpty(ExtraPrintTran))
+            if (ExtraPrintTran != null)
             {
-                sr.Append(" ");
-                sr.Append(ExtraPrintTran);
+                foreach (var item in ExtraPrintTran)
+                {
+                    sr.Append(" ");
+                    sr.Append(" " + item.DataName + " ");
+                }
             }
+            sr.AppendLine();
 
             #endregion
 
@@ -163,6 +204,8 @@ namespace Inverter.Models
             sr.Append(".MODEL DIODA d BV=2k");
             sr.AppendLine();
             sr.Append(".MODEL  KLUCZ  VSWITCH  ROFF={R_off}  RON={R_on}  VOFF={UG_off}  VON={UG_on}");
+            sr.AppendLine();
+
             #endregion
 
             #region Zasilanie
@@ -172,6 +215,7 @@ namespace Inverter.Models
             sr.Append("VzN 0 23 {Uz/2}");
             sr.AppendLine();
             sr.Append("V0 24 0 ");
+            sr.AppendLine();
 
             #endregion
 
@@ -183,6 +227,7 @@ namespace Inverter.Models
             sr.Append("ViP    101    0   pulse(  0  1  0  {(0.5-0.5m)/fi}  {(0.5-0.5m)/fi}  {1m/fi}  {1/fi} )");
             sr.AppendLine();
             sr.Append("ViN    102    0   pulse( -1  0  0  {(0.5-0.5m)/fi}  {(0.5-0.5m)/fi}  {1m/fi}  {1/fi} )");
+            sr.AppendLine();
 
             #endregion
 
@@ -193,6 +238,8 @@ namespace Inverter.Models
             sr.Append("EmB    104    0   VALUE  {ma*sin(2*pi*fo*TIME-2*pi/3)}");
             sr.AppendLine();
             sr.Append("EmC    105    0   VALUE  {ma*sin(2*pi*fo*TIME+2*pi/3)}");
+            sr.AppendLine();
+
             #endregion
 
             #region Przebiegi pomocnicze dla fali prostokatnej napiecia wyjaciowego
@@ -202,6 +249,8 @@ namespace Inverter.Models
             sr.Append("V_B    119    0   pulse( -1  1  {1/(3*fo)}  {(0.5-0.5m)/fo}  {(0.5-0.5m)/fo}  {1m/fo}  {1/fo} )");
             sr.AppendLine();
             sr.Append("V_C    120    0   pulse( -1  1  {2/(3*fo)}  {(0.5-0.5m)/fo}  {(0.5-0.5m)/fo}  {1m/fo}  {1/fo} )");
+            sr.AppendLine();
+
             #endregion
 
             #region Przebiegi sterujace (bramkowe)
@@ -247,7 +296,7 @@ namespace Inverter.Models
             sr.AppendLine();
             sr.Append("S_PB     1    3    107   0   klucz");
             sr.AppendLine();
-            sr.Append("S_PC     1    4    108   0   klucz\r\n");
+            sr.Append("S_PC     1    4    108   0   klucz");
             sr.AppendLine();
 
             sr.AppendLine();
@@ -255,7 +304,7 @@ namespace Inverter.Models
             sr.AppendLine();
             sr.Append("S_PMB    6    9    110   0   klucz");
             sr.AppendLine();
-            sr.Append("S_PMC    7   10    111   0   klucz\r\n");
+            sr.Append("S_PMC    7   10    111   0   klucz");
             sr.AppendLine();
 
             sr.AppendLine();

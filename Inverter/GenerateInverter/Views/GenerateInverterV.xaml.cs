@@ -2,8 +2,8 @@ namespace Inverter.GenerateInverter.Views;
 
 public partial class InverterV : ContentPage
 {
-	public InverterV()
-	{
-		InitializeComponent();
-	}
+    public InverterV()
+    {
+        InitializeComponent();
+    }
 }
