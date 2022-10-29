@@ -130,7 +130,7 @@ namespace Inverter.GenerateInverter.ViewsModel
 
                     Message.Add("Aplikacja została otwarta");
                 }
-
+                LoadDataColor=Colors.Green;
             }
             catch (Exception ex)
             {
@@ -150,23 +150,28 @@ namespace Inverter.GenerateInverter.ViewsModel
         #endregion
 
         #region WczytajDane
-
-        private string _loadDataColor = "Gray";
-        public string LoadDataColor
+        
+        private Color _loadDataColor = Colors.Grey;
+        public Color LoadDataColor
         {
             get => _loadDataColor;
-            set => _loadDataColor = value;
+            set
+            {
+                _loadDataColor = value;
+                OnPropertyChanged("LoadDataColor");
+            }
+
         }
 
         public ICommand LoadData => new Command(() =>
         {
             ResponseModel response = new(_FileManager.FilePathData);
 
-            response.Data = InverterM.DefaultDataNotify.ToList();
-            if(InverterM.DataNotify.Any(x=> !string.IsNullOrEmpty(x.DataName)))
-                response.Data.AddRange(InverterM.DataNotify);
+            response.DataGraphs = InverterM.DefaultDataNotify.ToList();
+            if (InverterM.DataNotify.Any(x => !string.IsNullOrEmpty(x.DataName)))
+                response.DataGraphs.AddRange(InverterM.DataNotify);
 
-            App.Current.MainPage = new NavigationPage(new DisplayV(response));
+            App.Current.MainPage = new NavigationPage(new DisplayV(new Display.ViewsModel.DisplayVM()));
         });
 
         #endregion

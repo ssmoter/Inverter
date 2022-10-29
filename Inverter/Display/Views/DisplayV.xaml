@@ -2,11 +2,102 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Inverter.Display.Views.DisplayV"
+             xmlns:local="clr-namespace:Inverter.Display.Views"
+             xmlns:drawable="clr-namespace:Inverter.Data.Draw"
              Title="DisplayV">
-    <VerticalStackLayout>
-        <Label 
-            x:Name="labelTest"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <ContentPage.Resources>
+        <drawable:Axis x:Key="DrawableAxis"/>
+    </ContentPage.Resources>
+
+
+    <ScrollView>
+        <Grid 
+                ColumnDefinitions="*,*" ColumnSpacing="10"
+                RowDefinitions="auto,300,auto,*" RowSpacing="10">
+            <!--Konfiguracja-->
+            <Label FontSize="Title" HorizontalOptions="Center" Text="Konfiguracja" Grid.Row="0" Grid.Column="0"/>
+            <Label FontSize="Title" HorizontalOptions="Center" Text="Schemat" Grid.Row="0" Grid.Column="1"/>
+            <Label FontSize="Title" HorizontalOptions="Center" Text="Wykresy" Grid.Row="2" Grid.ColumnSpan="2"/>
+
+            <ContentView Grid.Row="1" Grid.Column="0">
+                <Grid     ColumnDefinitions="*,*,*,*,*,50" ColumnSpacing="10"
+                          RowDefinitions="auto,*,auto,auto,auto">
+                    <!--Edycja-->
+                    <Label Grid.Row="2" Grid.ColumnSpan="5" Text="Edycja" HorizontalOptions="Center"/>
+
+                    <Editor MinimumWidthRequest="40" Grid.Row="3" Grid.Column="0" Placeholder="ID" HorizontalOptions="Center" IsEnabled="False"/>
+                    <Editor MinimumWidthRequest="40" Text="{Binding DataGraphUpdateItem.UserDataName}" Grid.Row="3" Grid.Column="1" Placeholder="Nazwa" HorizontalOptions="Center"/>
+                    <Editor MinimumWidthRequest="40" Text="{Binding DataGraphUpdateItem.UserColor}" Grid.Row="3" Grid.Column="2" Placeholder="Color" HorizontalOptions="Center"/>
+                    <Editor MinimumWidthRequest="40" Text="{Binding DataGraphUpdateItem.Multiplier}" Grid.Row="3" Grid.Column="3" Placeholder="Skala" HorizontalOptions="Center" Keyboard="Numeric" />
+                    <CheckBox Grid.Row="3" Grid.Column="4" IsChecked="{Binding DataGraphUpdateItem.Visible}" HorizontalOptions="Center"/>
+                    <Button Grid.Row="4" Grid.ColumnSpan="5" Command="{Binding UpdateRowCommand}" HorizontalOptions="Center" Text="Aktualizuj" Margin="0,5,0,0"/>
+                    <ListView 
+                            Grid.Row="1" Grid.ColumnSpan="5"
+                            ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem}">
+                        <ListView.Header>
+                            <StackLayout>
+                                <Grid
+                                    ColumnDefinitions="*,*,*,*,*" ColumnSpacing="10"
+                                        RowDefinitions="*" RowSpacing="10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="ID" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="1" Text="Nazwa" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="2" Text="Color" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="3" Text="Skala" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="4" Text="Widoczny" HorizontalOptions="Center"/>
+                                </Grid>
+                            </StackLayout>
+                        </ListView.Header>
+                        <ListView.Footer>
+                            <StackLayout>
+                                <Grid
+                                    ColumnDefinitions="*,*,*,*,*" ColumnSpacing="10"
+                                     RowDefinitions="*" RowSpacing="10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="ID" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="1" Text="Nazwa" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="2" Text="Color" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="3" Text="Skala" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0" Grid.Column="4" Text="Widoczny" HorizontalOptions="Center"/>
+                                </Grid>
+                            </StackLayout>
+                        </ListView.Footer>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid
+                                       ColumnDefinitions="*,*,*,*,*" ColumnSpacing="10"
+                                        RowDefinitions="*" RowSpacing="10">
+                                        <Label  Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" Text="{Binding DataName}"/>
+                                        <Label Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" Text="{Binding UserDataName}"/>
+                                        <Label Grid.Row="0" Grid.Column="2" HorizontalOptions="Center" Text="{Binding UserColor}"/>
+                                        <Label Grid.Row="0" Grid.Column="3" HorizontalOptions="End" Text="{Binding Multiplier}"/>
+                                        <CheckBox Grid.Row="0" Grid.Column="4" HorizontalOptions="End" IsChecked="{Binding Visible}" IsEnabled="False"/>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </ContentView>
+            <ScrollView Grid.Row="1" Grid.Column="1">
+                <Grid>
+                    <BoxView Color="Blue"/>
+                    <Label Text="Schemat" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Grid>
+            </ScrollView>
+            <ScrollView Grid.Row="3" Grid.ColumnSpan="2" HorizontalOptions="End">
+                <Grid
+                    ColumnDefinitions="*"
+                    RowDefinitions="*">
+                    <BoxView Color="White"/>
+                    <GraphicsView 
+                        Drawable="{DynamicResource DrawableAxis}"/>
+
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </ScrollView>
+
 </ContentPage>
+
+

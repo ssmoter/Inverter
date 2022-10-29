@@ -3,25 +3,29 @@
     public class ResponseModel
     {
         public string FileDataPath { get; set; }
-        public List<Data> Data { get; set; }
+        public List<DataGraph> DataGraphs { get; set; }
+        public ResponseModel()
+        {
+            DataGraphs = new();
+        }
         public ResponseModel(string fileDataPath)
         {
-            Data = new();
+            DataGraphs = new();
             FileDataPath = fileDataPath;
         }
     }
 
-    public class Data
+    public class DataGraph
     {
         public string DataName { get; set; }
         public string UserDataName { get; set; }
         public Color UserColor { get; set; }
-        public int Multiplier { get; set; } = 1;
+        public float? Multiplier { get; set; } = 1.00f;
         public List<float> X { get; set; }
         public List<float> Y { get; set; }
-        public bool Default { get; set; } = false;
+        public bool Visible { get; set; } = false;
 
-        public Data()
+        public DataGraph()
         {
             SetColor();
             X = new();

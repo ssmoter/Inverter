@@ -178,7 +178,7 @@
 
                 <Button Grid.Row="0" Grid.Column="0" Text="Ustawienia początkowe" TextColor="Black" Command="{Binding InitialValues}"/>
                 <Button Grid.Row="0" Grid.Column="1" Text="Wygeneruj plik" TextColor="Black" Command="{Binding CreatedNewFile}"/>
-                <Button Grid.Row="0" Grid.Column="2" Text="Wczytaj Plik" TextColor="Black" Command="{Binding LoadData}" BackgroundColor="Gray"/>
+                <Button Grid.Row="0" Grid.Column="2" Text="Wczytaj Plik" TextColor="Black" Command="{Binding LoadData}" BackgroundColor="{Binding LoadDataColor}"/>
 
             </Grid>
         </Grid>

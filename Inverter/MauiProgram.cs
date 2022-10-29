@@ -1,4 +1,7 @@
-﻿namespace Inverter;
+﻿using Inverter.Display.Views;
+using Inverter.Display.ViewsModel;
+
+namespace Inverter;
 
 public static class MauiProgram
 {
@@ -13,6 +16,15 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
-		return builder.Build();
-	}
+
+
+        builder.Services.AddSingleton<DisplayVM>();
+
+        builder.Services.AddSingleton<DisplayV>();
+
+		var app = builder.Build();
+
+		return app;
+
+    }
 }

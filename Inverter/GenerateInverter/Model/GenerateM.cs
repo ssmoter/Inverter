@@ -288,8 +288,8 @@ namespace Inverter.GenerateInverter.Model
                 }
             }
         }
-        private ObservableCollection<Inverter.Models.Data> _DefaultDataNotify;
-        public ObservableCollection<Inverter.Models.Data> DefaultDataNotify
+        private ObservableCollection<Inverter.Models.DataGraph> _DefaultDataNotify;
+        public ObservableCollection<Inverter.Models.DataGraph> DefaultDataNotify
         {
             get => _DefaultDataNotify;
             set
@@ -299,8 +299,8 @@ namespace Inverter.GenerateInverter.Model
             }
         }
 
-        private ObservableCollection<Inverter.Models.Data> _DataNotify;
-        public ObservableCollection<Inverter.Models.Data> DataNotify
+        private ObservableCollection<Inverter.Models.DataGraph> _DataNotify;
+        public ObservableCollection<Inverter.Models.DataGraph> DataNotify
         {
             get => _DataNotify;
             set
@@ -310,8 +310,8 @@ namespace Inverter.GenerateInverter.Model
             }
         }
 
-        private Inverter.Models.Data _SingleDataNotify;
-        public Inverter.Models.Data SingleDataNotify
+        private Inverter.Models.DataGraph _SingleDataNotify;
+        public Inverter.Models.DataGraph SingleDataNotify
         {
             get => _SingleDataNotify;
             set
@@ -320,8 +320,8 @@ namespace Inverter.GenerateInverter.Model
                 OnPropertyChanged("SingleDataNotify", false);
             }
         }
-        private Inverter.Models.Data _SelectedDataNotify;
-        public Inverter.Models.Data SelectedDataNotify
+        private Inverter.Models.DataGraph _SelectedDataNotify;
+        public Inverter.Models.DataGraph SelectedDataNotify
         {
             get => _SelectedDataNotify;
             set
@@ -375,9 +375,13 @@ namespace Inverter.GenerateInverter.Model
                 _InverterParameters.ExtraPrintTran = DataNotify.ToList();
 
             if (SelectedDataNotify != null)
+            {
                 IsSelectedDataNotify = true;
+            }
             else
+            {
                 IsSelectedDataNotify = false;
+            }
 
             _InverterParameters.CreateNewModel();
             StringModelNotify = _InverterParameters.StringModel;
@@ -394,7 +398,6 @@ namespace Inverter.GenerateInverter.Model
         {
             DataNotify.Remove(SelectedDataNotify);
             SelectedDataNotify = null;
-            SelectedDataNotify = new();
             RefreshStringModel();
         });
 
@@ -412,9 +415,12 @@ namespace Inverter.GenerateInverter.Model
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null, bool refresh = true)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             if (refresh)
+            {
                 RefreshStringModel();
+            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         }
     }
 

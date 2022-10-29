@@ -1,4 +1,5 @@
-﻿using Inverter.GenerateInverter.Views;
+﻿using Inverter.Display.Views;
+using Inverter.GenerateInverter.Views;
 
 namespace Inverter;
 
@@ -15,7 +16,7 @@ public partial class MainPage : ContentPage
 	}
 	private async void Configuration(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new InverterV());
+		await Navigation.PushAsync(new DisplayV(new Display.ViewsModel.DisplayVM()));
 	}
 
 

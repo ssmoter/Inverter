@@ -46,8 +46,8 @@ namespace Inverter.Models
         #endregion
 
         #region Print Tran
-        public List<Inverter.Models.Data> ExtraPrintTran { get; set; }
-        public List<Inverter.Models.Data> DefaultPrintTran { get; private set; }
+        public List<Inverter.Models.DataGraph> ExtraPrintTran { get; set; }
+        public List<Inverter.Models.DataGraph> DefaultPrintTran { get; private set; }
 
         #endregion
 
@@ -55,43 +55,43 @@ namespace Inverter.Models
         {
             #region PritnTran
 
-            DefaultPrintTran = new List<Data>();
-            DefaultPrintTran.Add(new Data() { DataName = "I(VzP)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(VzN)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(V0)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_PA)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_PB)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_PC)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_PMA)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_PMB)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_PMC)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_NMA)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_NMB)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_NMC)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_NA)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_NB)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(S_NC)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_PAz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_PBz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_PCz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_PMAz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_PMBz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_PMCz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_NMAz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_NMBz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_NMCz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_NAz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_NBz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(D_NCz)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(DPA)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(DPB)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(DPC)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(DNA)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(DNB)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(DNC)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(RoA)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(RoB)" });
-            DefaultPrintTran.Add(new Data() { DataName = "I(RoC)" });
+            DefaultPrintTran = new List<DataGraph>();
+            DefaultPrintTran.Add(new DataGraph() { UserDataName = "test", DataName = "I(VzP)" });
+            DefaultPrintTran.Add(new DataGraph() { UserDataName = "test", DataName = "I(VzN)" });
+            DefaultPrintTran.Add(new DataGraph() { UserDataName = "test", DataName = "I(V0)" });
+            DefaultPrintTran.Add(new DataGraph() { UserDataName = "test", DataName = "I(S_PA)" });
+            DefaultPrintTran.Add(new DataGraph() { UserDataName = "testtesttesttesttesttest", DataName = "I(S_PB)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PC)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMA)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMB)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMC)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMA)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMB)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMC)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NA)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NB)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NC)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PAz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PBz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PCz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMAz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMBz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMCz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMAz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMBz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMCz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NAz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NBz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NCz)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPA)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPB)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPC)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNA)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNB)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNC)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(RoA)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(RoB)" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(RoC)" });
 
             #endregion
 

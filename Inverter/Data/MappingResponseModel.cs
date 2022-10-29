@@ -37,14 +37,14 @@ namespace Inverter.Data
                     currentLine = TrimWhiteSpace(currentLine);
                     if (currentLine.Count > 0)
                     {
-                        for (int j = 0; j < responseModel.Data.Count; j++)
+                        for (int j = 0; j < responseModel.DataGraphs.Count; j++)
                         {
                             for (int k = 0; k < currentData.Count; k++)
                             {
-                                if (responseModel.Data[j].DataName == currentData[k])
+                                if (responseModel.DataGraphs[j].DataName == currentData[k])
                                 {
-                                    responseModel.Data[j].Y.Add(Single.Parse(currentLine[k], NumberStyles.Float, new CultureInfo("en-US")));
-                                    responseModel.Data[j].X.Add(Single.Parse(currentLine[0], NumberStyles.Float, new CultureInfo("en-US")));
+                                    responseModel.DataGraphs[j].Y.Add(Single.Parse(currentLine[k], NumberStyles.Float, new CultureInfo("en-US")));
+                                    responseModel.DataGraphs[j].X.Add(Single.Parse(currentLine[0], NumberStyles.Float, new CultureInfo("en-US")));
                                 }
                             }
                         }
