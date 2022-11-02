@@ -1,47 +1,23 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace Inverter.Data.Draw
+﻿namespace Inverter.Data.Draw
 {
-    internal class Graph : BaseDrawable, INotifyPropertyChanged
+    internal class Graph : BaseDrawable
     {
-        public PathF point { get; set; }
-        public float PositionY { get; set; } = 0;
-        private int positionX;
-        public int PositionX
-        {
-            get => positionX;
-            set => positionX = value;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged( string name )
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(name)));
-        }
-        private string scaleY;
-        public string ScaleY
-        {
-            get => scaleY;
-            set
-            {
-                scaleY = value;
-                OnPropertyChanged(ScaleY);
-            }
-        }
+        public PathF point { get; set; } = new();
+        public bool ResetCanvas = false;
+        public Color Color { get; set; } = new();
 
         public override void Draw(ICanvas canvas, RectF dirtyRect)
         {
-            scaleY = (dirtyRect.Bottom / PositionY).ToString();
-            canvas.SaveState();
-            canvas.Translate(dirtyRect.Left - 10, dirtyRect.Bottom - (PositionY + 35));
+            canvas.Translate(dirtyRect.Left, dirtyRect.Top);
 
-
-            canvas.StrokeColor = Colors.Black;
+            canvas.StrokeColor = Color;
             canvas.StrokeSize = 2;
             canvas.DrawPath(point);
 
-            canvas.RestoreState();
+            canvas.StrokeColor = Colors.Black;
+
+            canvas.DrawLine(dirtyRect.Left + 30, dirtyRect.Bottom, dirtyRect.Left + 30, dirtyRect.Top); //y
+            canvas.DrawLine(dirtyRect.Width, dirtyRect.Bottom - 30, dirtyRect.Left + 10, dirtyRect.Bottom - 30); //x
 
         }
     }

@@ -18,7 +18,7 @@ namespace Inverter.Display.ViewsModel
             set
             {
                 _dataGraphs = value;
-                OnPropertyChanged("DataGraphs");
+                OnPropertyChanged(nameof(DataGraphs));
             }
         }
 
@@ -29,7 +29,7 @@ namespace Inverter.Display.ViewsModel
             set
             {
                 _dataGraphSelectedItem = value;
-                OnPropertyChanged("DataGraphSelectedItem");
+                OnPropertyChanged(nameof(DataGraphSelectedItem));
             }
         }
 
@@ -40,7 +40,7 @@ namespace Inverter.Display.ViewsModel
             set
             {
                 _dataGraphUpdateItem = value;
-                OnPropertyChanged("DataGraphSelectedItem");
+                OnPropertyChanged(nameof(DataGraphUpdateItem));
             }
         }
 
@@ -65,9 +65,18 @@ namespace Inverter.Display.ViewsModel
                 DataGraphs.Add(item);
             }
 
+            SetUpdateItem();
+        }
+
+        private void SetUpdateItem()
+        {
             DataGraphUpdateItem = new();
             DataGraphUpdateItem.UserColor = null;
             DataGraphUpdateItem.Multiplier = null;
+            DataGraphUpdateItem.LocationRow = null;
+            DataGraphUpdateItem.locationRowSpan = null;
+            OnPropertyChanged("DataGraphUpdateItem");
+
         }
 
         public ICommand UpdateRowCommand => new Command(() =>
@@ -97,14 +106,23 @@ namespace Inverter.Display.ViewsModel
             if (update.Visible != DataGraphs[n].Visible)
                 data.Visible = update.Visible;
 
+            if (update.LocationRow != null)
+            {
+                if (update.LocationRow != DataGraphs[n].LocationRow && update.LocationRow >= 0)
+                    data.LocationRow = update.LocationRow;
+            }
+            if (update.locationRowSpan != null)
+            {
+                if (update.locationRowSpan != DataGraphs[n].locationRowSpan && update.locationRowSpan >= 0)
+                    data.locationRowSpan = update.locationRowSpan;
+            }
+
+
             DataGraphs.RemoveAt(n);
             DataGraphs.Insert(n, data);
 
 
-            DataGraphUpdateItem = new();
-            DataGraphUpdateItem.Multiplier = null;
-            DataGraphUpdateItem.UserColor = null;
-            OnPropertyChanged("DataGraphUpdateItem");
+            SetUpdateItem();
         });
 
         public event PropertyChangedEventHandler PropertyChanged;

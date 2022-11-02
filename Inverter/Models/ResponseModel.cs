@@ -24,6 +24,8 @@
         public List<float> X { get; set; }
         public List<float> Y { get; set; }
         public bool Visible { get; set; } = false;
+        public int? LocationRow { get; set; } = 0;
+        public int? locationRowSpan { get; set; } = 1;
 
         public DataGraph()
         {
@@ -35,7 +37,7 @@
         public void SetColor()
         {
             Random rnd = new Random();
-            UserColor = Color.FromRgb(rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
+            UserColor = Color.FromRgb(rnd.Next(255), rnd.Next(255), rnd.Next(255));
         }
 
     }

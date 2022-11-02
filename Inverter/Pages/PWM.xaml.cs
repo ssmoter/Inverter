@@ -32,33 +32,31 @@ public partial class PWM : ContentPage
 
     public void DrawLine()
     {
-        for (int i = 0; i < 4_000; i++)
-        {
-            float x = i + 10;
-            float y = (float)(100 * Math.Sin(50 * 3.14 * i) + 50);
-            pp.Add(new PointF(x, y));
-            p2.Add(new PointF(x + 10, y));
-        }
+        //for (int i = 0; i < 4_000; i++)
+        //{
+        //    float x = i + 10;
+        //    float y = (float)(100 * Math.Sin(50 * 3.14 * i) + 50);
+        //    pp.Add(new PointF(x, y));
+        //    p2.Add(new PointF(x + 10, y));
+        //}
 
-        graph.PositionY = (float)pp.Max(e => e.Y);
-        axis.MaxNumberY = (int)graph.PositionY;
-        axis.MaxNumberX = pp.Count;
+        //axis.MaxNumberX = pp.Count;
 
-        // Draw.WidthRequest = pp.Count;
+        //// Draw.WidthRequest = pp.Count;
 
 
-        graph.point = new PathF();
+        //graph.point = new PathF();
 
-        for (int i = 0; i < pp.Count; i++)
-        {
-            graph.point.LineTo(pp[i]);
-        }
-        graph.point.MoveTo(pp[0]);
         //for (int i = 0; i < pp.Count; i++)
         //{
-        //    graph.point.LineTo(p2[i]);
+        //    graph.point.LineTo(pp[i]);
         //}
-        //graphicsDraw.Invalidate();
+        //graph.point.MoveTo(pp[0]);
+        ////for (int i = 0; i < pp.Count; i++)
+        ////{
+        ////    graph.point.LineTo(p2[i]);
+        ////}
+        ////graphicsDraw.Invalidate();
     }
 
     List<Point> pp = new List<Point>();
@@ -88,8 +86,6 @@ public partial class PWM : ContentPage
     bool isTimer = true;
     private void OnTapGestureRecognizerTapped(object sender, EventArgs args)
     {
-        this.Draw.ScaleY = double.Parse(graph.ScaleY);
-
         //if (isTimer)
         //{
         //    timer.Start();

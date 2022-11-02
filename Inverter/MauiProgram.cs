@@ -1,4 +1,5 @@
-﻿using Inverter.Display.Views;
+﻿using Inverter.Data.Draw;
+using Inverter.Display.Views;
 using Inverter.Display.ViewsModel;
 
 namespace Inverter;

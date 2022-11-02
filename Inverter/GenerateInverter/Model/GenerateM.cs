@@ -19,7 +19,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_UzNotify != value)
                 {
                     _UzNotify = value;
-                    OnPropertyChanged("UzNotify");
+                    OnPropertyChanged(nameof(UzNotify));
                 }
             }
         }
@@ -33,7 +33,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_FoNotify != value)
                 {
                     _FoNotify = value;
-                    OnPropertyChanged("FoNotify");
+                    OnPropertyChanged(nameof(FoNotify));
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_MaNotify != value)
                 {
                     _MaNotify = value;
-                    OnPropertyChanged("MaNotify");
+                    OnPropertyChanged(nameof(MaNotify));
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_R_onNotify != value)
                 {
                     _R_onNotify = value;
-                    OnPropertyChanged("R_onNotify");
+                    OnPropertyChanged(nameof(R_onNotify));
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_R_offNotify != value)
                 {
                     _R_offNotify = value;
-                    OnPropertyChanged("R_offNotify");
+                    OnPropertyChanged(nameof(R_offNotify));
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_RoNotify != value)
                 {
                     _RoNotify = value;
-                    OnPropertyChanged("RoNotify");
+                    OnPropertyChanged(nameof(RoNotify));
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_LoNotify != value)
                 {
                     _LoNotify = value;
-                    OnPropertyChanged("LoNotify");
+                    OnPropertyChanged(nameof(LoNotify));
                 }
             }
         }
@@ -117,7 +117,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_EoNotify != value)
                 {
                     _EoNotify = value;
-                    OnPropertyChanged("EoNotify");
+                    OnPropertyChanged(nameof(EoNotify));
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_FioNotify != value)
                 {
                     _FioNotify = value;
-                    OnPropertyChanged("FioNotify");
+                    OnPropertyChanged(nameof(FioNotify));
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_FiNotify != value)
                 {
                     _FiNotify = value;
-                    OnPropertyChanged("FiNotify");
+                    OnPropertyChanged(nameof(FiNotify));
                 }
             }
         }
@@ -159,7 +159,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_AlfaNotify != value)
                 {
                     _AlfaNotify = value;
-                    OnPropertyChanged("AlfaNotify");
+                    OnPropertyChanged(nameof(AlfaNotify));
                 }
             }
         }
@@ -174,7 +174,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_KNotify != value)
                 {
                     _KNotify = value;
-                    OnPropertyChanged("KNotify");
+                    OnPropertyChanged(nameof(KNotify));
                 }
             }
         }
@@ -186,7 +186,7 @@ namespace Inverter.GenerateInverter.Model
             set
             {
                 _SelectedKNotify = value;
-                OnPropertyChanged("SelectedKNotify");
+                OnPropertyChanged(nameof(SelectedKNotify));
             }
         }
 
@@ -200,7 +200,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_T1Notify != value)
                 {
                     _T1Notify = value;
-                    OnPropertyChanged("T1Notify");
+                    OnPropertyChanged(nameof(T1Notify));
                 }
             }
         }
@@ -214,7 +214,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_T2Notify != value)
                 {
                     _T2Notify = value;
-                    OnPropertyChanged("T2Notify");
+                    OnPropertyChanged(nameof(T2Notify));
                 }
             }
         }
@@ -228,7 +228,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_T3Notify != value)
                 {
                     _T3Notify = value;
-                    OnPropertyChanged("T3Notify");
+                    OnPropertyChanged(nameof(T3Notify));
                 }
             }
         }
@@ -242,7 +242,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_T4Notify != value)
                 {
                     _T4Notify = value;
-                    OnPropertyChanged("T4Notify");
+                    OnPropertyChanged(nameof(T4Notify));
                 }
             }
         }
@@ -256,7 +256,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_T5Notify != value)
                 {
                     _T5Notify = value;
-                    OnPropertyChanged("T5Notify");
+                    OnPropertyChanged(nameof(T5Notify));
                 }
             }
         }
@@ -270,7 +270,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_T6Notify != value)
                 {
                     _T6Notify = value;
-                    OnPropertyChanged("T6Notify");
+                    OnPropertyChanged(nameof(T6Notify));
                 }
             }
         }
@@ -284,7 +284,7 @@ namespace Inverter.GenerateInverter.Model
                 if (_StringModelNotify != value)
                 {
                     _StringModelNotify = value;
-                    OnPropertyChanged("StringModelNotify");
+                    OnPropertyChanged(nameof(StringModelNotify));
                 }
             }
         }
@@ -295,7 +295,7 @@ namespace Inverter.GenerateInverter.Model
             set
             {
                 _DefaultDataNotify = value;
-                OnPropertyChanged("ResponseModels");
+                OnPropertyChanged(nameof(DefaultDataNotify));
             }
         }
 
@@ -306,7 +306,7 @@ namespace Inverter.GenerateInverter.Model
             set
             {
                 _DataNotify = value;
-                OnPropertyChanged("ResponseModels");
+                OnPropertyChanged(nameof(DataNotify));
             }
         }
 
@@ -317,7 +317,7 @@ namespace Inverter.GenerateInverter.Model
             set
             {
                 this._SingleDataNotify = value;
-                OnPropertyChanged("SingleDataNotify", false);
+                OnPropertyChanged(nameof(SingleDataNotify), false);
             }
         }
         private Inverter.Models.DataGraph _SelectedDataNotify;
@@ -327,7 +327,7 @@ namespace Inverter.GenerateInverter.Model
             set
             {
                 this._SelectedDataNotify = value;
-                OnPropertyChanged("SingleDataNotify");
+                OnPropertyChanged(nameof(SelectedDataNotify));
             }
         }
 
@@ -408,7 +408,7 @@ namespace Inverter.GenerateInverter.Model
             set
             {
                 this._IsSelectedDataNotify = value;
-                OnPropertyChanged("IsSelectedDataNotify", false);
+                OnPropertyChanged(nameof(IsSelectedDataNotify), false);
             }
         }
 
