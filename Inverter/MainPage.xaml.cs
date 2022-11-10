@@ -16,7 +16,6 @@ public partial class MainPage : ContentPage
 	}
 	private async void Configuration(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new DisplayV(new Display.ViewsModel.DisplayVM()));
 	}
 
 

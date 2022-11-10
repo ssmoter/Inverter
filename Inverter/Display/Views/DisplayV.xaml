@@ -7,9 +7,9 @@
              xmlns:vm="clr-namespace:Inverter.Display.ViewsModel"
              Title="DisplayV">
 
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <vm:DisplayVM/>
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
 
     <ScrollView>
         <Grid 

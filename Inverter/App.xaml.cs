@@ -7,7 +7,5 @@ public partial class App : Application
 		InitializeComponent();
 
 		MainPage = new AppShell();
-        var width = (int)MainPage.WidthRequest;
-        var height = (int)MainPage.HeightRequest;
     }
 }

@@ -7,14 +7,16 @@ using System.Windows.Input;
 
 namespace Inverter.Display.ViewsModel
 {
+    [QueryProperty(nameof(DataGraphs),nameof(DataGraph))]
     public class DisplayVM : INotifyPropertyChanged
     {
-        private FileManager _FileManager;
-
-        private ObservableCollection<DataGraph> _dataGraphs;
-        public ObservableCollection<DataGraph> DataGraphs
+        private List<DataGraph> _dataGraphs;
+        public List<DataGraph> DataGraphs
         {
-            get => _dataGraphs;
+            get
+            {
+                return _dataGraphs;                
+            } 
             set
             {
                 _dataGraphs = value;
@@ -29,6 +31,7 @@ namespace Inverter.Display.ViewsModel
             set
             {
                 _dataGraphSelectedItem = value;
+                DataGraphUpdateItem = DataGraphSelectedItem;
                 OnPropertyChanged(nameof(DataGraphSelectedItem));
             }
         }
@@ -44,9 +47,6 @@ namespace Inverter.Display.ViewsModel
             }
         }
 
-
-
-
         public DisplayVM()
         {
             Initialization();
@@ -54,17 +54,6 @@ namespace Inverter.Display.ViewsModel
 
         private void Initialization()
         {
-            _FileManager = new();
-            ResponseModel responseModel = new();
-            InverterParameters ip = new();
-            responseModel.DataGraphs = ip.DefaultPrintTran;
-            responseModel = _FileManager.OpenFile().Result.Mapping(responseModel);
-            DataGraphs = new();
-            foreach (var item in responseModel.DataGraphs)
-            {
-                DataGraphs.Add(item);
-            }
-
             SetUpdateItem();
         }
 
@@ -72,11 +61,10 @@ namespace Inverter.Display.ViewsModel
         {
             DataGraphUpdateItem = new();
             DataGraphUpdateItem.UserColor = null;
-            DataGraphUpdateItem.Multiplier = null;
-            DataGraphUpdateItem.LocationRow = null;
-            DataGraphUpdateItem.locationRowSpan = null;
+            DataGraphUpdateItem.Multiplier = 1;
+            DataGraphUpdateItem.LocationRow = 0;
+            DataGraphUpdateItem.locationRowSpan = 1;
             OnPropertyChanged("DataGraphUpdateItem");
-
         }
 
         public ICommand UpdateRowCommand => new Command(() =>
@@ -87,17 +75,13 @@ namespace Inverter.Display.ViewsModel
             {
                 return;
             }
-            if (!string.IsNullOrEmpty(update.DataName))
-            {
-                return;
-            }
 
             var data = DataGraphs[n];
 
             if (update.UserDataName != DataGraphs[n].UserDataName && !string.IsNullOrEmpty(update.UserDataName))
                 data.UserDataName = update.UserDataName;
 
-            if (update.Multiplier != DataGraphs[n].Multiplier && update.Multiplier != null)
+            if (update.Multiplier != DataGraphs[n].Multiplier)
                 data.Multiplier = update.Multiplier;
 
             if (update.UserColor != DataGraphs[n].UserColor && update.UserColor != null)
@@ -106,16 +90,14 @@ namespace Inverter.Display.ViewsModel
             if (update.Visible != DataGraphs[n].Visible)
                 data.Visible = update.Visible;
 
-            if (update.LocationRow != null)
-            {
-                if (update.LocationRow != DataGraphs[n].LocationRow && update.LocationRow >= 0)
-                    data.LocationRow = update.LocationRow;
-            }
-            if (update.locationRowSpan != null)
-            {
-                if (update.locationRowSpan != DataGraphs[n].locationRowSpan && update.locationRowSpan >= 0)
-                    data.locationRowSpan = update.locationRowSpan;
-            }
+
+            if (update.LocationRow != DataGraphs[n].LocationRow && update.LocationRow >= 0)
+                data.LocationRow = update.LocationRow;
+
+
+            if (update.locationRowSpan != DataGraphs[n].locationRowSpan && update.locationRowSpan >= 0)
+                data.locationRowSpan = update.locationRowSpan;
+
 
 
             DataGraphs.RemoveAt(n);

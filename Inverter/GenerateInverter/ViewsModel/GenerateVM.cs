@@ -171,7 +171,11 @@ namespace Inverter.GenerateInverter.ViewsModel
             if (InverterM.DataNotify.Any(x => !string.IsNullOrEmpty(x.DataName)))
                 response.DataGraphs.AddRange(InverterM.DataNotify);
 
-            App.Current.MainPage = new NavigationPage(new DisplayV(new Display.ViewsModel.DisplayVM()));
+            Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
+                new Dictionary<string, object>
+                {
+                    [nameof(DataGraph)] = response.DataGraphs,
+                });
         });
 
         #endregion

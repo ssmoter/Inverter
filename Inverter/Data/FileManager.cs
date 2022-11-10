@@ -19,6 +19,7 @@ namespace Inverter.Data
                 System.IO.Directory.CreateDirectory(path);
             }
         }
+
         public async Task<bool> NewFile(string inverterModel)
         {
             try
