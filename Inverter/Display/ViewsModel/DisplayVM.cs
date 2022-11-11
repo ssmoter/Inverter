@@ -1,13 +1,11 @@
-﻿using Inverter.Data;
-using Inverter.Models;
-using System.Collections.ObjectModel;
+﻿using Inverter.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace Inverter.Display.ViewsModel
 {
-    [QueryProperty(nameof(DataGraphs),nameof(DataGraph))]
+    [QueryProperty(nameof(DataGraphs), nameof(DataGraph))]
     public class DisplayVM : INotifyPropertyChanged
     {
         private List<DataGraph> _dataGraphs;
@@ -15,12 +13,33 @@ namespace Inverter.Display.ViewsModel
         {
             get
             {
-                return _dataGraphs;                
-            } 
+                return _dataGraphs;
+            }
             set
             {
                 _dataGraphs = value;
                 OnPropertyChanged(nameof(DataGraphs));
+            }
+        }
+
+        private string _maxValue;
+        public string MaxValue
+        {
+            get { return _maxValue; }
+            set
+            {
+                _maxValue = value;
+                OnPropertyChanged(nameof(MaxValue));
+            }
+        }
+        private string _minValue;
+        public string MinValue
+        {
+            get { return _minValue; }
+            set
+            {
+                _minValue = value;
+                OnPropertyChanged(nameof(MinValue));
             }
         }
 
@@ -32,6 +51,14 @@ namespace Inverter.Display.ViewsModel
             {
                 _dataGraphSelectedItem = value;
                 DataGraphUpdateItem = DataGraphSelectedItem;
+
+                if (_dataGraphSelectedItem != null)
+                {
+                    _maxValue = _dataGraphSelectedItem.Y.Max().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
+                    _minValue = _dataGraphSelectedItem.Y.Min().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
+                    OnPropertyChanged(nameof(MaxValue));
+                    OnPropertyChanged(nameof(MinValue));
+                }
                 OnPropertyChanged(nameof(DataGraphSelectedItem));
             }
         }
@@ -94,17 +121,13 @@ namespace Inverter.Display.ViewsModel
             if (update.LocationRow != DataGraphs[n].LocationRow && update.LocationRow >= 0)
                 data.LocationRow = update.LocationRow;
 
-
             if (update.locationRowSpan != DataGraphs[n].locationRowSpan && update.locationRowSpan >= 0)
                 data.locationRowSpan = update.locationRowSpan;
 
 
-
             DataGraphs.RemoveAt(n);
             DataGraphs.Insert(n, data);
-
-
-            SetUpdateItem();
+            OnPropertyChanged(nameof(DataGraphs));
         });
 
         public event PropertyChangedEventHandler PropertyChanged;

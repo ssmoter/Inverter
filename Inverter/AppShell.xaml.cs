@@ -1,4 +1,5 @@
 ﻿using Inverter.Display.Views;
+using Inverter.GenerateInverter.Views;
 
 namespace Inverter;
 
@@ -8,6 +9,8 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 
-		Routing.RegisterRoute(nameof(DisplayV), typeof(DisplayV));
+		Routing.RegisterRoute(nameof(InverterV), typeof(InverterV));
+        Routing.RegisterRoute(nameof(DisplayV), typeof(DisplayV));
+
     }
 }

@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:Inverter.Display.Views"
              xmlns:drawable="clr-namespace:Inverter.Data.Draw"
              xmlns:vm="clr-namespace:Inverter.Display.ViewsModel"
-             Title="DisplayV">
+             Title="DisplayV" BackgroundColor="Black">
 
     <!--<ContentPage.BindingContext>
         <vm:DisplayVM/>
@@ -22,11 +22,11 @@
 
             <ContentView Grid.Row="1" Grid.Column="0" >
                 <Grid     ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="10"
-                          RowDefinitions="auto,*,auto,auto,auto">
+                          RowDefinitions="auto,*,auto,auto,auto,auto">
                     <!--Edycja-->
                     <Label Grid.Row="2" Grid.ColumnSpan="5" Text="Edycja" HorizontalOptions="Center"/>
 
-                    <Editor Grid.Row="3" Grid.Column="0" Placeholder="ID" HorizontalOptions="Center" IsEnabled="False"/>
+                    <Editor Grid.Row="3" Grid.Column="0" Text="{Binding DataGraphUpdateItem.DataName}" Placeholder="ID" HorizontalOptions="Center" IsEnabled="False" TextColor="LightBlue"/>
                     <Editor Grid.Row="3" Grid.Column="1" Text="{Binding DataGraphUpdateItem.UserDataName}"  Placeholder="Nazwa" HorizontalOptions="Center"/>
                     <Editor Grid.Row="3" Grid.Column="2" Text="{Binding DataGraphUpdateItem.UserColor}"  Placeholder="Color" HorizontalOptions="Center"/>
                     <Editor Grid.Row="3" Grid.Column="3" Text="{Binding DataGraphUpdateItem.Multiplier}" Placeholder="Skala" HorizontalOptions="Center" Keyboard="Numeric" />
@@ -34,6 +34,12 @@
                     <Editor Grid.Row="3" Grid.Column="5" Text="{Binding DataGraphUpdateItem.locationRowSpan}"  Placeholder="Ilość wierszy" HorizontalOptions="Center" Keyboard="Numeric" />
                     <CheckBox Grid.Row="3" Grid.Column="6" IsChecked="{Binding DataGraphUpdateItem.Visible}" HorizontalOptions="Center"/>
                     <Button Grid.Row="4" Grid.ColumnSpan="7" Clicked="UpdateRow_Clicked" Command="{Binding UpdateRowCommand}" HorizontalOptions="Center" Text="Aktualizuj" Margin="0,5,0,0"/>
+
+                    <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" TextColor="White" Text="Maksymalna: "/>
+                    <Label Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" TextColor="White" Text="{Binding MaxValue}"/>
+                    <Label Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" TextColor="White" Text="Minimalna: "/>
+                    <Label Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2" TextColor="White" Text="{Binding MinValue}"/>
+
                     <ListView 
                             Grid.Row="1" Grid.ColumnSpan="7"
                             ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem }">
@@ -99,7 +105,7 @@
                     RowDefinitions="1,*,1"
                     >
                     <GraphicsView
-                        Grid.Row="1" Grid.Column="0"/>
+                        Grid.Row="1" Grid.Column="0" />
                     <ScrollView
                         Grid.Row="1" Grid.Column="0"
                         ZIndex="9" BackgroundColor="White">

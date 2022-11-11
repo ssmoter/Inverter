@@ -1,4 +1,4 @@
-using Inverter.Data;
+﻿using Inverter.Data;
 using Inverter.Data.Draw;
 using Inverter.Display.ViewsModel;
 using Inverter.Models;
@@ -15,19 +15,16 @@ public partial class DisplayV : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
-        // DataGraphs = vm.DataGraphs.ToList();
-
-        //  Initialization();
     }
 
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
 
-        Initialization();
+        await Initialization();
     }
 
-    private void Initialization()
+    private async Task Initialization()
     {
         try
         {
@@ -39,16 +36,22 @@ public partial class DisplayV : ContentPage
             ResponseModel rs = new ResponseModel();
             rs.DataGraphs = DataGraphs;
 
-            DataGraphs = fm.OpenFile().Result.Mapping(rs).DataGraphs;
+            var result = await fm.OpenFile();
+            DataGraphs = result.Mapping(rs).DataGraphs;
 
 
             _graphs = new();
+            if (DataGraphs == null)
+            {
+                return;
+            }            
             for (int i = 0; i < DataGraphs.Count; i++)
             {
                 _graphs.Add(new Graph());
                 Resources.Add(i.ToString(), _graphs[i]);
             }
         }
+
         catch (Exception)
         {
             throw;
@@ -59,7 +62,7 @@ public partial class DisplayV : ContentPage
     private GraphicsView SetGraphicsView(GraphicsView graphicsView)
     {
         graphicsView = new();
-        graphicsView.Margin = new Thickness(20, 5, 0, 0);
+        graphicsView.Margin = new Thickness(5, 5, 0, 0);
         graphicsView.ZIndex = 10;
         return graphicsView;
     }
@@ -89,22 +92,42 @@ public partial class DisplayV : ContentPage
     {
         try
         {
+            List<int> axisX = new List<int>();
             gGraph.Clear();
+            //Ustawienie ilości widocznych Wykresów
             var numberCurrentGraph = SetNumberCurrentGraph();
+            //Ustawienie ilości wierszy
             SetGraphRowDefinitions(gGraph, numberCurrentGraph);
+
 
             for (int i = 0; i < DataGraphs.Count; i++)
             {
                 if (DataGraphs[i].Visible)
                 {
+
                     _graphicsDraw = SetGraphicsView(_graphicsDraw);
                     _graphicsDraw.Drawable = _graphs[i];
 
+                    //Ustawienie lokacji wykresu
                     gGraph.Add(_graphicsDraw, 0, DataGraphs[i].LocationRow);
+                    //Ustawienie wysokości wykresu
                     gGraph.SetRowSpan(_graphicsDraw, DataGraphs[i].locationRowSpan);
-
+                    //Ustawienie wyświetlanych wartości osi x
+                    _graphs[i].AxisX = DataGraphs[i].X;
+                    //sprawdzenie czy tylko raz zostanie opisana oś X
+                    _graphs[i].AxisXWrite = !axisX.Any(x => x == DataGraphs[i].LocationRow);
+                    axisX.Add(DataGraphs[i].LocationRow);
+                    //ustawienie koloru wykresu
                     _graphs[i].Color = DataGraphs[i].UserColor;
                     _graphs[i].point = new PathF();
+                    //Nazwa wykresy
+                    _graphs[i].Name = DataGraphs[i].DataName;
+                    //pozycja wykresów
+                    int PositionName = 1;
+                    PositionName = axisX.FindAll(x => x == DataGraphs[i].LocationRow).Count;
+                    _graphs[i].PositionName = PositionName;
+
+                    //os Y
                     _graphs[i].MaxY = DataGraphs[i].Y.Max(x => Math.Abs(x));
                     int n = 30;
                     int secondLoop = 0;

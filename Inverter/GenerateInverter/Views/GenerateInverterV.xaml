@@ -3,24 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Inverter.GenerateInverter.Views.InverterV"
              xmlns:VM="clr-namespace:Inverter.GenerateInverter.ViewsModel"
-             Title="Konfiguracja" >
+             Title="Konfiguracja" BackgroundColor="Black">
 
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <VM:GenerateMV/>
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
 
     <ScrollView>
         <Grid
-            RowDefinitions="auto,auto,auto,*"
+            RowDefinitions="AUTO,auto,auto,*"
+            RowSpacing="5"
             ColumnDefinitions="auto,15,auto,15,auto" Margin="10,0,10,0">
 
             <!--komunikaty-->
-            <CollectionView 
-                Grid.ColumnSpan="5"
-                Grid.Row="0" ItemsSource="{Binding Message}" 
-                IsVisible="{Binding ShowMessage}">
+                <ListView 
+                Grid.ColumnSpan="5" Grid.Row="0" 
+                MaximumHeightRequest="50" MinimumHeightRequest="20"
+                 ItemsSource="{Binding Message}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding .}" TextColor="Red"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
-            </CollectionView>
             <!--ParametryFalownika-->
             <Grid
                 Grid.Row="1"           

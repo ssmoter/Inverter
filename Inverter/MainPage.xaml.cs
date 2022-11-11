@@ -12,10 +12,11 @@ public partial class MainPage : ContentPage
 
 	private async void CreateNewInverter(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new InverterV());
+		await Shell.Current.GoToAsync($"{nameof(InverterV)}");
 	}
 	private async void Configuration(object sender, EventArgs e)
 	{
+
 	}
 
 
