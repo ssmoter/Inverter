@@ -80,7 +80,6 @@ namespace Inverter.GenerateInverter.ViewsModel
         }
 
 
-        #region Nowy plik
         private ObservableCollection<string> _Message;
         public ObservableCollection<string> Message
         {
@@ -93,9 +92,11 @@ namespace Inverter.GenerateInverter.ViewsModel
         }
         private void AddMessage(string message)
         {
-            Message.Insert(0, message);
-            // Message.Add(message);
+            //Message.Insert(0, message);
+            Message.Add(message);
+            Message.Move(Message.Count - 1, 0);
         }
+        #region Nowy plik
 
         public ICommand CreatedNewFile => new Command(async () =>
         {
@@ -108,8 +109,14 @@ namespace Inverter.GenerateInverter.ViewsModel
                     AddMessage("Plik Został utworzony");
 
                     AddMessage("Uruchamianie Aplikacji");
+#if WINDOWS
                     Process.Start(@"F:\pspice\instal\PSpice\pspice.exe", _FileManager.FilePathData);
                     AddMessage("Aplikacja została uruchomiona");
+#else
+                    AddMessage("Aplikacja zostanie uruchomiona tylko na systemie Windows");
+                    return;
+#endif
+
                 }
                 LoadDataColor = Colors.Green;
             }
@@ -146,11 +153,24 @@ namespace Inverter.GenerateInverter.ViewsModel
                     if (InverterM.DataNotify.Any(x => !string.IsNullOrEmpty(x.DataName)))
                         response.DataGraphs.AddRange(InverterM.DataNotify);
 
+                    response.OutPutString = await _FileManager.OpenFile();
+
+                    List<NamedColor> colors = NamedColor.All.ToList();
+                    int n = 0;
+                    for (int i = 0; i < response.DataGraphs.Count; i++,n++)
+                    {
+                        if (n==colors.Count)
+                        {
+                            n = 0;
+                        }
+                        response.DataGraphs[i].UserColor = colors[n];
+                    }
+                    response.DataGraphs.Reverse();
                     Message = new ObservableCollection<string>();
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
                           new Dictionary<string, object>
                           {
-                              [nameof(DataGraph)] = response.DataGraphs,
+                              [nameof(ResponseModel)]=response,
                           });
                 }
             }

@@ -51,7 +51,6 @@ namespace Inverter.Data
                     }
                 }
             }
-
             return responseModel;
         }
 

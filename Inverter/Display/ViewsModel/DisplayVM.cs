@@ -1,15 +1,19 @@
-﻿using Inverter.Models;
+﻿using Inverter.Data;
+using Inverter.Models;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace Inverter.Display.ViewsModel
 {
-    [QueryProperty(nameof(DataGraphs), nameof(DataGraph))]
+    //[QueryProperty(nameof(DataGraphs), nameof(DataGraph))]
+    [QueryProperty(nameof(ResponseModel), nameof(ResponseModel))]
     public class DisplayVM : INotifyPropertyChanged
     {
-        private List<DataGraph> _dataGraphs;
-        public List<DataGraph> DataGraphs
+        public ResponseModel ResponseModel { get; set; }
+        private ObservableCollection<DataGraph> _dataGraphs;
+        public ObservableCollection<DataGraph> DataGraphs
         {
             get
             {
@@ -22,26 +26,27 @@ namespace Inverter.Display.ViewsModel
             }
         }
 
-        private string _maxValue;
-        public string MaxValue
+        private string _maxMinValue;
+        public string MaxMinValue
         {
-            get { return _maxValue; }
+            get { return _maxMinValue; }
             set
             {
-                _maxValue = value;
-                OnPropertyChanged(nameof(MaxValue));
+                _maxMinValue = value;
+                OnPropertyChanged(nameof(MaxMinValue));
             }
         }
-        private string _minValue;
-        public string MinValue
-        {
-            get { return _minValue; }
-            set
-            {
-                _minValue = value;
-                OnPropertyChanged(nameof(MinValue));
-            }
-        }
+        //private string _rmsValue;
+        //public string RmsValue
+        //{
+        //    get { return _maxMinValue; }
+        //    set
+        //    {
+        //        _rmsValue = value;
+        //        OnPropertyChanged(nameof(_rmsValue));
+        //    }
+        //}
+
 
         private DataGraph _dataGraphSelectedItem;
         public DataGraph DataGraphSelectedItem
@@ -54,10 +59,10 @@ namespace Inverter.Display.ViewsModel
 
                 if (_dataGraphSelectedItem != null)
                 {
-                    _maxValue = _dataGraphSelectedItem.Y.Max().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
-                    _minValue = _dataGraphSelectedItem.Y.Min().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
-                    OnPropertyChanged(nameof(MaxValue));
-                    OnPropertyChanged(nameof(MinValue));
+                    _maxMinValue = "Maksymalna wartość = " + _dataGraphSelectedItem.Y.Max().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
+                        Environment.NewLine + "Minimalna wartość = " + _dataGraphSelectedItem.Y.Min().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
+
+                    OnPropertyChanged(nameof(MaxMinValue));
                 }
                 OnPropertyChanged(nameof(DataGraphSelectedItem));
             }
@@ -87,18 +92,19 @@ namespace Inverter.Display.ViewsModel
         private void SetUpdateItem()
         {
             DataGraphUpdateItem = new();
-            DataGraphUpdateItem.UserColor = null;
-            DataGraphUpdateItem.Multiplier = 1;
-            DataGraphUpdateItem.LocationRow = 0;
-            DataGraphUpdateItem.locationRowSpan = 1;
+            DataGraphUpdateItem.UserColor = new();
+          //  DataGraphUpdateItem.Multiplier = 1;
+          //  DataGraphUpdateItem.LocationRow = 0;
+          //  DataGraphUpdateItem.locationRowSpan = 1;
             OnPropertyChanged("DataGraphUpdateItem");
         }
 
         public ICommand UpdateRowCommand => new Command(() =>
         {
             var update = DataGraphUpdateItem;
-            int n = DataGraphs.IndexOf(DataGraphSelectedItem);
-            if (n == -1)
+            int n = -1;
+            n = DataGraphs.IndexOf(DataGraphSelectedItem);
+            if (n < 0)
             {
                 return;
             }
@@ -129,6 +135,14 @@ namespace Inverter.Display.ViewsModel
             DataGraphs.Insert(n, data);
             OnPropertyChanged(nameof(DataGraphs));
         });
+
+        private string GetAvarange()
+        {
+            string result = string.Empty;
+
+
+            return result;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -102,10 +102,10 @@ namespace Inverter.Models
 
 
         public string StringModel { get; private set; }
+        private StringBuilder sr = new();
         public string CreateNewModel()
         {
-            StringBuilder sr = new();
-
+            sr.Clear();
             #region Param
             sr.AppendLine();
             sr.Append(".PARAM Uz=");
@@ -178,6 +178,19 @@ namespace Inverter.Models
 
             sr.AppendLine();
             sr.Append(".PRINT TRAN ");
+
+            if (ExtraPrintTran != null)
+            {
+                for (int i = 0; i < ExtraPrintTran.Count; i++)
+                {
+                    if (i % 5 == 0)
+                    {
+                        sr.AppendLine();
+                        sr.Append("+ ");
+                    }
+                    sr.Append(" " + ExtraPrintTran[i].DataName + " ");
+                }
+            }
             for (int i = 0; i < DefaultPrintTran.Count; i++)
             {
                 if (i % 5 == 0)
@@ -186,14 +199,6 @@ namespace Inverter.Models
                     sr.Append("+ ");
                 }
                 sr.Append(" " + DefaultPrintTran[i].DataName + " ");
-            }
-            if (ExtraPrintTran != null)
-            {
-                foreach (var item in ExtraPrintTran)
-                {
-                    sr.Append(" ");
-                    sr.Append(" " + item.DataName + " ");
-                }
             }
             sr.AppendLine();
 

@@ -2,12 +2,13 @@
 using Inverter.Data.Draw;
 using Inverter.Display.ViewsModel;
 using Inverter.Models;
+using System.Collections.ObjectModel;
 
 namespace Inverter.Display.Views;
 
 public partial class DisplayV : ContentPage
 {
-    private List<DataGraph> DataGraphs;
+    private ObservableCollection<DataGraph> DataGraphs;
     private List<Graph> _graphs;
     private GraphicsView _graphicsDraw;
 
@@ -30,28 +31,22 @@ public partial class DisplayV : ContentPage
         {
             DisplayVM bc = (DisplayVM)BindingContext;
 
+            bc.DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.DataGraphs);
             DataGraphs = bc.DataGraphs;
 
-            FileManager fm = new FileManager();
-            ResponseModel rs = new ResponseModel();
-            rs.DataGraphs = DataGraphs;
-
-            var result = await fm.OpenFile();
-            DataGraphs = result.Mapping(rs).DataGraphs;
-
+            DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.OutPutString.Mapping(bc.ResponseModel).DataGraphs);
 
             _graphs = new();
             if (DataGraphs == null)
             {
                 return;
-            }            
+            }
             for (int i = 0; i < DataGraphs.Count; i++)
             {
                 _graphs.Add(new Graph());
                 Resources.Add(i.ToString(), _graphs[i]);
             }
         }
-
         catch (Exception)
         {
             throw;
@@ -73,7 +68,8 @@ public partial class DisplayV : ContentPage
         {
             if (n <= DataGraphs[i].LocationRow)
             {
-                n = (int)DataGraphs[i].LocationRow + 1;
+                if (DataGraphs[i].Visible)
+                    n = (int)DataGraphs[i].LocationRow + 1;
             }
         }
         return n;
@@ -89,6 +85,11 @@ public partial class DisplayV : ContentPage
     }
 
     private void UpdateRow_Clicked(object sender, EventArgs e)
+    {
+        ReDrawGraph();
+    }
+
+    private void ReDrawGraph()
     {
         try
         {
@@ -118,7 +119,7 @@ public partial class DisplayV : ContentPage
                     _graphs[i].AxisXWrite = !axisX.Any(x => x == DataGraphs[i].LocationRow);
                     axisX.Add(DataGraphs[i].LocationRow);
                     //ustawienie koloru wykresu
-                    _graphs[i].Color = DataGraphs[i].UserColor;
+                    _graphs[i].Color = DataGraphs[i].UserColor.Color;
                     _graphs[i].point = new PathF();
                     //Nazwa wykresy
                     _graphs[i].Name = DataGraphs[i].DataName;
@@ -128,12 +129,19 @@ public partial class DisplayV : ContentPage
                     _graphs[i].PositionName = PositionName;
 
                     //os Y
-                    _graphs[i].MaxY = DataGraphs[i].Y.Max(x => Math.Abs(x));
+                    _graphs[i].MaxYValue = DataGraphs[i].Y.Max();
+                    _graphs[i].MinYValue = DataGraphs[i].Y.Min();
+                    _graphs[i].MaxYPosition = DataGraphs[i].Y.Max() * DataGraphs[i].Multiplier;
+                    _graphs[i].MinYPositions = DataGraphs[i].Y.Min() * DataGraphs[i].Multiplier;
+
+                    //Czy siatka jest widoczna
+                    _graphs[i].GridIsVisible = gridVisible;
+
                     int n = 30;
                     int secondLoop = 0;
                     for (int j = 0; j < DataGraphs[i].Y.Count; j++)
                     {
-                        _graphs[i].point.LineTo(n, DataGraphs[i].Y[j] * (float)DataGraphs[i].Multiplier);
+                        _graphs[i].point.LineTo(n, -(DataGraphs[i].Y[j] * DataGraphs[i].Multiplier));
                         n++;
                         if (j + 1 >= DataGraphs[i].Y.Count && secondLoop != 4)
                         {
@@ -149,5 +157,14 @@ public partial class DisplayV : ContentPage
         {
             throw;
         }
+    }
+
+    bool gridVisible = true;
+    private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        gridVisible = !gridVisible;
+        if(DataGraphs!=null)
+            ReDrawGraph();
+
     }
 }
