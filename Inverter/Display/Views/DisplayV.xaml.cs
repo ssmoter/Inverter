@@ -84,12 +84,12 @@ public partial class DisplayV : ContentPage
         }
     }
 
-    private void UpdateRow_Clicked(object sender, EventArgs e)
+    private async void UpdateRow_Clicked(object sender, EventArgs e)
     {
-        ReDrawGraph();
+      await ReDrawGraph();
     }
 
-    private void ReDrawGraph()
+    private async Task ReDrawGraph()
     {
         try
         {
@@ -160,11 +160,11 @@ public partial class DisplayV : ContentPage
     }
 
     bool gridVisible = true;
-    private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    private async void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         gridVisible = !gridVisible;
         if(DataGraphs!=null)
-            ReDrawGraph();
+           await ReDrawGraph();
 
     }
 }

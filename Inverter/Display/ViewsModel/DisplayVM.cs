@@ -93,9 +93,6 @@ namespace Inverter.Display.ViewsModel
         {
             DataGraphUpdateItem = new();
             DataGraphUpdateItem.UserColor = new();
-          //  DataGraphUpdateItem.Multiplier = 1;
-          //  DataGraphUpdateItem.LocationRow = 0;
-          //  DataGraphUpdateItem.locationRowSpan = 1;
             OnPropertyChanged("DataGraphUpdateItem");
         }
 

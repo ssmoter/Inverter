@@ -90,11 +90,11 @@ namespace Inverter.GenerateInverter.ViewsModel
                 OnPropertyChanged(nameof(Message));
             }
         }
-        private void AddMessage(string message)
+        private async void AddMessage(string message)
         {
-            //Message.Insert(0, message);
             Message.Add(message);
             Message.Move(Message.Count - 1, 0);
+            //Message.Insert(0, message);
         }
         #region Nowy plik
 
@@ -102,14 +102,20 @@ namespace Inverter.GenerateInverter.ViewsModel
         {
             try
             {
-                bool isCreatedFile = await _FileManager.NewFile(InverterM.StringModelNotify);
                 AddMessage("Tworzenie Pliku");
+                bool isCreatedFile = await _FileManager.NewFile(InverterM.StringModelNotify);
                 if (isCreatedFile)
                 {
                     AddMessage("Plik Został utworzony");
 
-                    AddMessage("Uruchamianie Aplikacji");
+
 #if WINDOWS
+                    AddMessage("Uruchamianie Aplikacji");
+                    if (Process.GetProcessesByName(@"F:\pspice\instal\PSpice\pspice.exe").Length > 0)
+                    {
+                        AddMessage("Wyłącz PSpice");
+                        return;
+                    }
                     Process.Start(@"F:\pspice\instal\PSpice\pspice.exe", _FileManager.FilePathData);
                     AddMessage("Aplikacja została uruchomiona");
 #else
@@ -157,9 +163,9 @@ namespace Inverter.GenerateInverter.ViewsModel
 
                     List<NamedColor> colors = NamedColor.All.ToList();
                     int n = 0;
-                    for (int i = 0; i < response.DataGraphs.Count; i++,n++)
+                    for (int i = 0; i < response.DataGraphs.Count; i++, n++)
                     {
-                        if (n==colors.Count)
+                        if (n == colors.Count)
                         {
                             n = 0;
                         }
@@ -170,7 +176,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
                           new Dictionary<string, object>
                           {
-                              [nameof(ResponseModel)]=response,
+                              [nameof(ResponseModel)] = response,
                           });
                 }
             }
