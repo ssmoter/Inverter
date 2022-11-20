@@ -7,6 +7,6 @@ public partial class InverterV : ContentPage
     public InverterV(GenerateMV vm)
     {
         InitializeComponent();
-        BindingContext = vm;
+        BindingContext = vm;        
     }
 }

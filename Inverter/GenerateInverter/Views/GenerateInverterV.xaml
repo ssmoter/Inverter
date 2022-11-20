@@ -8,14 +8,67 @@
     <!--<ContentPage.BindingContext>
         <VM:GenerateMV/>
     </ContentPage.BindingContext>-->
+    <ContentPage.Resources>
+        <Style TargetType="Entry">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="White"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Focused">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="White"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
 
-    <ScrollView>
-        <Grid
+    <ScrollView Margin="10" Padding="10">
+        
+        <RefreshView IsRefreshing="{Binding IsBusy}">
+
+            <Grid
             RowDefinitions="AUTO,auto,auto,*"
             RowSpacing="5"
             ColumnDefinitions="auto,15,auto,15,auto" Margin="10,0,10,0">
 
-            <!--komunikaty-->
+                <!--komunikaty-->
                 <ListView 
                 Grid.ColumnSpan="5" Grid.Row="0" 
                 MaximumHeightRequest="50" MinimumHeightRequest="20"
@@ -27,8 +80,8 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-            <!--ParametryFalownika-->
-            <Grid
+                <!--ParametryFalownika-->
+                <Grid
                 Grid.Row="1"           
                 Grid.Column="0"
                 ColumnDefinitions="auto,auto"
@@ -37,45 +90,138 @@
                                 auto,auto,auto,auto,auto,auto,auto"  
                 MaximumWidthRequest="200"
                 >
-                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Konfiguracja parametrów:"/>
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Konfiguracja parametrów:"/>
 
-                <Label Grid.Row="1" Grid.Column="0" Text="Uz: "  TextColor="White" ToolTipProperties.Text="Napięcie zasilania falownika [V]"/>
-                <Label Grid.Row="2" Grid.Column="0" Text="Fo: " TextColor="White" ToolTipProperties.Text="Częstotliwość napięcia wyjściowego [Hz]"/>
-                <Label Grid.Row="3" Grid.Column="0" Text="Ma: " TextColor="White" ToolTipProperties.Text="Współczynik głębokości modulacji [-] (Ma&lt;1)"/>
-                <Label Grid.Row="4" Grid.Column="0" Text="R_on: " TextColor="White" ToolTipProperties.Text="Rezystancja stycznika w stanie załączenia [&#8486;]"/>
-                <Label Grid.Row="5" Grid.Column="0" Text="R_off: " TextColor="White" ToolTipProperties.Text="Rezystancja stycznika w stanie Wyłączenia [&#8486;]"/>
-                <Label Grid.Row="6" Grid.Column="0" Text="Ro: " TextColor="White" ToolTipProperties.Text="Rezystancja fazy odbiornika [&#8486;]"/>
-                <Label Grid.Row="7" Grid.Column="0" Text="Lo: " TextColor="White" ToolTipProperties.Text="Indukcyjność fazy odbiornika [H]"/>
-                <Label Grid.Row="8" Grid.Column="0" Text="Eo: " TextColor="White" ToolTipProperties.Text="Amplituda napięcia SEM fazy odbiornika [V]"/>
-                <Label Grid.Row="9" Grid.Column="0" Text="Fio: " TextColor="White" ToolTipProperties.Text="Przesunięcie fazowe SEM względem harmonicznej podstawowej fazy napięcia wyjściowego [deg]"/>
-                <Label Grid.Row="10" Grid.Column="0" Text="Fi: " TextColor="White" ToolTipProperties.Text="Częstotliwość przełączeń styczników [Hz]"/>
-                <Label Grid.Row="11" Grid.Column="0" Text="Alfa: " TextColor="White" ToolTipProperties.Text="Kąt przesunięcia załączenia tranzystorów [deg]"/>
-                <Label Grid.Row="12" Grid.Column="0" Text="K: " TextColor="White" ToolTipProperties.Text="Typ pracy falownika &#10;0-Fala&#10;prostokatna 1-PWM"/>
+                    <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Napięcie zasilania falownika [V]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Uz: "  TextColor="White" />
+                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.UzNotify}" Placeholder="{Binding InverterM.UzNotify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Częstotliwość napięcia wyjściowego [Hz]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Fo: " TextColor="White"/>
+                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.FoNotify}" Placeholder="{Binding InverterM.FoNotify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Współczynik głębokości modulacji [-] (Ma&lt;1)">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Ma: " TextColor="White" />
+                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.MaNotify}" Placeholder="{Binding InverterM.MaNotify}" />
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Rezystancja stycznika w stanie załączenia [&#8486;]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label  Grid.Column="0" Text="R_on: " TextColor="White" />
+                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.R_onNotify}" Placeholder="{Binding InverterM.R_onNotify}" />
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Rezystancja stycznika w stanie Wyłączenia [&#8486;]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label  Grid.Column="0" Text="R_off: " TextColor="White" />
+                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.R_offNotify}" Placeholder="{Binding InverterM.R_offNotify}" />
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Rezystancja fazy odbiornika [&#8486;]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Ro: " TextColor="White" />
+                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.RoNotify}" Placeholder="{Binding InverterM.RoNotify}"/>
 
-                <Entry Grid.Row="1" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.UzNotify}" Placeholder="{Binding InverterM.UzNotify}"/>
-                <Entry Grid.Row="2" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.FoNotify}" Placeholder="{Binding InverterM.FoNotify}"/>
-                <Entry Grid.Row="3" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.MaNotify}" Placeholder="{Binding InverterM.MaNotify}"/>
-                <Entry Grid.Row="4" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.R_onNotify}" Placeholder="{Binding InverterM.R_onNotify}"/>
-                <Entry Grid.Row="5" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.R_offNotify}" Placeholder="{Binding InverterM.R_offNotify}"/>
-                <Entry Grid.Row="6" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.RoNotify}" Placeholder="{Binding InverterM.RoNotify}"/>
-                <Entry Grid.Row="7" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.LoNotify}" Placeholder="{Binding InverterM.LoNotify}"/>
-                <Entry Grid.Row="8" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.EoNotify}" Placeholder="{Binding InverterM.EoNotify}"/>
-                <Entry Grid.Row="9" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.FioNotify}" Placeholder="{Binding InverterM.FioNotify}"/>
-                <Entry Grid.Row="10" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.FiNotify}" Placeholder="{Binding InverterM.FiNotify}"/>
-                <Entry Grid.Row="11" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.AlfaNotify}" Placeholder="{Binding InverterM.AlfaNotify}"/>
-                <ListView Grid.Row="12" Grid.Column="1" MaximumHeightRequest="20" BackgroundColor="White" ItemsSource="{Binding InverterM.KNotify}" SelectedItem="{Binding InverterM.SelectedKNotify}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate >
-                            <ViewCell>
-                                <Label Text="{Binding Key}" TextColor="Black"/>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Indukcyjność fazy odbiornika [H]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Lo: " TextColor="White" />
+                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.LoNotify}" Placeholder="{Binding InverterM.LoNotify}"/>
 
-            </Grid>
-            <!--Tran/print-->
-            <Grid
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Amplituda napięcia SEM fazy odbiornika [V]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Eo: " TextColor="White" />
+                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.EoNotify}" Placeholder="{Binding InverterM.EoNotify}"/>
+
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Przesunięcie fazowe SEM względem harmonicznej podstawowej fazy napięcia wyjściowego [deg]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Fio: " TextColor="White" />
+                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.FioNotify}" Placeholder="{Binding InverterM.FioNotify}"/>
+
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Częstotliwość przełączeń styczników [Hz]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Fi: " TextColor="White" />
+                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.FiNotify}" Placeholder="{Binding InverterM.FiNotify}" />
+
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Kąt przesunięcia załączenia tranzystorów [deg]">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="Alfa: " TextColor="White" />
+                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.AlfaNotify}" Placeholder="{Binding InverterM.AlfaNotify}"/>
+
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" ToolTipProperties.Text="Typ pracy falownika &#10;0-Fala prostokatna&#10;1-PWM">
+                        <Grid ColumnDefinitions=".5*,*" WidthRequest="200" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="K: " TextColor="White" />
+                            <ListView  Grid.Column="1" MaximumHeightRequest="20" ItemsSource="{Binding InverterM.KNotify}" SelectedItem="{Binding InverterM.SelectedKNotify}" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate >
+                                        <ViewCell>
+                                            <Frame Margin="0" Padding="0">
+                                                <Label Text="{Binding Key}" TextColor="Black"/>
+                                                <VisualStateManager.VisualStateGroups>
+                                                    <VisualStateGroup>
+                                                        <VisualState x:Name="PointerOver">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                                                <Setter Property="Opacity" Value="0.7"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="Normal">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="BackgroundColor" Value="White"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="Selected">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                                                <Setter Property="Opacity" Value="0.5"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateManager.VisualStateGroups>
+                                            </Frame>
+                                           
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+
+
+
+
+
+                </Grid>
+                <!--Tran/print-->
+                <Grid
                 Grid.Row="1"
                 Grid.Column="2"
                 RowSpacing="2"
@@ -83,97 +229,156 @@
                 ColumnDefinitions="auto,auto,auto,auto"
                 RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto"
                 >
-                <Label Grid.Row="0" Grid.ColumnSpan="4" Text="Konfiguracja Tran:"/>
+                    <Label Grid.Row="0" Grid.ColumnSpan="4" Text="Konfiguracja Tran:"/>
 
-                <Label Grid.Row="1" Grid.Column="0" Text="T1: " TextColor="White"/>
-                <Label Grid.Row="1" Grid.Column="2" Text="T2: " TextColor="White"/>
-                <Label Grid.Row="2" Grid.Column="0" Text="T3: " TextColor="White"/>
-                <Label Grid.Row="2" Grid.Column="2" Text="T4: " TextColor="White"/>
-                <Label Grid.Row="3" Grid.Column="0" Text="T5: " TextColor="White"/>
-                <Label Grid.Row="3" Grid.Column="2" Text="T6: " TextColor="White"/>
+                    <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" >
+                        <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
+                            <Label  Grid.Column="0" Text="T1: " TextColor="White"/>
+                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T1Notify}" Placeholder="{Binding InverterM.T1Notify}"/>
 
-                <Entry Grid.Row="1" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.T1Notify}" Placeholder="{Binding InverterM.T1Notify}"/>
-                <Entry Grid.Row="1" Grid.Column="3" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.T2Notify}" Placeholder="{Binding InverterM.T2Notify}"/>
-                <Entry Grid.Row="2" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.T3Notify}" Placeholder="{Binding InverterM.T3Notify}"/>
-                <Entry Grid.Row="2" Grid.Column="3" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.T4Notify}" Placeholder="{Binding InverterM.T4Notify}"/>
-                <Entry Grid.Row="3" Grid.Column="1" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.T5Notify}" Placeholder="{Binding InverterM.T5Notify}"/>
-                <Entry Grid.Row="3" Grid.Column="3" TextColor="Black" BackgroundColor="White" Text="{Binding InverterM.T6Notify}" Placeholder="{Binding InverterM.T6Notify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" >
+                        <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
+                            <Label  Grid.Column="0" Text="T2: " TextColor="White"/>
+                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T2Notify}" Placeholder="{Binding InverterM.T2Notify}"/>
 
-                <!--<Label Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="Konfiguracja Print Tran:"/>-->
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" >
+                        <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
+                            <Label  Grid.Column="0" Text="T3: " TextColor="White"/>
+                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T3Notify}" Placeholder="{Binding InverterM.T3Notify}"/>
 
-                <TableView Grid.Row="4" Grid.ColumnSpan="6" Intent="Form">
-                    <TableRoot>
-                        <TableSection Title="Dodaj Nowy Print Tran">
-                            <ViewCell>
-                                <Grid 
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" >
+                        <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
+                            <Label Grid.Column="0" Text="T4: " TextColor="White"/>
+                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T4Notify}" Placeholder="{Binding InverterM.T4Notify}"/>
+
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" >
+                        <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
+                            <Label  Grid.Column="0" Text="T5: " TextColor="White"/>
+                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T5Notify}" Placeholder="{Binding InverterM.T5Notify}"/>
+
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+                    <Frame Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="0" Padding="0" CornerRadius="0" >
+                        <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
+                            <Label  Grid.Column="0" Text="T6: " TextColor="White"/>
+                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T6Notify}" Placeholder="{Binding InverterM.T6Notify}"/>
+
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                        </Grid>
+                    </Frame>
+
+
+
+
+                    <!--<Label Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="Konfiguracja Print Tran:"/>-->
+
+                    <TableView Grid.Row="4" Grid.ColumnSpan="6" Intent="Form">
+                        <TableRoot>
+                            <TableSection Title="Dodaj Nowy Print Tran">
+                                <ViewCell>
+                                    <Grid 
                                     ColumnDefinitions=".5*,*,auto"
                                     RowSpacing="5"
                                     ColumnSpacing="5"
                                     RowDefinitions="auto,auto,*">
-                                    <Label Grid.Row="0" Grid.Column="0" Text="Id"/>
-                                    <Label Grid.Row="0" Grid.Column="1" Text="Nazwa Użytkownika"/>
+                                        <Label Grid.Row="0" Grid.Column="0" Text="Id"/>
+                                        <Label Grid.Row="0" Grid.Column="1" Text="Nazwa Użytkownika"/>
 
-                                    <Entry Grid.Column="0" Grid.Row="1" Text="{Binding InverterM.SingleDataNotify.DataName}"/>
-                                    <Entry Grid.Column="1"  Grid.Row="1" Text="{Binding InverterM.SingleDataNotify.UserDataName}"/>
-                                    <Button Grid.Column="2" Grid.Row="1" Text="Dodaj"  Command="{Binding InverterM.AddNewTranPrint}"/>
-                                    <Button Grid.Column="2" Grid.Row="2" HeightRequest="40" VerticalOptions="Start" Text="Usuń" 
+                                        <Entry Grid.Column="0" Grid.Row="1" Text="{Binding InverterM.SingleDataNotify.DataName}"/>
+                                        <Entry Grid.Column="1"  Grid.Row="1" Text="{Binding InverterM.SingleDataNotify.UserDataName}"/>
+                                        <Button Grid.Column="2" Grid.Row="1" Text="Dodaj"  Command="{Binding InverterM.AddNewTranPrint}"/>
+                                        <Button Grid.Column="2" Grid.Row="2" HeightRequest="40" VerticalOptions="Start" Text="Usuń" 
                                             Command="{Binding InverterM.RemoveTranPrint}" IsEnabled="{Binding InverterM.IsSelectedDataNotify}"/>
-                                    <ListView 
-                                        MaximumHeightRequest="80" BackgroundColor="White" Grid.Row="2" Grid.ColumnSpan="2" 
-                                        ItemsSource="{Binding InverterM.DataNotify}" SelectedItem="{Binding InverterM.SelectedDataNotify}" SeparatorColor="Red">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <ViewCell>
-                                                    <ScrollView>
-                                                        <Grid 
+                                        <ListView 
+                                        MaximumHeightRequest="80" BackgroundColor="White" Grid.Row="2" Grid.ColumnSpan="2" SeparatorVisibility="Default" SeparatorColor="Pink"
+                                        ItemsSource="{Binding InverterM.DataNotify}" SelectedItem="{Binding InverterM.SelectedDataNotify}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ViewCell>
+                                                        <Frame Margin="2" Padding="2">
+                                                            <VisualStateManager.VisualStateGroups>
+                                                                <VisualStateGroup>
+                                                                    <VisualState x:Name="PointerOver">
+                                                                        <VisualState.Setters>
+                                                                            <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                                                            <Setter Property="Opacity" Value="0.7"/>
+                                                                        </VisualState.Setters>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name="Normal">
+                                                                        <VisualState.Setters>
+                                                                            <Setter Property="BackgroundColor" Value="White"/>
+                                                                        </VisualState.Setters>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name="Selected">
+                                                                        <VisualState.Setters>
+                                                                            <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                                                            <Setter Property="Opacity" Value="0.5"/>
+                                                                        </VisualState.Setters>
+                                                                    </VisualState>
+                                                                </VisualStateGroup>
+                                                            </VisualStateManager.VisualStateGroups>
+                                                            <Grid 
                                                             ColumnDefinitions=".5*,*"
                                                             ColumnSpacing="20">
-                                                            <Label Grid.Column="0" Text="{Binding DataName}" TextColor="Black"/>
-                                                            <Label Grid.Column="1" Text="{Binding UserDataName}" TextColor="Black"/>
-                                                        </Grid>
-                                                    </ScrollView>
-                                                </ViewCell>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </Grid>
-                            </ViewCell>
-                        </TableSection>
-                    </TableRoot>
-                </TableView>
-                <Label  Grid.Row="6" Grid.ColumnSpan="10" Text="Defoult Print Tran" />
-                <ListView 
+                                                                <Label Grid.Column="0" Text="{Binding DataName}" TextColor="Black"/>
+                                                                <Label Grid.Column="1" Text="{Binding UserDataName}" TextColor="Black"/>
+                                                            </Grid>
+                                                        </Frame>
+                                                    </ViewCell>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Grid>
+                                </ViewCell>
+                            </TableSection>
+                        </TableRoot>
+                    </TableView>
+                    <Label  Grid.Row="6" Grid.ColumnSpan="10" Text="Defoult Print Tran" />
+                    <ListView 
                      MaximumHeightRequest="80" Grid.Row="7" Grid.ColumnSpan="4" ItemsSource="{Binding InverterM.DefaultDataNotify}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid ColumnDefinitions="auto,auto" ColumnSpacing="5">
-                                    <Label Grid.Column="0" VerticalTextAlignment="Start" Text="{Binding DataName}"/>
-                                    <Label Grid.Column="1" VerticalTextAlignment="End" Text="{Binding UserDataName}"/>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid ColumnDefinitions="auto,auto" ColumnSpacing="5">
+                                        <Label Grid.Column="0" VerticalTextAlignment="Start" Text="{Binding DataName}"/>
+                                        <Label Grid.Column="1" VerticalTextAlignment="End" Text="{Binding UserDataName}"/>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
-            </Grid>
-            <!--Podglad-->
-            <Grid 
+                </Grid>
+                <!--Podglad-->
+                <Grid 
                 Grid.Column="4"
                   Grid.Row="1"
                   RowDefinitions="auto,auto"
                   ColumnDefinitions="auto">
-                <Label Grid.Column="0" Margin="0,5,0,0"
+                    <Label Grid.Column="0" Margin="0,5,0,0"
                        Grid.Row="0" Text="Podgląd pliku:"/>
-                <Border Grid.Column="0" Grid.Row="1" MaximumHeightRequest="420">
-                    <ScrollView >
-                        <Label  Text="{Binding InverterM.StringModelNotify}"/>
-                    </ScrollView>
-                </Border>
+                    <Border Grid.Column="0" Grid.Row="1" MaximumHeightRequest="420">
+                        <ScrollView >
+                            <Label  Text="{Binding InverterM.StringModelNotify}"/>
+                        </ScrollView>
+                    </Border>
 
-            </Grid>
-            <!--Przyciski-->
-            <Grid 
+                </Grid>
+                <!--Przyciski-->
+                <Grid 
                 Grid.Row="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="5"
@@ -181,12 +386,13 @@
                 RowDefinitions="*"
                 ColumnDefinitions="auto,auto,auto,*">
 
-                <Button Grid.Row="0" Grid.Column="0" Text="Ustawienia początkowe" TextColor="Black" Command="{Binding InitialValues}"/>
-                <Button Grid.Row="0" Grid.Column="1" Text="Wygeneruj plik" TextColor="Black" Command="{Binding CreatedNewFile}"/>
-                <Button Grid.Row="0" Grid.Column="2" Text="Wczytaj Plik" TextColor="Black" Command="{Binding LoadData}" BackgroundColor="{Binding LoadDataColor}"/>
+                    <Button Grid.Row="0" Grid.Column="0" Text="Ustawienia początkowe"  Command="{Binding InitialValues}"/>
+                    <Button Grid.Row="0" Grid.Column="1" Text="Wygeneruj plik"  Command="{Binding CreatedNewFile}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Text="Wczytaj Plik"  Command="{Binding LoadData}" BackgroundColor="{Binding LoadDataColor}"/>
 
+                </Grid>
             </Grid>
-        </Grid>
+        </RefreshView>
     </ScrollView>
 
 </ContentPage>

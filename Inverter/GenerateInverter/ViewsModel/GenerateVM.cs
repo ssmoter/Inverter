@@ -25,6 +25,17 @@ namespace Inverter.GenerateInverter.ViewsModel
                 OnPropertyChanged(nameof(InverterM));
             }
         }
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+        }
+
 
         public GenerateMV()
         {
@@ -35,6 +46,7 @@ namespace Inverter.GenerateInverter.ViewsModel
             _FileManager = new();
             Message = new ObservableCollection<string>();
             Message.Clear();
+            _isBusy = false;
             Initialization();
         }
         public ICommand InitialValues => new Command(() =>
@@ -94,7 +106,7 @@ namespace Inverter.GenerateInverter.ViewsModel
         {
             Message.Add(message);
             Message.Move(Message.Count - 1, 0);
-            //Message.Insert(0, message);
+            OnPropertyChanged(nameof(Message));
         }
         #region Nowy plik
 
@@ -102,27 +114,27 @@ namespace Inverter.GenerateInverter.ViewsModel
         {
             try
             {
+                IsBusy = true;
                 AddMessage("Tworzenie Pliku");
                 bool isCreatedFile = await _FileManager.NewFile(InverterM.StringModelNotify);
                 if (isCreatedFile)
                 {
                     AddMessage("Plik Został utworzony");
-
-
 #if WINDOWS
                     AddMessage("Uruchamianie Aplikacji");
-                    if (Process.GetProcessesByName(@"F:\pspice\instal\PSpice\pspice.exe").Length > 0)
+                    using (Process myprocess = new Process())
                     {
-                        AddMessage("Wyłącz PSpice");
-                        return;
+                        myprocess.StartInfo.FileName = @"F:\pspice\instal\PSpice\pspice.exe";
+                        myprocess.StartInfo.Arguments = _FileManager.FilePathData;
+                        if (myprocess.Start())
+                        {
+                            AddMessage("Aplikacja została uruchomiona");
+                        }
                     }
-                    Process.Start(@"F:\pspice\instal\PSpice\pspice.exe", _FileManager.FilePathData);
-                    AddMessage("Aplikacja została uruchomiona");
 #else
                     AddMessage("Aplikacja zostanie uruchomiona tylko na systemie Windows");
                     return;
 #endif
-
                 }
                 LoadDataColor = Colors.Green;
             }
@@ -130,6 +142,8 @@ namespace Inverter.GenerateInverter.ViewsModel
             {
                 Message.Add(ex.Message);
             }
+            finally
+            { IsBusy = false; }
         });
         #endregion
 
@@ -150,28 +164,16 @@ namespace Inverter.GenerateInverter.ViewsModel
         {
             try
             {
-                if (await Shell.Current.DisplayAlert("", "Czy chcesz kontynuować", "Tak", "Nie"))
+                IsBusy = true;
+                bool Load = await Shell.Current.DisplayAlert("Wizualizacja", "Czy chcesz kontynuować", "Tak", "Nie");
+
+                if (Load)
                 {
                     AddMessage("Wczytywanie nowego modelu");
-                    ResponseModel response = new(_FileManager.FilePathData);
 
-                    response.DataGraphs = InverterM.DefaultDataNotify.ToList();
-                    if (InverterM.DataNotify.Any(x => !string.IsNullOrEmpty(x.DataName)))
-                        response.DataGraphs.AddRange(InverterM.DataNotify);
+                    ResponseModel response = null;
+                    response = await GetData(response);
 
-                    response.OutPutString = await _FileManager.OpenFile();
-
-                    List<NamedColor> colors = NamedColor.All.ToList();
-                    int n = 0;
-                    for (int i = 0; i < response.DataGraphs.Count; i++, n++)
-                    {
-                        if (n == colors.Count)
-                        {
-                            n = 0;
-                        }
-                        response.DataGraphs[i].UserColor = colors[n];
-                    }
-                    response.DataGraphs.Reverse();
                     Message = new ObservableCollection<string>();
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
                           new Dictionary<string, object>
@@ -184,8 +186,34 @@ namespace Inverter.GenerateInverter.ViewsModel
             {
                 AddMessage(ex.Message);
             }
-
+            finally
+            { 
+                IsBusy = false;
+            }
         });
+        private async Task<ResponseModel> GetData(ResponseModel response)
+        {
+            response = new(_FileManager.FilePathData);
+
+            response.DataGraphs = InverterM.DefaultDataNotify.ToList();
+            if (InverterM.DataNotify.Any(x => !string.IsNullOrEmpty(x.DataName)))
+                response.DataGraphs.AddRange(InverterM.DataNotify);
+
+            response.OutPutString = await _FileManager.OpenFile();
+
+            List<NamedColor> colors = NamedColor.All.ToList();
+            int n = 0;
+            for (int i = 0; i < response.DataGraphs.Count; i++, n++)
+            {
+                if (n == colors.Count)
+                {
+                    n = 0;
+                }
+                response.DataGraphs[i].UserColor = colors[n];
+            }
+            response.DataGraphs.Reverse();
+            return response;
+        }
 
         #endregion
 

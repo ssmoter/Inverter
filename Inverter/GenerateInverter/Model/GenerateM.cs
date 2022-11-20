@@ -389,6 +389,10 @@ namespace Inverter.GenerateInverter.Model
 
         public ICommand AddNewTranPrint => new Command(() =>
         {
+            if (string.IsNullOrWhiteSpace(SingleDataNotify.DataName))
+            {
+                return;
+            }
             DataNotify.Add(SingleDataNotify);
             SingleDataNotify = null;
             SingleDataNotify = new();
@@ -398,6 +402,7 @@ namespace Inverter.GenerateInverter.Model
         {
             DataNotify.Remove(SelectedDataNotify);
             SelectedDataNotify = null;
+            SelectedDataNotify=new();
             RefreshStringModel();
         });
 

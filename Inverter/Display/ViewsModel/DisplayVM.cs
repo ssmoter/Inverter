@@ -1,8 +1,8 @@
-﻿using Inverter.Data;
-using Inverter.Models;
+﻿using Inverter.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Timers;
 using System.Windows.Input;
 
 namespace Inverter.Display.ViewsModel
@@ -36,17 +36,6 @@ namespace Inverter.Display.ViewsModel
                 OnPropertyChanged(nameof(MaxMinValue));
             }
         }
-        //private string _rmsValue;
-        //public string RmsValue
-        //{
-        //    get { return _maxMinValue; }
-        //    set
-        //    {
-        //        _rmsValue = value;
-        //        OnPropertyChanged(nameof(_rmsValue));
-        //    }
-        //}
-
 
         private DataGraph _dataGraphSelectedItem;
         public DataGraph DataGraphSelectedItem
@@ -67,7 +56,6 @@ namespace Inverter.Display.ViewsModel
                 OnPropertyChanged(nameof(DataGraphSelectedItem));
             }
         }
-
         private DataGraph _dataGraphUpdateItem;
         public DataGraph DataGraphUpdateItem
         {
@@ -83,11 +71,79 @@ namespace Inverter.Display.ViewsModel
         {
             Initialization();
         }
-
         private void Initialization()
         {
             SetUpdateItem();
+
+            _timer = new System.Timers.Timer(100);
+            _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
+            NameSimulationbutton = "Uruchom Symulacje";
+            symulationRunning = false;
+
         }
+        #region Symulacja
+
+        System.Timers.Timer _timer;
+        public void TimerEvent(object source, ElapsedEventArgs e)
+        {
+            SActualCurrentIndex++;
+            if (SActualCurrentIndex >= SCurrentMaxIndex)
+            {
+                SActualCurrentIndex = 0;
+            }
+
+            //OnPropertyChanged(nameof(SActualCurrentIndex));
+        }
+        private int _sActualCurrentndex = 0;
+        public int SActualCurrentIndex
+        {
+            get => _sActualCurrentndex;
+            set
+            {
+                _sActualCurrentndex = value;
+                OnPropertyChanged(nameof(SActualCurrentIndex));
+            }
+        }
+        private int _sActualMaxIndex = 1;
+        public int SCurrentMaxIndex
+        {
+            get => _sActualMaxIndex;
+            set
+            {
+                _sActualMaxIndex = value;
+                OnPropertyChanged(nameof(SCurrentMaxIndex));
+            }
+        }
+        private string _nameSimulationbutton;
+        public string NameSimulationbutton
+        {
+            get => _nameSimulationbutton;
+            set
+            {
+                _nameSimulationbutton = value;
+                OnPropertyChanged(nameof(NameSimulationbutton));
+            }
+        }
+        private bool symulationRunning;
+        public ICommand StartSymulation => new Command(() =>
+        {
+            if (!symulationRunning)
+            {
+                symulationRunning = !symulationRunning;
+                _timer.Start();
+                NameSimulationbutton = "Zatrzymaj Symulacje";
+            }
+            else if (symulationRunning)
+            {
+                symulationRunning = !symulationRunning;
+                _timer.Stop();
+                NameSimulationbutton = "Uruchom Symulacje";
+            }
+        });
+
+
+        //private string 
+        #endregion
 
         private void SetUpdateItem()
         {
@@ -98,48 +154,25 @@ namespace Inverter.Display.ViewsModel
 
         public ICommand UpdateRowCommand => new Command(() =>
         {
-            var update = DataGraphUpdateItem;
-            int n = -1;
+            var n = -1;
             n = DataGraphs.IndexOf(DataGraphSelectedItem);
             if (n < 0)
             {
                 return;
             }
-
-            var data = DataGraphs[n];
-
-            if (update.UserDataName != DataGraphs[n].UserDataName && !string.IsNullOrEmpty(update.UserDataName))
-                data.UserDataName = update.UserDataName;
-
-            if (update.Multiplier != DataGraphs[n].Multiplier)
-                data.Multiplier = update.Multiplier;
-
-            if (update.UserColor != DataGraphs[n].UserColor && update.UserColor != null)
-                data.UserColor = update.UserColor;
-
-            if (update.Visible != DataGraphs[n].Visible)
-                data.Visible = update.Visible;
-
-
-            if (update.LocationRow != DataGraphs[n].LocationRow && update.LocationRow >= 0)
-                data.LocationRow = update.LocationRow;
-
-            if (update.locationRowSpan != DataGraphs[n].locationRowSpan && update.locationRowSpan >= 0)
-                data.locationRowSpan = update.locationRowSpan;
-
-
-            DataGraphs.RemoveAt(n);
-            DataGraphs.Insert(n, data);
-            OnPropertyChanged(nameof(DataGraphs));
+            List<DataGraph> newData = DataGraphs.ToList();
+            try
+            {
+                //newData.Add(DataGraphSelectedItem);                
+                newData.Insert(n, DataGraphSelectedItem);
+                newData.RemoveAt(n + 1);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            DataGraphs = new ObservableCollection<DataGraph>(newData);
         });
-
-        private string GetAvarange()
-        {
-            string result = string.Empty;
-
-
-            return result;
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

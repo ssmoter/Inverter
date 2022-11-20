@@ -1,22 +1,36 @@
 ﻿using Inverter.Data;
 using Inverter.Data.Draw;
+using Inverter.Data.Draw.Schema;
 using Inverter.Display.ViewsModel;
 using Inverter.Models;
 using System.Collections.ObjectModel;
+using System.Timers;
 
 namespace Inverter.Display.Views;
 
 public partial class DisplayV : ContentPage
 {
+    private DisplayVM bc; //context
+
+    //wykresy
     private ObservableCollection<DataGraph> DataGraphs;
     private List<Graph> _graphs;
-    private GraphicsView _graphicsDraw;
-
+    private GraphicsView _gvGraphs;
+    //schemat
+    private GraphicsView _gvSchema;
+    private InverterSchema _inverterSchema;
+    private int SActualCurrentIndex;
+    private int SCurrentMaxIndex;
+    System.Timers.Timer _timer;
+    //linia do schematu
+    private LineTimeSchema _lineTimeSchema;
     public DisplayV(DisplayVM vm)
     {
         InitializeComponent();
         BindingContext = vm;
+        symulationRunning = false;
     }
+
 
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
@@ -29,7 +43,9 @@ public partial class DisplayV : ContentPage
     {
         try
         {
-            DisplayVM bc = (DisplayVM)BindingContext;
+            #region Wykresy
+
+            bc = (DisplayVM)BindingContext;
 
             bc.DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.DataGraphs);
             DataGraphs = bc.DataGraphs;
@@ -46,6 +62,25 @@ public partial class DisplayV : ContentPage
                 _graphs.Add(new Graph());
                 Resources.Add(i.ToString(), _graphs[i]);
             }
+            #endregion
+
+            #region schemat
+            //schemat
+            _inverterSchema = new();
+            _gvSchema = new();
+            _gvSchema.Drawable = _inverterSchema;
+            Resources.Add(nameof(InverterSchema), _gvSchema);
+            gSchema.Add(_gvSchema);
+            SCurrentMaxIndex = DataGraphs.FirstOrDefault().X.Count;
+            bc.SCurrentMaxIndex = SCurrentMaxIndex;
+            SActualCurrentIndex = bc.SActualCurrentIndex;
+            _timer = new System.Timers.Timer(100);
+            _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
+            //linia
+            _lineTimeSchema = new();
+            gvLineTimeSchematV.Drawable = _lineTimeSchema;
+            _lineTimeIsHidden = true;
+            #endregion
         }
         catch (Exception)
         {
@@ -53,6 +88,8 @@ public partial class DisplayV : ContentPage
         }
 
     }
+    #region Wykres
+
 
     private GraphicsView SetGraphicsView(GraphicsView graphicsView)
     {
@@ -74,7 +111,6 @@ public partial class DisplayV : ContentPage
         }
         return n;
     }
-
     private void SetGraphRowDefinitions(Grid views, int NumberOfRows)
     {
         views.RowDefinitions.Clear();
@@ -83,12 +119,11 @@ public partial class DisplayV : ContentPage
             views.AddRowDefinition(new RowDefinition(new GridLength(1, GridUnitType.Star)));
         }
     }
-
     private async void UpdateRow_Clicked(object sender, EventArgs e)
     {
-      await ReDrawGraph();
+        lvDataGraphs.BeginRefresh();
+        await ReDrawGraph();
     }
-
     private async Task ReDrawGraph()
     {
         try
@@ -100,19 +135,18 @@ public partial class DisplayV : ContentPage
             //Ustawienie ilości wierszy
             SetGraphRowDefinitions(gGraph, numberCurrentGraph);
 
-
             for (int i = 0; i < DataGraphs.Count; i++)
             {
                 if (DataGraphs[i].Visible)
                 {
 
-                    _graphicsDraw = SetGraphicsView(_graphicsDraw);
-                    _graphicsDraw.Drawable = _graphs[i];
+                    _gvGraphs = SetGraphicsView(_gvGraphs);
+                    _gvGraphs.Drawable = _graphs[i];
 
                     //Ustawienie lokacji wykresu
-                    gGraph.Add(_graphicsDraw, 0, DataGraphs[i].LocationRow);
+                    gGraph.Add(_gvGraphs, 0, DataGraphs[i].LocationRow);
                     //Ustawienie wysokości wykresu
-                    gGraph.SetRowSpan(_graphicsDraw, DataGraphs[i].locationRowSpan);
+                    gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
                     //Ustawienie wyświetlanych wartości osi x
                     _graphs[i].AxisX = DataGraphs[i].X;
                     //sprawdzenie czy tylko raz zostanie opisana oś X
@@ -127,7 +161,6 @@ public partial class DisplayV : ContentPage
                     int PositionName = 1;
                     PositionName = axisX.FindAll(x => x == DataGraphs[i].LocationRow).Count;
                     _graphs[i].PositionName = PositionName;
-
                     //os Y
                     _graphs[i].MaxYValue = DataGraphs[i].Y.Max();
                     _graphs[i].MinYValue = DataGraphs[i].Y.Min();
@@ -136,17 +169,21 @@ public partial class DisplayV : ContentPage
 
                     //Czy siatka jest widoczna
                     _graphs[i].GridIsVisible = gridVisible;
-
+                    _graphs[i].MultipledGraph = multipledGraph;
                     int n = 30;
                     int secondLoop = 0;
                     for (int j = 0; j < DataGraphs[i].Y.Count; j++)
                     {
-                        _graphs[i].point.LineTo(n, -(DataGraphs[i].Y[j] * DataGraphs[i].Multiplier));
+                         _graphs[i].point.LineTo(n, -(DataGraphs[i].Y[j] * DataGraphs[i].Multiplier));
+
                         n++;
-                        if (j + 1 >= DataGraphs[i].Y.Count && secondLoop != 4)
+                        if (!multipledGraph)
                         {
-                            j = 0;
-                            secondLoop++;
+                            if (j + 1 >= DataGraphs[i].Y.Count && secondLoop < 5)
+                            {
+                                j = 0;
+                                secondLoop++;
+                            }
                         }
                     }
 
@@ -158,13 +195,75 @@ public partial class DisplayV : ContentPage
             throw;
         }
     }
-
     bool gridVisible = true;
-    private async void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    bool multipledGraph = true;
+    private async void ckMultipledGraph_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        multipledGraph = !multipledGraph;
+        if (DataGraphs != null)
+            await ReDrawGraph();
+    }
+    private async void ckGridVisible_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         gridVisible = !gridVisible;
-        if(DataGraphs!=null)
-           await ReDrawGraph();
+        if (DataGraphs != null)
+            await ReDrawGraph();
+    }
+
+    #endregion
+
+    #region Symulacja
+    public void TimerEvent(object source, ElapsedEventArgs e)
+    {
+        SActualCurrentIndex++;
+        if (SActualCurrentIndex >= SCurrentMaxIndex)
+        {
+            SActualCurrentIndex = 0;
+        }
+        changeTime();
+    }
+    private bool symulationRunning;
+    private void Symulation_Clicked(object sender, EventArgs e)
+    {
+        SActualCurrentIndex = bc.SActualCurrentIndex;
+
+        if (!symulationRunning)
+        {
+            symulationRunning = !symulationRunning;
+            _timer.Start();
+        }
+        else if (symulationRunning)
+        {
+            symulationRunning = !symulationRunning;
+            _timer.Stop();
+        }
 
     }
+    private void sSymulationTimer_ValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        SActualCurrentIndex = bc.SActualCurrentIndex;
+        changeTime();
+    }
+    private void changeTime()
+    {
+        _inverterSchema.Index = SActualCurrentIndex;
+        _gvSchema.Invalidate();
+
+        _lineTimeSchema.Index = SActualCurrentIndex;
+        gvLineTimeSchematV.Invalidate();
+    }
+    private bool _lineTimeIsHidden = true;
+    private void ckLineTime_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (_lineTimeSchema != null)
+        {
+            _lineTimeIsHidden = !_lineTimeIsHidden;
+            _lineTimeSchema.IsHidden = _lineTimeIsHidden;
+            gvLineTimeSchematV.Invalidate();
+        }
+    }
+
+    #endregion
+
+
 }

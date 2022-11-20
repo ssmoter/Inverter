@@ -52,9 +52,9 @@ namespace Inverter.Data
                 string line;
                 using (StreamReader sr = new StreamReader(path + @"\" + FileName + @".out", Encoding.UTF8))
                 {
-                    line =  sr.ReadToEnd();
+                    line = sr.ReadToEnd();
                 }
-              //  System.IO.File.Delete(path + @"\" + FileName + @".out");
+                //  System.IO.File.Delete(path + @"\" + FileName + @".out");
 
                 return line;
             }
