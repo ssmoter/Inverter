@@ -1,4 +1,6 @@
-﻿using Inverter.Models;
+﻿using Inverter.Data;
+using Inverter.Helpers;
+using Inverter.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,6 +14,16 @@ namespace Inverter.Display.ViewsModel
     public class DisplayVM : INotifyPropertyChanged
     {
         public ResponseModel ResponseModel { get; set; }
+        private int _fontSize = 10;
+        public int FontSize
+        {
+            get => _fontSize;
+            set
+            {
+                _fontSize = value;
+                OnPropertyChanged(nameof(FontSize));
+            }
+        }
         private ObservableCollection<DataGraph> _dataGraphs;
         public ObservableCollection<DataGraph> DataGraphs
         {
@@ -48,9 +60,13 @@ namespace Inverter.Display.ViewsModel
 
                 if (_dataGraphSelectedItem != null)
                 {
-                    _maxMinValue = "Maksymalna wartość = " + _dataGraphSelectedItem.Y.Max().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
-                        Environment.NewLine + "Minimalna wartość = " + _dataGraphSelectedItem.Y.Min().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
-
+                    try
+                    {
+                        _maxMinValue = "Maksymalna = " + _dataGraphSelectedItem.Y.Max().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
+                            Environment.NewLine + "Minimalna = " + _dataGraphSelectedItem.Y.Min().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
+                    }
+                    catch
+                    { }
                     OnPropertyChanged(nameof(MaxMinValue));
                 }
                 OnPropertyChanged(nameof(DataGraphSelectedItem));
@@ -77,9 +93,15 @@ namespace Inverter.Display.ViewsModel
 
             _timer = new System.Timers.Timer(100);
             _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
-            NameSimulationbutton = "Uruchom Symulacje";
+            NameSimulationbutton = "Uruchom";
             symulationRunning = false;
-
+            try
+            {
+                FileManager _fm = new();
+                FontSize = int.Parse(_fm.GetConfig(MyEnums.configName.FontSize));
+            }
+            catch
+            { }
         }
         #region Symulacja
 
@@ -131,13 +153,13 @@ namespace Inverter.Display.ViewsModel
             {
                 symulationRunning = !symulationRunning;
                 _timer.Start();
-                NameSimulationbutton = "Zatrzymaj Symulacje";
+                NameSimulationbutton = "Zatrzymaj";
             }
             else if (symulationRunning)
             {
                 symulationRunning = !symulationRunning;
                 _timer.Stop();
-                NameSimulationbutton = "Uruchom Symulacje";
+                NameSimulationbutton = "Uruchom";
             }
         });
 
@@ -163,14 +185,19 @@ namespace Inverter.Display.ViewsModel
             List<DataGraph> newData = DataGraphs.ToList();
             try
             {
-                //newData.Add(DataGraphSelectedItem);                
+                if (DataGraphSelectedItem.locationRowSpan < 0)
+                {
+                    DataGraphSelectedItem.locationRowSpan = 1;
+                }
+                if (DataGraphSelectedItem.LocationRow <= 0)
+                {
+                    DataGraphSelectedItem.LocationRow = 0;
+                }
                 newData.Insert(n, DataGraphSelectedItem);
                 newData.RemoveAt(n + 1);
             }
             catch (Exception)
-            {
-                throw;
-            }
+            { }
             DataGraphs = new ObservableCollection<DataGraph>(newData);
         });
 

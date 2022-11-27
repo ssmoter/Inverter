@@ -25,7 +25,7 @@ namespace Inverter.Models
         public string DataName { get; set; }
         public string UserDataName { get; set; }
         public NamedColor UserColor { get; set; }
-        public float Multiplier { get; set; } = 1.00f;
+        public float Multiplier { get; set; } = 0.00f;
         public List<float> X { get; set; }
         public List<float> Y { get; set; }
         public bool Visible { get; set; } = false;

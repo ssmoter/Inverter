@@ -4,6 +4,7 @@ using Inverter.Data.Draw.Schema;
 using Inverter.Display.ViewsModel;
 using Inverter.Models;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Timers;
 
 namespace Inverter.Display.Views;
@@ -29,6 +30,7 @@ public partial class DisplayV : ContentPage
         InitializeComponent();
         BindingContext = vm;
         symulationRunning = false;
+        eStrokeSize.Text = strokeSize.ToString();
     }
 
 
@@ -139,16 +141,22 @@ public partial class DisplayV : ContentPage
             {
                 if (DataGraphs[i].Visible)
                 {
-
                     _gvGraphs = SetGraphicsView(_gvGraphs);
                     _gvGraphs.Drawable = _graphs[i];
-
+                    //grubosc lini
+                    try
+                    {
+                        strokeSize = float.Parse(eStrokeSize.Text);
+                    }
+                    catch
+                    {
+                        strokeSize = 1.5f;
+                    }
+                    _graphs[i].StrokeSize = strokeSize;
                     //Ustawienie lokacji wykresu
                     gGraph.Add(_gvGraphs, 0, DataGraphs[i].LocationRow);
                     //Ustawienie wysokości wykresu
                     gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
-                    //Ustawienie wyświetlanych wartości osi x
-                    _graphs[i].AxisX = DataGraphs[i].X;
                     //sprawdzenie czy tylko raz zostanie opisana oś X
                     _graphs[i].AxisXWrite = !axisX.Any(x => x == DataGraphs[i].LocationRow);
                     axisX.Add(DataGraphs[i].LocationRow);
@@ -161,25 +169,111 @@ public partial class DisplayV : ContentPage
                     int PositionName = 1;
                     PositionName = axisX.FindAll(x => x == DataGraphs[i].LocationRow).Count;
                     _graphs[i].PositionName = PositionName;
+                    //tylko wybrana wartosc
+                    startIndex = 0;
+                    endIndex = DataGraphs[i].Y.Count;
+                    #region OsX =user
+                    if (scopeGraph)
+                    {
+                        float valueStart = 0;
+                        float valueEnd = DataGraphs[i].X.LastOrDefault();
+                        try
+                        {
+                            if (!string.IsNullOrWhiteSpace(eStartScope.Text))
+                            {
+                                valueStart = float.Parse(eStartScope.Text);
+                            }
+                            if (!string.IsNullOrWhiteSpace(eEndScope.Text))
+                            {
+                                valueEnd = float.Parse(eEndScope.Text);
+                            }
+                        }
+                        catch
+                        {
+                        }
+                        startIndex = DataGraphs[i].Y.Count;
+                        endIndex = 0;
+                        for (int j = 1; j < DataGraphs[i].Y.Count - 1; j++)
+                        {
+                            if (valueStart >= DataGraphs[i].X[j])
+                            {
+                                if (valueStart <= DataGraphs[i].X[j + 1])
+                                {
+                                    startIndex = j;
+                                }
+                            }
+                            if (valueEnd <= DataGraphs[i].X[j])
+                            {
+                                if (valueEnd >= DataGraphs[i].X[j - 1])
+                                {
+                                    endIndex = j;
+                                }
+                            }
+                        }
+                        if (valueStart <= DataGraphs[i].X.FirstOrDefault())
+                        {
+                            startIndex = 0;
+                        }
+                        if (valueEnd >= DataGraphs[i].X.LastOrDefault())
+                        {
+                            endIndex = DataGraphs[i].X.Count;
+                        }
+                    }
+                    data.X = new List<float>();
+                    data.Y = new List<float>();
+                    data.DataName = DataGraphs[i].DataName;
+                    data.UserDataName = DataGraphs[i].UserDataName;
+                    data.UserColor = DataGraphs[i].UserColor;
+                    data.Multiplier = DataGraphs[i].Multiplier;
+                    data.Visible = DataGraphs[i].Visible;
+                    data.LocationRow = DataGraphs[i].LocationRow;
+                    data.locationRowSpan = DataGraphs[i].locationRowSpan;
+                    for (int k = startIndex; k < endIndex; k++)
+                    {
+                        data.X.Add(DataGraphs[i].X[k]);
+                        data.Y.Add(DataGraphs[i].Y[k]);
+                    }
+                    #endregion
                     //os Y
-                    _graphs[i].MaxYValue = DataGraphs[i].Y.Max();
-                    _graphs[i].MinYValue = DataGraphs[i].Y.Min();
-                    _graphs[i].MaxYPosition = DataGraphs[i].Y.Max() * DataGraphs[i].Multiplier;
-                    _graphs[i].MinYPositions = DataGraphs[i].Y.Min() * DataGraphs[i].Multiplier;
-
+                    _graphs[i].MaxYValue = data.Y.Max();
+                    _graphs[i].MinYValue = data.Y.Min();
+                    _graphs[i].MaxYPosition = data.Y.Max() * data.Multiplier;
+                    _graphs[i].MinYPositions = data.Y.Min() * data.Multiplier;
+                    //font size
+                    _graphs[i].FontSize = bc.FontSize;
                     //Czy siatka jest widoczna
                     _graphs[i].GridIsVisible = gridVisible;
                     _graphs[i].MultipledGraph = multipledGraph;
-                    int n = 30;
+
+                    //Ustawienie wyświetlanych wartości osi x
+                    _graphs[i].AxisX = data.X;
+                    int n = 1;
                     int secondLoop = 0;
-                    for (int j = 0; j < DataGraphs[i].Y.Count; j++)
+                    //Ustawienie wyświetlanych wartości osi x
+                    _graphs[i].AxisX = data.X;
+                    //zakres wyświetlanych wartości na X
+                    _graphs[i].StartScopeIndex = startIndex;
+                    _graphs[i].EndScopeIndex = endIndex;
+                    //skalowanie osi X
+                    _graphs[i].AutoScaleX = autoScaleX;
+
+                    for (int j = 0; j < (endIndex - startIndex); j++)
                     {
-                         _graphs[i].point.LineTo(n, -(DataGraphs[i].Y[j] * DataGraphs[i].Multiplier));
+                        if (data.Multiplier != 0)
+                        {
+                            _graphs[i].AutoScaleY = false;
+                            _graphs[i].point.LineTo(n, -(data.Y[j] * data.Multiplier));
+                        }
+                        else
+                        {
+                            _graphs[i].AutoScaleY = true;
+                            _graphs[i].point.LineTo(n, -data.Y[j]);
+                        }
 
                         n++;
                         if (!multipledGraph)
                         {
-                            if (j + 1 >= DataGraphs[i].Y.Count && secondLoop < 5)
+                            if (j + 1 >= data.Y.Count && secondLoop < 50)
                             {
                                 j = 0;
                                 secondLoop++;
@@ -190,13 +284,22 @@ public partial class DisplayV : ContentPage
                 }
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw;
+            Debug.WriteLine(Environment.NewLine);
+            Debug.WriteLine(ex);
+            // throw;
         }
     }
+    DataGraph data = new DataGraph();
+
+    int startIndex;
+    int endIndex;
+    float strokeSize = 0f;
     bool gridVisible = true;
     bool multipledGraph = true;
+    bool scopeGraph = false;
+    bool autoScaleX = false;
     private async void ckMultipledGraph_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         multipledGraph = !multipledGraph;
@@ -209,7 +312,28 @@ public partial class DisplayV : ContentPage
         if (DataGraphs != null)
             await ReDrawGraph();
     }
-
+    private async void ckGridScope_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        scopeGraph = !scopeGraph;
+        if (DataGraphs != null)
+            await ReDrawGraph();
+    }
+    private async void ckExtendAxisX_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        autoScaleX = !autoScaleX;
+        if (DataGraphs != null)
+            await ReDrawGraph();
+    }
+    private async void eStrokeSize_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (DataGraphs != null)
+            await ReDrawGraph();
+    }
+    private async void eScope_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (DataGraphs != null)
+            await ReDrawGraph();
+    }
     #endregion
 
     #region Symulacja
@@ -263,7 +387,9 @@ public partial class DisplayV : ContentPage
         }
     }
 
-    #endregion
 
+
+
+    #endregion
 
 }

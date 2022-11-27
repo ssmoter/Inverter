@@ -1,6 +1,7 @@
 ﻿using Inverter.Data;
 using Inverter.Display.Views;
 using Inverter.GenerateInverter.Model;
+using Inverter.Helpers;
 using Inverter.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,7 +14,7 @@ namespace Inverter.GenerateInverter.ViewsModel
     public class GenerateMV : INotifyPropertyChanged
     {
         private InverterParameters _InverterParameters;
-        private FileManager _FileManager;
+        private FileManager _fm;
 
         private GenerateM _InverterM;
         public GenerateM InverterM
@@ -35,7 +36,16 @@ namespace Inverter.GenerateInverter.ViewsModel
                 OnPropertyChanged(nameof(IsBusy));
             }
         }
-
+        private int _fontSize = 14;
+        public int FontSize
+        {
+            get => _fontSize;
+            set
+            {
+                _fontSize = value;
+                OnPropertyChanged(nameof(FontSize));
+            }
+        }
 
         public GenerateMV()
         {
@@ -43,11 +53,17 @@ namespace Inverter.GenerateInverter.ViewsModel
             _InverterM = new();
             _InverterM.DefaultDataNotify = new();
             _InverterM.DataNotify = new();
-            _FileManager = new();
+            _fm = new();
             Message = new ObservableCollection<string>();
             Message.Clear();
             _isBusy = false;
             Initialization();
+            try
+            {
+                FontSize = int.Parse(_fm.GetConfig(MyEnums.configName.FontSize));
+            }
+            catch
+            { }
         }
         public ICommand InitialValues => new Command(() =>
         {
@@ -116,7 +132,7 @@ namespace Inverter.GenerateInverter.ViewsModel
             {
                 IsBusy = true;
                 AddMessage("Tworzenie Pliku");
-                bool isCreatedFile = await _FileManager.NewFile(InverterM.StringModelNotify);
+                bool isCreatedFile = await _fm.NewFile(InverterM.StringModelNotify);
                 if (isCreatedFile)
                 {
                     AddMessage("Plik Został utworzony");
@@ -124,8 +140,8 @@ namespace Inverter.GenerateInverter.ViewsModel
                     AddMessage("Uruchamianie Aplikacji");
                     using (Process myprocess = new Process())
                     {
-                        myprocess.StartInfo.FileName = @"F:\pspice\instal\PSpice\pspice.exe";
-                        myprocess.StartInfo.Arguments = _FileManager.FilePathData;
+                        myprocess.StartInfo.FileName = _fm.GetConfig(Helpers.MyEnums.configName.PspicePath);
+                        myprocess.StartInfo.Arguments = _fm.FilePathData;
                         if (myprocess.Start())
                         {
                             AddMessage("Aplikacja została uruchomiona");
@@ -145,6 +161,7 @@ namespace Inverter.GenerateInverter.ViewsModel
             finally
             { IsBusy = false; }
         });
+
         #endregion
 
         #region WczytajDane
@@ -165,7 +182,8 @@ namespace Inverter.GenerateInverter.ViewsModel
             try
             {
                 IsBusy = true;
-                bool Load = await Shell.Current.DisplayAlert("Wizualizacja", "Czy chcesz kontynuować", "Tak", "Nie");
+                bool Load = false;
+                Load = await Shell.Current.DisplayAlert("Wizualizacja", "Czy chcesz kontynuować", "Tak", "Nie");
 
                 if (Load)
                 {
@@ -187,19 +205,19 @@ namespace Inverter.GenerateInverter.ViewsModel
                 AddMessage(ex.Message);
             }
             finally
-            { 
+            {
                 IsBusy = false;
             }
         });
         private async Task<ResponseModel> GetData(ResponseModel response)
         {
-            response = new(_FileManager.FilePathData);
+            response = new(_fm.FilePathData);
 
             response.DataGraphs = InverterM.DefaultDataNotify.ToList();
             if (InverterM.DataNotify.Any(x => !string.IsNullOrEmpty(x.DataName)))
                 response.DataGraphs.AddRange(InverterM.DataNotify);
 
-            response.OutPutString = await _FileManager.OpenFile();
+            response.OutPutString = await _fm.OpenFile();
 
             List<NamedColor> colors = NamedColor.All.ToList();
             int n = 0;

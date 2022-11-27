@@ -1,6 +1,7 @@
 ﻿using Inverter.Display.Views;
 using Inverter.Display.ViewsModel;
 using Inverter.GenerateInverter.ViewsModel;
+using Inverter.Helpers;
 
 namespace Inverter;
 
@@ -24,8 +25,6 @@ public static class MauiProgram
 
         builder.Services.AddTransient<GenerateMV>();
         builder.Services.AddTransient<GenerateInverter.Views.InverterV>();
-
-
 
         var app = builder.Build();
 

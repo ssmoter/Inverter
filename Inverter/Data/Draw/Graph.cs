@@ -14,6 +14,13 @@
         public int PositionName { get; set; } = 1;
         public bool GridIsVisible { get; set; }
         public bool MultipledGraph { get; set; }
+        public bool AutoScaleY { get; set; }
+        public bool AutoScaleX { get; set; }
+        public float FontSize { get; set; }
+        public float StrokeSize { get; set; } = 1f;
+        public int StartScopeIndex { get; set; } = 0;
+        public int EndScopeIndex { get; set; } = 0;
+
         public Graph()
         {
             AxisX = new List<float>();
@@ -26,16 +33,66 @@
             try
             {
                 int farFromUp = 10;
+
+
                 #region Wykresy
                 canvas.SaveState();
+                canvas.StrokeSize = StrokeSize;
 
-                canvas.Translate(dirtyRect.Left + 40, dirtyRect.Top + MaxYPosition + farFromUp);
 
                 canvas.StrokeColor = Color;
-                canvas.StrokeSize = 1.5f;
+
+                //skala w osi X
+                float scaleX = 1;
+                scaleX = (dirtyRect.Width - 100) / (EndScopeIndex - StartScopeIndex);
+
+
+                //skalowanie w osi Y
+                float scaleY = 1;
+                if (AutoScaleY)
+                {
+                    float denominator = 1;
+                    if (Math.Abs(MinYValue) < Math.Abs(MaxYValue) * 0.1)
+                    {
+                        denominator = Math.Abs(MaxYValue) * 2;
+                        canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
+                    }
+                    else if (Math.Abs(MaxYValue) < Math.Abs(MinYValue) * 0.1)
+                    {
+                        denominator = Math.Abs(MinYValue) * 2;
+                        canvas.Translate(dirtyRect.Left + 70, dirtyRect.Top + farFromUp);
+                    }
+                    else
+                    {
+                        denominator = Math.Abs(MinYValue) + Math.Abs(MaxYValue);
+                        canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
+                    }
+
+                    scaleY = (dirtyRect.Height - farFromUp - 80) / denominator;
+                    canvas.Scale(1, scaleY);
+                }
+                else
+                {
+                    canvas.Translate(dirtyRect.Left + 70, dirtyRect.Top + MaxYPosition + farFromUp);
+                }
+                if (AutoScaleX)
+                {
+                    canvas.Scale(scaleX, 1);
+                }
+
+                if (StrokeSize == 0)
+                {
+                    canvas.StrokeSize = 1 / scaleX;
+                    if (1 / scaleX <= 0.1f)
+                    {
+                        canvas.StrokeSize = 0.1f;
+                    }
+                }
+
                 canvas.DrawPath(point);
                 canvas.RestoreState();
                 #endregion               
+                canvas.Scale(1, 1);
 
                 #region Osie
 
@@ -43,20 +100,57 @@
                 canvas.Translate(dirtyRect.Left, dirtyRect.Top);
                 //podpis wykresu
                 canvas.FontColor = Color;
-                canvas.DrawString(Name, 50 + (PositionName * 50), dirtyRect.Bottom - 10, HorizontalAlignment.Left);
+                canvas.FontSize = FontSize;
+                canvas.DrawString(Name, 50 + (PositionName * (Name.Length + FontSize + 25)), dirtyRect.Bottom - 10, HorizontalAlignment.Left);
 
                 //wartości na osi Y
+                //poprawic
 
                 var yValue = MaxYValue.ToString().Split(',');
-                string visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
-                canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + farFromUp, HorizontalAlignment.Right);
-                if (Math.Abs(MinYValue) > 0.001)
-                {
-                    yValue = MinYValue.ToString().Split(',');
-                    visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
-                    canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp, HorizontalAlignment.Right);
-                }
+                string visibleYValue = string.Empty;
 
+                if (AutoScaleY)
+                {
+                    if (yValue.Length > 1)
+                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
+                    else
+                        visibleYValue = yValue.FirstOrDefault();
+
+                    canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Center.Y - (scaleY * MaxYValue) - farFromUp, HorizontalAlignment.Right);
+                    if (Math.Abs(MinYValue) > 0.001)
+                    {
+                        yValue = MinYValue.ToString().Split(',');
+                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
+                        canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Center.Y - (MinYValue * scaleY) - farFromUp, HorizontalAlignment.Right);
+                    }
+                    if (MaxYValue > 0)
+                    {
+                        canvas.FontColor = Color;
+                        canvas.DrawString("0-", 70, dirtyRect.Center.Y - farFromUp, HorizontalAlignment.Right);
+                        canvas.FontColor = Colors.Black;
+                    }
+                }
+                else
+                {
+                    if (yValue.Length > 1)
+                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
+                    else
+                        visibleYValue = yValue.FirstOrDefault();
+
+                    canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + farFromUp, HorizontalAlignment.Right);
+                    if (Math.Abs(MinYValue) > 0.001)
+                    {
+                        yValue = MinYValue.ToString().Split(',');
+                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
+                        canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp, HorizontalAlignment.Right);
+                    }
+                    if (MaxYValue > 0)
+                    {
+                        canvas.FontColor = Color;
+                        canvas.DrawString("0-", 70, (dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp) - Math.Abs(MinYPositions), HorizontalAlignment.Right);
+                        canvas.FontColor = Colors.Black;
+                    }
+                }
                 canvas.StrokeColor = Colors.Black;
                 canvas.FontColor = Colors.Black;
 
@@ -74,13 +168,6 @@
 
                 canvas.StrokeColor = Colors.Black;
 
-                if (MaxYValue > 0)
-                {
-                    canvas.FontColor = Color;
-                    canvas.DrawString("0-", 70, (dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp) - Math.Abs(MinYPositions), HorizontalAlignment.Right);
-                    canvas.FontColor = Colors.Black;
-                }
-
                 //wartosci na osi X
                 if (AxisXWrite)
                 {
@@ -90,15 +177,27 @@
                     int nIndicator = 0;
                     int nPosition = 0;
                     int lenghtN = AxisX.Count / 20;
-                    if (lenghtN < 30)
-                        lenghtN += lenghtN;
-                    if (lenghtN > 100)
-                        lenghtN = 50;
+
+                    for (int j = 0; ; j++)
+                    {
+                        if (lenghtN < 50)
+                            lenghtN *= 2;
+
+                        if (lenghtN > 100)
+                            lenghtN /= 2;
+
+                        if (lenghtN > 50)
+                            break;
+                    }
+                    if (AutoScaleX)
+                        lenghtN /= (int)scaleX;
+
                     canvas.DrawString("|", nPosition - 2, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
                     canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 35, HorizontalAlignment.Center);
 
                     for (int i = 0; i < AxisX.Count; i++, nIndicator += lenghtN, nPosition += lenghtN)
                     {
+
                         if (!MultipledGraph)
                         {
                             if (nIndicator >= AxisX.Count)
@@ -118,10 +217,24 @@
                             continue;
                         }
 
-                        canvas.DrawString("|", nPosition - 2, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
-                        canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 35, HorizontalAlignment.Center);
+                        if (AutoScaleX)
+                        {
+                            canvas.DrawString("|", (nPosition - 2) * scaleX, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
+                            canvas.DrawString(AxisX[nIndicator].ToString(), nPosition * scaleX, dirtyRect.Bottom - 25, HorizontalAlignment.Center);
+                        }
+                        else if (false)
+                        {
+
+                        }
+                        else
+                        {
+                            canvas.DrawString("|", nPosition - 2, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
+                            canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 25, HorizontalAlignment.Center);
+                        }
                     }
                 }
+
+
                 canvas.RestoreState();
 
                 #endregion

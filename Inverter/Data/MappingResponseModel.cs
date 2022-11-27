@@ -43,7 +43,7 @@ namespace Inverter.Data
                             {
                                 for (int k = 0; k < currentData.Count; k++)
                                 {
-                                    if (responseModel.DataGraphs[j].DataName == currentData[k])
+                                    if (responseModel.DataGraphs[j].DataName.ToUpper() == currentData[k].ToUpper())
                                     {
                                         responseModel.DataGraphs[j].Y.Add(Single.Parse(currentLine[k], NumberStyles.Float, new CultureInfo("en-US")));
                                         responseModel.DataGraphs[j].X.Add(Single.Parse(currentLine[0], NumberStyles.Float, new CultureInfo("en-US")));

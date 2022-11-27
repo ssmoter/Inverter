@@ -11,6 +11,8 @@
 
     <ContentPage.Resources>
         <Style TargetType="Editor">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
@@ -35,6 +37,8 @@
             </Setter>
         </Style>
         <Style TargetType="Button">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
@@ -55,10 +59,25 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="FontSize" Value="{Binding FontSize}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
     </ContentPage.Resources>
 
-    <ScrollView Margin="5,0,10,5" >
-        <Grid 
+    <ScrollView Margin="5,0,10,5">
+        <Grid  
                 ColumnDefinitions="*,.8*" ColumnSpacing="10"
                 RowDefinitions="auto,300,auto,auto,*" RowSpacing="10">
             <!--Konfiguracja-->
@@ -67,13 +86,18 @@
             <Label FontSize="Title" HorizontalOptions="Center" Text="Wykresy" Grid.Row="2" Grid.ColumnSpan="2"/>
 
             <Grid Grid.Row="2" Grid.Column="2" HorizontalOptions="End" VerticalOptions="End"
-                  ColumnDefinitions="*,*,*,*">
-                <CheckBox Grid.Column="0" ToolTipProperties.Text="Widoczność lini czasu" CheckedChanged="ckLineTime_CheckedChanged" x:Name="ckLineTime" IsChecked="True"/>
-                <CheckBox Grid.Column="1" ToolTipProperties.Text="Powielanie wykresu" CheckedChanged="ckMultipledGraph_CheckedChanged" x:Name="ckMultipledGraph" IsChecked="True"/>
-                <CheckBox Grid.Column="2" ToolTipProperties.Text="Widoczność siatki" CheckedChanged="ckGridVisible_CheckedChanged" x:Name="ckGridVisible" IsChecked="True"/>
-                <ListView Grid.Column="3" ToolTipProperties.Text="Wyświetlany kolor tła" 
+                  ColumnDefinitions="*,*,*,*,*,*,*,*,*">
+                <Editor Grid.Column="0" ToolTipProperties.Text="Grubość lini&#10;0-auto" x:Name="eStrokeSize" TextChanged="eStrokeSize_TextChanged"/>
+                <CheckBox Grid.Column="1" ToolTipProperties.Text="Przybliżać w danym zakresie&#10;Tak/Nie" CheckedChanged="ckGridScope_CheckedChanged" IsChecked="False"/>
+                <Editor Grid.Column="2" ToolTipProperties.Text="Początek zakresu" TextChanged="eScope_TextChanged"  x:Name="eStartScope" Placeholder="Start" WidthRequest="150"/>
+                <Editor Grid.Column="3" ToolTipProperties.Text="Koniec zakresu" TextChanged="eScope_TextChanged" x:Name="eEndScope" Placeholder="Koniec" WidthRequest="150"/>
+                <CheckBox Grid.Column="4" ToolTipProperties.Text="Widoczność lini czasu" CheckedChanged="ckLineTime_CheckedChanged" x:Name="ckLineTime" IsChecked="True"/>
+                <CheckBox Grid.Column="5"  ToolTipProperties.Text="auto skala osi X" CheckedChanged="ckExtendAxisX_CheckedChanged" x:Name="ckExtendAxisX" IsChecked="False"/>
+                <CheckBox Grid.Column="6" ToolTipProperties.Text="Powielanie wykresu" CheckedChanged="ckMultipledGraph_CheckedChanged" x:Name="ckMultipledGraph" IsChecked="False"/>
+                <CheckBox Grid.Column="7" ToolTipProperties.Text="Widoczność siatki" CheckedChanged="ckGridVisible_CheckedChanged" x:Name="ckGridVisible" IsChecked="True"/>
+                <ListView Grid.Column="8" ToolTipProperties.Text="Wyświetlany kolor tła" 
                               ItemsSource="{x:Static vm2:NamedColor.All}" x:Name="lvBackgroundColor" MaximumWidthRequest="100"
-                              MaximumHeightRequest="20" >
+                              MaximumHeightRequest="50" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -141,44 +165,44 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <Editor Grid.Row="3" Grid.Column="3" ToolTipProperties.Text="Nowa skala" Text="{Binding DataGraphUpdateItem.Multiplier}" Placeholder="Skala" HorizontalOptions="Center" Keyboard="Numeric" />
+                    <Editor Grid.Row="3" Grid.Column="3" ToolTipProperties.Text="Nowa skala&#10;0-auto" Text="{Binding DataGraphUpdateItem.Multiplier}" Placeholder="Skala" HorizontalOptions="Center" Keyboard="Numeric" />
                     <Editor Grid.Row="3" Grid.Column="4" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry)" Text="{Binding DataGraphUpdateItem.LocationRow}"  Placeholder="Wiersz" HorizontalOptions="Center" Keyboard="Numeric" />
                     <Editor Grid.Row="3" Grid.Column="5" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry)" Text="{Binding DataGraphUpdateItem.locationRowSpan}"  Placeholder="Rozpiętość wierszy" HorizontalOptions="Center" Keyboard="Numeric" />
-                    <CheckBox Grid.Row="3" Grid.Column="6" ToolTipProperties.Text="Czy wykres jest widoczny"  IsChecked="{Binding DataGraphUpdateItem.Visible}" HorizontalOptions="Center"/>
+                    <CheckBox Grid.Row="3" Grid.Column="6" ToolTipProperties.Text="Czy wykres jest widoczny"  IsChecked="{Binding DataGraphUpdateItem.Visible}" HorizontalOptions="Center" Margin="0,5,0,5"/>
                     <Label  Grid.Row="4" Grid.ColumnSpan="3" ZIndex="10" TextColor="White" Text="{Binding MaxMinValue}"/>
                     <Button Grid.Row="4" Grid.ColumnSpan="7" ZIndex="10" ToolTipProperties.Text="Zapisz ustawienia i odśwież osie"  Clicked="UpdateRow_Clicked" Command="{Binding UpdateRowCommand}" HorizontalOptions="Center" Text="Aktualizuj" Margin="0,5,0,0"/>
                     <Button Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="3" ZIndex="10" ToolTipProperties.Text="Przycisk uruchamia symulacje przepływu prądów w obowdzie" Command="{Binding StartSymulation}" Text="{Binding NameSimulationbutton}" Clicked="Symulation_Clicked" HorizontalOptions="Start" Margin="0,5,0,0"/>
                     <!--Tabela z danymi-->
                     <ListView 
-                            Grid.Row="1" Grid.ColumnSpan="7" SelectionMode="Single" x:Name="lvDataGraphs"
+                            Grid.Row="1" Grid.ColumnSpan="7" SelectionMode="Single" x:Name="lvDataGraphs" 
                             ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem }">
                         <ListView.Header>
                             <StackLayout>
                                 <Grid
                                     ColumnDefinitions="0.5*,2*,*,0.5*,0.5*,0.7*,0.5*" ColumnSpacing="5"
                                         RowDefinitions="*" RowSpacing="10">
-                                    <Label Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" Text="ID" />
-                                    <Label Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" Text="Nazwa"/>
-                                    <Label Grid.Row="0" Grid.Column="2" HorizontalOptions="Start" Text="Color"/>
-                                    <Label Grid.Row="0" Grid.Column="3" HorizontalOptions="Center" Text="Skala"/>
-                                    <Label Grid.Row="0" Grid.Column="4" HorizontalOptions="Center" Text="Wiersz"/>
-                                    <Label Grid.Row="0" Grid.Column="5" HorizontalOptions="Center" Text="Rozpiętość&#10;Wierszy" />
-                                    <Label Grid.Row="0" Grid.Column="6" HorizontalOptions="Center" Text="Widoczny"/>
+                                    <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold" HorizontalOptions="Center" Text="ID" />
+                                    <Label Grid.Row="0" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Center" Text="Nazwa"/>
+                                    <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Start" Text="Color"/>
+                                    <Label Grid.Row="0" Grid.Column="3" FontAttributes="Bold" HorizontalOptions="Center" Text="Skala"/>
+                                    <Label Grid.Row="0" Grid.Column="4" FontAttributes="Bold" HorizontalOptions="Center" Text="Wiersz"/>
+                                    <Label Grid.Row="0" Grid.Column="5" FontAttributes="Bold" HorizontalOptions="Center" Text="Rozpiętość&#10;Wierszy" />
+                                    <Label Grid.Row="0" Grid.Column="6" FontAttributes="Bold" HorizontalOptions="Center" Text="Widoczny"/>
                                 </Grid>
                             </StackLayout>
                         </ListView.Header>
                         <ListView.Footer>
                             <StackLayout>
                                 <Grid
-                                    ColumnDefinitions="0.5*,2*,*,0.5*,0.5*,0.7*,0.5*" ColumnSpacing="10"
+                                    ColumnDefinitions="0.5*,2*,*,0.5*,0.5*,0.7*,0.5*" ColumnSpacing="5"
                                      RowDefinitions="*" RowSpacing="10">
-                                    <Label Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" Text="ID" />
-                                    <Label Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" Text="Nazwa"/>
-                                    <Label Grid.Row="0" Grid.Column="2" HorizontalOptions="Start" Text="Color"/>
-                                    <Label Grid.Row="0" Grid.Column="3" HorizontalOptions="Center" Text="Skala"/>
-                                    <Label Grid.Row="0" Grid.Column="4" HorizontalOptions="Center" Text="Wiersz"/>
-                                    <Label Grid.Row="0" Grid.Column="5" HorizontalOptions="Center" Text="Rozpiętość&#10;Wierszy" />
-                                    <Label Grid.Row="0" Grid.Column="6" HorizontalOptions="Center" Text="Widoczny"/>
+                                    <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold" HorizontalOptions="Center" Text="ID" />
+                                    <Label Grid.Row="0" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Center" Text="Nazwa"/>
+                                    <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Start" Text="Color"/>
+                                    <Label Grid.Row="0" Grid.Column="3" FontAttributes="Bold" HorizontalOptions="Center" Text="Skala"/>
+                                    <Label Grid.Row="0" Grid.Column="4" FontAttributes="Bold" HorizontalOptions="Center" Text="Wiersz"/>
+                                    <Label Grid.Row="0" Grid.Column="5" FontAttributes="Bold" HorizontalOptions="Center" Text="Rozpiętość&#10;Wierszy" />
+                                    <Label Grid.Row="0" Grid.Column="6" FontAttributes="Bold" HorizontalOptions="Center" Text="Widoczny"/>
                                 </Grid>
                             </StackLayout>
                         </ListView.Footer>
@@ -234,9 +258,9 @@
                     RowDefinitions="1,*,1">
                     <GraphicsView
                         Grid.Row="1" Grid.Column="0" x:Name="gvLineTimeSchematV" ZIndex="10"/>
-                    <ScrollView
+                    <ScrollView Orientation="Both"
                         Grid.Row="1" Grid.Column="0" BindingContext="{x:Reference lvBackgroundColor}"
-                        ZIndex="9" BackgroundColor="{Binding Path=SelectedItem.Color}" MaximumHeightRequest="500" >
+                        ZIndex="9" BackgroundColor="{Binding Path=SelectedItem.Color}" >
                         <Grid
                         x:Name="gGraph">
                         </Grid>

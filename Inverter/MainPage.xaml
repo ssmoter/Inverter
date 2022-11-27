@@ -5,6 +5,7 @@
 
     <ContentPage.Resources>
         <Style TargetType="Editor">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
@@ -29,6 +30,7 @@
             </Setter>
         </Style>
         <Style TargetType="Button">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
@@ -49,33 +51,41 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid
-        VerticalOptions="Center"
-        MinimumHeightRequest="200"
-        MinimumWidthRequest="200">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <VerticalStackLayout
-            HorizontalOptions="Center"
-            VerticalOptions="Center"
+    <ScrollView MinimumHeightRequest="600">
+        <Grid
+        HorizontalOptions="CenterAndExpand"
+        VerticalOptions="CenterAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <VerticalStackLayout
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand"
             Padding="30"
             Spacing="25">
-            <Button Text="Wygeneruj Nowy Falownik" 
+                <Button Text="Wygeneruj Nowy Falownik" 
                     Grid.Column="0"
                     Grid.Row="0"
                     Clicked="CreateNewInverter"/>
-            <Button Text="konfiguracja" 
+                <Button Text="Wczytaj Gotowy Zestaw" 
                     Grid.Column="0"
                     Grid.Row="1"
                     Clicked="Configuration"/>
+                <Button Text="Lokalizacja Pspice" 
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Clicked="PspiceLocation_Clicked"/>
+                <Button Text="Rozmiar Czcionki" 
+                    Grid.Column="0"
+                    Grid.Row="3"
+                    Clicked="FontSize_Clicked"/>
 
-        </VerticalStackLayout>
-    </Grid>
-
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
 </ContentPage>
