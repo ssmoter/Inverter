@@ -14,7 +14,7 @@ namespace Inverter.Display.ViewsModel
     public class DisplayVM : INotifyPropertyChanged
     {
         public ResponseModel ResponseModel { get; set; }
-        private int _fontSize = 10;
+        private int _fontSize = 14;
         public int FontSize
         {
             get => _fontSize;
@@ -63,7 +63,7 @@ namespace Inverter.Display.ViewsModel
                     try
                     {
                         _maxMinValue = "Maksymalna = " + _dataGraphSelectedItem.Y.Max().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
-                            Environment.NewLine + "Minimalna = " + _dataGraphSelectedItem.Y.Min().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
+                           Environment.NewLine + "Minimalna = " + _dataGraphSelectedItem.Y.Min().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
                     }
                     catch
                     { }
@@ -87,6 +87,12 @@ namespace Inverter.Display.ViewsModel
         {
             Initialization();
         }
+        public DisplayVM(ResponseModel responseModel)
+        {
+            ResponseModel = responseModel;
+            Initialization();
+        }
+
         private void Initialization()
         {
             SetUpdateItem();

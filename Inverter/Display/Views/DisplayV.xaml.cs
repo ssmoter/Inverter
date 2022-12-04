@@ -31,6 +31,14 @@ public partial class DisplayV : ContentPage
         BindingContext = vm;
         symulationRunning = false;
         eStrokeSize.Text = strokeSize.ToString();
+
+        try
+        {
+            Initialization();
+        }
+        catch
+        { }
+
     }
 
 
@@ -38,7 +46,9 @@ public partial class DisplayV : ContentPage
     {
         base.OnNavigatedTo(args);
 
-        await Initialization();
+        Task t = Initialization();
+        await t;
+        //await Initialization();
     }
 
     private async Task Initialization()
@@ -323,6 +333,14 @@ public partial class DisplayV : ContentPage
         autoScaleX = !autoScaleX;
         if (DataGraphs != null)
             await ReDrawGraph();
+        if (_lineTimeSchema != null)
+        {
+            _lineTimeSchema.StartScopeIndex = startIndex;
+            _lineTimeSchema.EndScopeIndex = endIndex;
+            _lineTimeSchema.AutoScaleX = autoScaleX;
+            gvLineTimeSchematV.Invalidate();
+        }
+
     }
     private async void eStrokeSize_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -366,6 +384,9 @@ public partial class DisplayV : ContentPage
     private void sSymulationTimer_ValueChanged(object sender, ValueChangedEventArgs e)
     {
         SActualCurrentIndex = bc.SActualCurrentIndex;
+        _lineTimeSchema.StartScopeIndex = startIndex;
+        _lineTimeSchema.EndScopeIndex = endIndex;
+        _lineTimeSchema.AutoScaleX = autoScaleX;
         changeTime();
     }
     private void changeTime()
@@ -374,6 +395,12 @@ public partial class DisplayV : ContentPage
         _gvSchema.Invalidate();
 
         _lineTimeSchema.Index = SActualCurrentIndex;
+        if (autoScaleX)
+        {
+            _lineTimeSchema.StartScopeIndex = startIndex;
+            _lineTimeSchema.EndScopeIndex = endIndex;
+            _lineTimeSchema.AutoScaleX = autoScaleX;
+        }
         gvLineTimeSchematV.Invalidate();
     }
     private bool _lineTimeIsHidden = true;
@@ -392,4 +419,14 @@ public partial class DisplayV : ContentPage
 
     #endregion
 
+    private void svGraph_SizeChanged(object sender, EventArgs e)
+    {
+        svGraph.MaximumWidthRequest = this.Width;
+    }
+
+    private void svMain_SizeChanged(object sender, EventArgs e)
+    {
+        svMain.MaximumWidthRequest = this.Width;
+        svMain.MaximumHeightRequest = this.Height;
+    }
 }

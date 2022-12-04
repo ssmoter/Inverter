@@ -34,7 +34,6 @@
             {
                 int farFromUp = 10;
 
-
                 #region Wykresy
                 canvas.SaveState();
                 canvas.StrokeSize = StrokeSize;
@@ -83,9 +82,9 @@
                 if (StrokeSize == 0)
                 {
                     canvas.StrokeSize = 1 / scaleX;
-                    if (1 / scaleX <= 0.1f)
+                    if (1 / scaleX <= 0.5f)
                     {
-                        canvas.StrokeSize = 0.1f;
+                        canvas.StrokeSize = 0.5f;
                     }
                 }
 
@@ -95,13 +94,14 @@
                 canvas.Scale(1, 1);
 
                 #region Osie
+                canvas.Translate(dirtyRect.Left, dirtyRect.Top);
+
 
                 canvas.SaveState();
-                canvas.Translate(dirtyRect.Left, dirtyRect.Top);
                 //podpis wykresu
                 canvas.FontColor = Color;
                 canvas.FontSize = FontSize;
-                canvas.DrawString(Name, 50 + (PositionName * (Name.Length + FontSize + 25)), dirtyRect.Bottom - 10, HorizontalAlignment.Left);
+                canvas.DrawString(Name, -80 + (PositionName * (Name.Length * (FontSize / 2))), dirtyRect.Bottom - 3, HorizontalAlignment.Left);
 
                 //wartości na osi Y
                 //poprawic
@@ -112,7 +112,7 @@
                 if (AutoScaleY)
                 {
                     if (yValue.Length > 1)
-                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
+                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
                     else
                         visibleYValue = yValue.FirstOrDefault();
 
@@ -120,7 +120,7 @@
                     if (Math.Abs(MinYValue) > 0.001)
                     {
                         yValue = MinYValue.ToString().Split(',');
-                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
+                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
                         canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Center.Y - (MinYValue * scaleY) - farFromUp, HorizontalAlignment.Right);
                     }
                     if (MaxYValue > 0)
@@ -133,7 +133,7 @@
                 else
                 {
                     if (yValue.Length > 1)
-                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
+                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
                     else
                         visibleYValue = yValue.FirstOrDefault();
 
@@ -141,7 +141,7 @@
                     if (Math.Abs(MinYValue) > 0.001)
                     {
                         yValue = MinYValue.ToString().Split(',');
-                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 3);
+                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
                         canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp, HorizontalAlignment.Right);
                     }
                     if (MaxYValue > 0)
@@ -153,6 +153,7 @@
                 }
                 canvas.StrokeColor = Colors.Black;
                 canvas.FontColor = Colors.Black;
+
 
                 if (AxisXWrite)
                 {
@@ -190,14 +191,20 @@
                             break;
                     }
                     if (AutoScaleX)
-                        lenghtN /= (int)scaleX;
+                    {
+                        if (scaleX < 1)
+                            lenghtN += 0;
+                        else
+                            lenghtN /= (int)scaleX;
+                    }
 
                     canvas.DrawString("|", nPosition - 2, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
                     canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 35, HorizontalAlignment.Center);
 
+                    int secondLineI = 0;
+                    bool secondLineB = false;
                     for (int i = 0; i < AxisX.Count; i++, nIndicator += lenghtN, nPosition += lenghtN)
                     {
-
                         if (!MultipledGraph)
                         {
                             if (nIndicator >= AxisX.Count)
@@ -219,17 +226,23 @@
 
                         if (AutoScaleX)
                         {
-                            canvas.DrawString("|", (nPosition - 2) * scaleX, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
-                            canvas.DrawString(AxisX[nIndicator].ToString(), nPosition * scaleX, dirtyRect.Bottom - 25, HorizontalAlignment.Center);
-                        }
-                        else if (false)
-                        {
-
+                            canvas.DrawString("|", (nPosition) * scaleX, dirtyRect.Bottom - 48 + secondLineI, HorizontalAlignment.Center);
+                            canvas.DrawString(AxisX[nIndicator].ToString(), nPosition * scaleX, dirtyRect.Bottom - 25 + secondLineI, HorizontalAlignment.Center);
                         }
                         else
                         {
-                            canvas.DrawString("|", nPosition - 2, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
-                            canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 25, HorizontalAlignment.Center);
+                            canvas.DrawString("|", nPosition, dirtyRect.Bottom - 48 + secondLineI, HorizontalAlignment.Center);
+                            canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 25 + secondLineI, HorizontalAlignment.Center);
+                        }
+                        if (secondLineB)
+                        {
+                            secondLineB = !secondLineB;
+                            secondLineI = 20;
+                        }
+                        else
+                        {
+                            secondLineB = !secondLineB;
+                            secondLineI = 0;
                         }
                     }
                 }

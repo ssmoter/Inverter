@@ -107,14 +107,14 @@
         </Style>
     </ContentPage.Resources>
 
-    <RefreshView IsRefreshing="{Binding IsBusy}" Margin="0" Padding="0"  >
-        <ScrollView Margin="1,0,1,0" Padding="0" Orientation="Both" MaximumHeightRequest="600"
+    <RefreshView IsRefreshing="{Binding IsBusy}" Margin="0" Padding="0" x:Name="rvMain" SizeChanged="rvMain_SizeChanged" >
+        <ScrollView Margin="1,0,1,0" Padding="0" Orientation="Both" 
                     >
 
             <Grid
             RowDefinitions="auto,auto,auto"
             RowSpacing="5"
-            ColumnDefinitions="auto,15,auto,15,auto" Margin="10,0,10,0">
+            ColumnDefinitions="auto,15,auto,15,auto" Margin="10,0,0,0">
 
                 <!--komunikaty-->
                 <ListView 
@@ -218,12 +218,12 @@
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
                             <Label Grid.Column="0" Text="K: " TextColor="White" />
                             <ListView  Grid.Column="1" MaximumHeightRequest="50" BackgroundColor="White"
-                                       ItemsSource="{Binding InverterM.KNotify}" SelectedItem="{Binding InverterM.SelectedKNotify}" >
+                                       ItemsSource="{Binding InverterM.KNotify}"  SelectedItem="{Binding InverterM.SelectedKNotify}" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate >
                                         <ViewCell>
                                             <Frame>
-                                                <Label Text="{Binding Key}" TextColor="Black"  FontSize="{Binding FontSize}"/>
+                                                <Label Text="{Binding Key}" TextColor="Black" />
                                             </Frame>
                                         </ViewCell>
                                     </DataTemplate>
@@ -343,8 +343,8 @@
                                             <Grid 
                                                             ColumnDefinitions=".5*,*"
                                                             ColumnSpacing="20">
-                                                <Label Grid.Column="0" Text="{Binding DataName}" TextColor="Black" FontSize="{Binding FontSize}"/>
-                                                <Label Grid.Column="1" Text="{Binding UserDataName}" TextColor="Black" FontSize="{Binding FontSize}"/>
+                                                <Label Grid.Column="0" Text="{Binding DataName}" TextColor="Black" />
+                                                <Label Grid.Column="1" Text="{Binding UserDataName}" TextColor="Black"/>
                                             </Grid>
                                         </Frame>
                                     </ViewCell>
@@ -401,7 +401,12 @@
 
                     <Button Grid.Row="0" Grid.Column="0" Text="Ustawienia początkowe"  Command="{Binding InitialValues}"/>
                     <Button Grid.Row="0" Grid.Column="1" Text="Wygeneruj plik"  Command="{Binding CreatedNewFile}"/>
-                    <Button Grid.Row="0" Grid.Column="2" Text="Wczytaj Plik"  Command="{Binding LoadData}" BackgroundColor="{Binding LoadDataColor}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Text="Wczytaj Plik"  Command="{Binding LoadData}" BackgroundColor="{Binding LoadDataColor}">
+                        <Button.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LoadDataRight}"
+                                          Buttons="Secondary"/>
+                        </Button.GestureRecognizers>
+                    </Button>
 
                 </Grid>
             </Grid>

@@ -184,6 +184,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 IsBusy = true;
                 bool Load = false;
                 Load = await Shell.Current.DisplayAlert("Wizualizacja", "Czy chcesz kontynuować", "Tak", "Nie");
+                
 
                 if (Load)
                 {
@@ -209,6 +210,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 IsBusy = false;
             }
         });
+
         private async Task<ResponseModel> GetData(ResponseModel response)
         {
             response = new(_fm.FilePathData);
@@ -232,6 +234,31 @@ namespace Inverter.GenerateInverter.ViewsModel
             response.DataGraphs.Reverse();
             return response;
         }
+
+        public ICommand LoadDataRight => new Command(async () =>
+        {
+            try
+            {
+                IsBusy = true;
+                AddMessage("Wczytywanie nowego modelu");
+
+                ResponseModel response = null;
+                response = await GetData(response);
+
+                Application.Current.OpenWindow(new Window
+                {
+                    Page = new DisplayV(new Display.ViewsModel.DisplayVM(response))
+                });
+            }
+            catch (Exception ex)
+            {
+                AddMessage(ex.Message);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        });
 
         #endregion
 

@@ -51,41 +51,29 @@
         </Style>
     </ContentPage.Resources>
 
-    <ScrollView MinimumHeightRequest="600">
-        <Grid
-        HorizontalOptions="CenterAndExpand"
-        VerticalOptions="CenterAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <VerticalStackLayout
+    <ScrollView x:Name="svMain" SizeChanged="svMain_SizeChanged">
+        <VerticalStackLayout 
             HorizontalOptions="CenterAndExpand"
             VerticalOptions="CenterAndExpand"
             Padding="30"
             Spacing="25">
-                <Button Text="Wygeneruj Nowy Falownik" 
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Clicked="CreateNewInverter"/>
-                <Button Text="Wczytaj Gotowy Zestaw" 
-                    Grid.Column="0"
-                    Grid.Row="1"
+            <Button Text="Wygeneruj Nowy Falownik" VerticalOptions="Fill"
+                    Clicked="CreateNewInverter">
+                <Button.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"
+                                          Buttons="Secondary"/>
+                </Button.GestureRecognizers>
+            </Button>
+
+            <Button Text="Wczytaj Gotowy Zestaw" 
                     Clicked="Configuration"/>
-                <Button Text="Lokalizacja Pspice" 
-                    Grid.Column="0"
-                    Grid.Row="2"
+
+            <Button Text="Lokalizacja Pspice" 
                     Clicked="PspiceLocation_Clicked"/>
-                <Button Text="Rozmiar Czcionki" 
-                    Grid.Column="0"
-                    Grid.Row="3"
+
+            <Button Text="Rozmiar Czcionki" 
                     Clicked="FontSize_Clicked"/>
 
-            </VerticalStackLayout>
-        </Grid>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

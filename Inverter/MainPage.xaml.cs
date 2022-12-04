@@ -21,11 +21,15 @@ public partial class MainPage : ContentPage
 
     private async void CreateNewInverter(object sender, EventArgs e)
     {
+
         await Shell.Current.GoToAsync($"{nameof(InverterV)}");
     }
     private async void Configuration(object sender, EventArgs e)
     {
-
+        //  Application.Current.OpenWindow(new Window
+        //  {
+        //      Page = new MainPage()
+        //  });
     }
     FileManager _fm;
     private async void PspiceLocation_Clicked(object sender, EventArgs e)
@@ -87,6 +91,20 @@ public partial class MainPage : ContentPage
             else
                 await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
         }
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        //  Application.Current.OpenWindow(new Window
+        //  {
+        //      Page = new InverterV(new GenerateInverter.ViewsModel.GenerateMV())
+        //  });
+    }
+
+    private void svMain_SizeChanged(object sender, EventArgs e)
+    {
+        svMain.MaximumHeightRequest = this.Height;
+        svMain.MaximumWidthRequest = this.Width;
     }
 }
 

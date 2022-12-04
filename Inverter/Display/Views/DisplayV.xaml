@@ -13,6 +13,7 @@
         <Style TargetType="Editor">
             <Setter Property="FontSize" Value="{Binding FontSize}"/>
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="AutoSize" Value="TextChanges"/>
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
@@ -76,27 +77,30 @@
         </Style>
     </ContentPage.Resources>
 
-    <ScrollView Margin="5,0,10,5">
+    <ScrollView Margin="5,0,10,5" x:Name="svMain" SizeChanged="svMain_SizeChanged">
         <Grid  
-                ColumnDefinitions="*,.8*" ColumnSpacing="10"
-                RowDefinitions="auto,300,auto,auto,*" RowSpacing="10">
+                ColumnDefinitions="*,auto" ColumnSpacing="10" x:Name="gMain"
+                RowDefinitions="auto,auto,auto,auto,*" RowSpacing="10">
+
             <!--Konfiguracja-->
             <Label FontSize="Title" HorizontalOptions="Center" Text="Konfiguracja" Grid.Row="0" Grid.Column="0"/>
             <Label FontSize="Title" HorizontalOptions="Center" Text="Schemat" Grid.Row="0" Grid.Column="1"/>
             <Label FontSize="Title" HorizontalOptions="Center" Text="Wykresy" Grid.Row="2" Grid.ColumnSpan="2"/>
 
+
             <Grid Grid.Row="2" Grid.Column="2" HorizontalOptions="End" VerticalOptions="End"
                   ColumnDefinitions="*,*,*,*,*,*,*,*,*">
+
                 <Editor Grid.Column="0" ToolTipProperties.Text="Grubość lini&#10;0-auto" x:Name="eStrokeSize" TextChanged="eStrokeSize_TextChanged"/>
                 <CheckBox Grid.Column="1" ToolTipProperties.Text="Przybliżać w danym zakresie&#10;Tak/Nie" CheckedChanged="ckGridScope_CheckedChanged" IsChecked="False"/>
-                <Editor Grid.Column="2" ToolTipProperties.Text="Początek zakresu" TextChanged="eScope_TextChanged"  x:Name="eStartScope" Placeholder="Start" WidthRequest="150"/>
-                <Editor Grid.Column="3" ToolTipProperties.Text="Koniec zakresu" TextChanged="eScope_TextChanged" x:Name="eEndScope" Placeholder="Koniec" WidthRequest="150"/>
+                <Editor Grid.Column="2" ToolTipProperties.Text="Początek zakresu" TextChanged="eScope_TextChanged"  x:Name="eStartScope" Placeholder="0" WidthRequest="150"/>
+                <Editor Grid.Column="3" ToolTipProperties.Text="Koniec zakresu" TextChanged="eScope_TextChanged" x:Name="eEndScope" Placeholder="1" WidthRequest="150"/>
                 <CheckBox Grid.Column="4" ToolTipProperties.Text="Widoczność lini czasu" CheckedChanged="ckLineTime_CheckedChanged" x:Name="ckLineTime" IsChecked="True"/>
                 <CheckBox Grid.Column="5"  ToolTipProperties.Text="auto skala osi X" CheckedChanged="ckExtendAxisX_CheckedChanged" x:Name="ckExtendAxisX" IsChecked="False"/>
                 <CheckBox Grid.Column="6" ToolTipProperties.Text="Powielanie wykresu" CheckedChanged="ckMultipledGraph_CheckedChanged" x:Name="ckMultipledGraph" IsChecked="False"/>
                 <CheckBox Grid.Column="7" ToolTipProperties.Text="Widoczność siatki" CheckedChanged="ckGridVisible_CheckedChanged" x:Name="ckGridVisible" IsChecked="True"/>
                 <ListView Grid.Column="8" ToolTipProperties.Text="Wyświetlany kolor tła" 
-                              ItemsSource="{x:Static vm2:NamedColor.All}" x:Name="lvBackgroundColor" MaximumWidthRequest="100"
+                              ItemsSource="{x:Static vm2:NamedColor.All}" x:Name="lvBackgroundColor" MaximumWidthRequest="150"
                               MaximumHeightRequest="50" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -174,8 +178,22 @@
                     <Button Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="3" ZIndex="10" ToolTipProperties.Text="Przycisk uruchamia symulacje przepływu prądów w obowdzie" Command="{Binding StartSymulation}" Text="{Binding NameSimulationbutton}" Clicked="Symulation_Clicked" HorizontalOptions="Start" Margin="0,5,0,0"/>
                     <!--Tabela z danymi-->
                     <ListView 
-                            Grid.Row="1" Grid.ColumnSpan="7" SelectionMode="Single" x:Name="lvDataGraphs" 
+                            Grid.Row="1" Grid.ColumnSpan="7" SelectionMode="Single" x:Name="lvDataGraphs"  SizeChanged="svGraph_SizeChanged"
                             ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem }">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="MaximumHeightRequest" Value="200"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Property="MaximumHeightRequest" Value="400"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                         <ListView.Header>
                             <StackLayout>
                                 <Grid
@@ -246,9 +264,9 @@
                     </ListView>
                 </Grid>
             </ContentView>
-            <ScrollView Grid.Row="1" Grid.Column="1">
+            <ScrollView Grid.Row="1" Grid.Column="1" VerticalOptions="Fill" HorizontalOptions="Fill">
                 <Grid x:Name="gSchema">
-                    <BoxView Color="White" Margin="10"/>
+                    <BoxView Color="White"/>
                 </Grid>
             </ScrollView>
             <Slider Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Value="{Binding SActualCurrentIndex}" Maximum="{Binding SCurrentMaxIndex}" x:Name="sSymulationTimer" ValueChanged="sSymulationTimer_ValueChanged"/>
@@ -258,7 +276,7 @@
                     RowDefinitions="1,*,1">
                     <GraphicsView
                         Grid.Row="1" Grid.Column="0" x:Name="gvLineTimeSchematV" ZIndex="10"/>
-                    <ScrollView Orientation="Both"
+                    <ScrollView Orientation="Both" x:Name="svGraph" SizeChanged="svGraph_SizeChanged"
                         Grid.Row="1" Grid.Column="0" BindingContext="{x:Reference lvBackgroundColor}"
                         ZIndex="9" BackgroundColor="{Binding Path=SelectedItem.Color}" >
                         <Grid

@@ -9,4 +9,10 @@ public partial class InverterV : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
+
+    private void rvMain_SizeChanged(object sender, EventArgs e)
+    {
+        rvMain.MaximumHeightRequest = this.Height;
+        rvMain.MaximumWidthRequest = this.Width;
+    }
 }
