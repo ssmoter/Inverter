@@ -51,28 +51,18 @@
                 if (AutoScaleY)
                 {
                     float denominator = 1;
-                    if (Math.Abs(MinYValue) < Math.Abs(MaxYValue) * 0.1)
-                    {
-                        denominator = Math.Abs(MaxYValue) * 2;
-                        canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
-                    }
-                    else if (Math.Abs(MaxYValue) < Math.Abs(MinYValue) * 0.1)
-                    {
-                        denominator = Math.Abs(MinYValue) * 2;
-                        canvas.Translate(dirtyRect.Left + 70, dirtyRect.Top + farFromUp);
-                    }
-                    else
-                    {
-                        denominator = Math.Abs(MinYValue) + Math.Abs(MaxYValue);
-                        canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
-                    }
+                    canvas.Translate(dirtyRect.Left, dirtyRect.Top);
+                    canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
+
+                    denominator = Math.Abs(MinYValue) + MaxYValue;
 
                     scaleY = (dirtyRect.Height - farFromUp - 80) / denominator;
                     canvas.Scale(1, scaleY);
                 }
                 else
                 {
-                    canvas.Translate(dirtyRect.Left + 70, dirtyRect.Top + MaxYPosition + farFromUp);
+                    canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
+                    //canvas.Translate(dirtyRect.Left + 70, dirtyRect.Top + MaxYPosition + farFromUp);
                 }
                 if (AutoScaleX)
                 {
@@ -101,7 +91,7 @@
                 //podpis wykresu
                 canvas.FontColor = Color;
                 canvas.FontSize = FontSize;
-                canvas.DrawString(Name, -80 + (PositionName * (Name.Length * (FontSize / 2))), dirtyRect.Bottom - 3, HorizontalAlignment.Left);
+                canvas.DrawString(Name, -10 + (PositionName * (Name.Length * (FontSize / 2))), dirtyRect.Bottom - 3, HorizontalAlignment.Left);
 
                 //wartości na osi Y
                 //poprawic
@@ -177,8 +167,11 @@
 
                     int nIndicator = 0;
                     int nPosition = 0;
-                    int lenghtN = AxisX.Count / 20;
-
+                    int lenghtN = 20;
+                    if (AxisX.Count > 0)
+                    {
+                        lenghtN = AxisX.Count / 20;
+                    }
                     for (int j = 0; ; j++)
                     {
                         if (lenghtN < 50)
@@ -187,8 +180,13 @@
                         if (lenghtN > 100)
                             lenghtN /= 2;
 
-                        if (lenghtN > 50)
+                        if (lenghtN >= 50)
                             break;
+
+                        if (j > 100)
+                        {
+                            break;
+                        }
                     }
                     if (AutoScaleX)
                     {

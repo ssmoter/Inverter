@@ -51,49 +51,98 @@ namespace Inverter.Models
 
         #endregion
 
+        #region FOURIER
+
+        public int NumberOfFft { get; set; } = 10;
+
+        public List<string> Four { get; set; }
+
+        #endregion
+
         public InverterParameters()
         {
-            #region PritnTran
+            Four = new List<string>();
 
             DefaultPrintTran = new List<DataGraph>();
-            DefaultPrintTran.Add(new DataGraph() { UserDataName = "test", DataName = "I(VzP)" });
-            DefaultPrintTran.Add(new DataGraph() { UserDataName = "test", DataName = "I(VzN)" });
-            DefaultPrintTran.Add(new DataGraph() { UserDataName = "test", DataName = "I(V0)" });
-            DefaultPrintTran.Add(new DataGraph() { UserDataName = "test", DataName = "I(S_PA)" });
-            DefaultPrintTran.Add(new DataGraph() { UserDataName = "testtesttesttesttesttest", DataName = "I(S_PB)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PC)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMA)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMB)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMC)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMA)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMB)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMC)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NA)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NB)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NC)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PAz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PBz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PCz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMAz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMBz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMCz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMAz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMBz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMCz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NAz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NBz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NCz)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPA)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPB)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPC)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNA)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNB)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNC)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(RoA)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(RoB)" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(RoC)" });
 
-            #endregion
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PA)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PB)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PC)", UserDataName = "Dioda pomocnicza" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMA)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMB)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMC)", UserDataName = "Dioda pomocnicza" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMA)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMB)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMC)", UserDataName = "Dioda pomocnicza" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NA)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NB)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NC)", UserDataName = "Dioda pomocnicza" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "V(ViP)", UserDataName = "Przebieg nośny P" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "V(ViN)", UserDataName = "Przebieg nośny N" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "V(EmA)", UserDataName = "Przebieg modulujacy A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "V(EmB)", UserDataName = "Przebieg modulujacy B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "V(EmC)", UserDataName = "Przebieg modulujacy C" });
+
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PAz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PBz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PCz)", UserDataName = "Dioda zwrotna" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMAz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMBz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMCz)", UserDataName = "Dioda zwrotna" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMAz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMBz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMCz)", UserDataName = "Dioda zwrotna" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NAz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NBz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NCz)", UserDataName = "Dioda zwrotna" });
+
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPA)", UserDataName = "Dioda poziomująca" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPB)", UserDataName = "Dioda poziomująca" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPC)", UserDataName = "Dioda poziomująca" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNA)", UserDataName = "Dioda poziomująca" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNB)", UserDataName = "Dioda poziomująca" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNC)", UserDataName = "Dioda poziomująca" });
+
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PA)", UserDataName = "Tyrystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PB)", UserDataName = "Tyrystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PC)", UserDataName = "Tyrystor" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMA)", UserDataName = "Tyrystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMB)", UserDataName = "Tyrystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMC)", UserDataName = "Tyrystor" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMA)", UserDataName = "Tyrystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMB)", UserDataName = "Tyrystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMC)", UserDataName = "Tyrystor" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NA)", UserDataName = "Tyrystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NB)", UserDataName = "Tyrystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NC)", UserDataName = "Tyrystor" });
+
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VoA)", UserDataName = "Odbiornik A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VoB)", UserDataName = "Odbiornik B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VoC)", UserDataName = "Odbiornik C" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VzP)", UserDataName = "Żródło P" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VzN)", UserDataName = "Żródło N" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(V0)", UserDataName = "Żródło 0" });
+
+
+
 
             StringModel = CreateNewModel();
         }
@@ -172,6 +221,31 @@ namespace Inverter.Models
                 sr.Append(ExtraProbe);
                 sr.AppendLine();
             }
+            #endregion
+
+            #region FOURIER
+
+            if (Four != null)
+            {
+                sr.AppendLine();
+                sr.Append(".FOUR ");
+                sr.Append(Fo);
+                sr.Append(" ");
+                sr.Append(NumberOfFft);
+                sr.Append(" ");
+                for (int i = 0; i < Four.Count; i++)
+                {
+                    if (i % 5 == 0)
+                    {
+                        sr.AppendLine();
+                        sr.Append("+ ");
+                    }
+                    sr.Append(" ");
+                    sr.Append(Four[i]);
+                }
+                sr.AppendLine();
+            }
+
             #endregion
 
             #region Print Train
@@ -447,6 +521,7 @@ namespace Inverter.Models
             #endregion
 
             #endregion
+
 
             sr.AppendLine();
             sr.Append(".END");

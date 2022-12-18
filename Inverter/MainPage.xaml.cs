@@ -1,6 +1,7 @@
 ﻿using Inverter.Data;
 using Inverter.GenerateInverter.Views;
 using Inverter.Helpers;
+using Inverter.Sets;
 
 namespace Inverter;
 
@@ -14,6 +15,8 @@ public partial class MainPage : ContentPage
         try
         {
             FontSize = int.Parse(_fm.GetConfig(MyEnums.configName.FontSize));
+            Config.FontSize = FontSize;
+            Config.PspicePath = _fm.GetConfig(MyEnums.configName.PspicePath);
         }
         catch
         { }
@@ -26,10 +29,7 @@ public partial class MainPage : ContentPage
     }
     private async void Configuration(object sender, EventArgs e)
     {
-        //  Application.Current.OpenWindow(new Window
-        //  {
-        //      Page = new MainPage()
-        //  });
+        await Shell.Current.GoToAsync($"{nameof(ReadySetsV)}");
     }
     FileManager _fm;
     private async void PspiceLocation_Clicked(object sender, EventArgs e)
@@ -47,7 +47,10 @@ public partial class MainPage : ContentPage
             }
             bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.PspicePath);
             if (isComplited)
+            {
+                Config.PspicePath = result;
                 await DisplayAlert("Configuracja", "Zapisano ścieżkę" + Environment.NewLine + result, "OK");
+            }
             else
                 await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
         }
@@ -84,6 +87,7 @@ public partial class MainPage : ContentPage
                 try
                 {
                     FontSize = int.Parse(result);
+                    Config.FontSize = FontSize;
                 }
                 catch
                 { }

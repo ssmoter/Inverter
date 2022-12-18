@@ -1,5 +1,4 @@
-﻿using Inverter.Data;
-using Inverter.Helpers;
+﻿using Inverter.Helpers;
 using Inverter.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -62,8 +61,8 @@ namespace Inverter.Display.ViewsModel
                 {
                     try
                     {
-                        _maxMinValue = "Maksymalna = " + _dataGraphSelectedItem.Y.Max().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
-                           Environment.NewLine + "Minimalna = " + _dataGraphSelectedItem.Y.Min().ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
+                        _maxMinValue = "Maksymalna = " + _dataGraphSelectedItem.Max.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
+                           Environment.NewLine + "Minimalna = " + _dataGraphSelectedItem.Min.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
                     }
                     catch
                     { }
@@ -101,24 +100,20 @@ namespace Inverter.Display.ViewsModel
             _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
             NameSimulationbutton = "Uruchom";
             symulationRunning = false;
-            try
-            {
-                FileManager _fm = new();
-                FontSize = int.Parse(_fm.GetConfig(MyEnums.configName.FontSize));
-            }
-            catch
-            { }
+
+            FontSize = Config.FontSize;
+
         }
         #region Symulacja
 
         System.Timers.Timer _timer;
         public void TimerEvent(object source, ElapsedEventArgs e)
         {
-            SActualCurrentIndex++;
             if (SActualCurrentIndex >= SCurrentMaxIndex)
             {
                 SActualCurrentIndex = 0;
             }
+            SActualCurrentIndex++;
 
             //OnPropertyChanged(nameof(SActualCurrentIndex));
         }
@@ -170,7 +165,6 @@ namespace Inverter.Display.ViewsModel
         });
 
 
-        //private string 
         #endregion
 
         private void SetUpdateItem()

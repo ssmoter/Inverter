@@ -7,7 +7,7 @@ namespace Inverter.Data
     {
         private const string FileName = @"Model";
         public string FilePathData;
-        private string path;
+        public string path { get; private set; }
         private const string configName = "config";
 
         public FileManager()
@@ -146,6 +146,130 @@ namespace Inverter.Data
             catch (IOException ex)
             {
                 throw new IOException("Error:Wczytywanie pliku nie powiodło się" + Environment.NewLine + ex.Message);
+            }
+        }
+
+        public List<string> GetFilesName()
+        {
+            try
+            {
+                List<string> fileEntries = Directory.GetFiles(path).ToList();
+
+                fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(FileName)));
+                fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(FileName)));
+                fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(configName)));
+
+                return fileEntries;
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error:Wczytywanie plików nie powiodło się" + Environment.NewLine + ex.Message);
+            }
+        }
+
+        public bool DeleteFile(string filePath)
+        {
+            try
+            {
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error:Usuwanie pliku nie powiodło się" + Environment.NewLine + ex.Message);
+            }
+
+        }
+
+        public bool ExistFile(string name)
+        {
+            try
+            {
+                string filePath = path + @"\" + name + ".txt";
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error:Wystąpił błąd przy sprawdzaniu czy plik istnieje" + Environment.NewLine + ex.Message);
+            }
+        }
+        public async Task<bool> SaveNewData(string name, string data)
+        {
+            try
+            {
+                string filePath = path + @"\" + name + ".txt";
+                using (System.IO.FileStream fs = System.IO.File.Create(filePath))
+                {
+                    StreamWriter writer = new(fs);
+                    await writer.WriteLineAsync(data);
+                    writer.Close();
+                    writer.Dispose();
+                }
+                if (System.IO.File.Exists(filePath))
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error:Nie udało zapisać się pliku" + Environment.NewLine + ex.Message);
+            }
+        }
+
+        public async Task<string> LoadDataName(string name)
+        {
+            try
+            {
+                string filePath = path + @"\" + name + ".txt";
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return null;
+                }
+                string line;
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    line = await sr.ReadToEndAsync();
+                }
+                return line;
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error:Nie udało się wczytać pliku" + Environment.NewLine + ex.Message);
+            }
+        }
+        public async Task<string> LoadDataPath(string path)
+        {
+            try
+            {
+                if (!System.IO.File.Exists(path))
+                {
+                    return null;
+                }
+                string line;
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    line = await sr.ReadToEndAsync();
+                }
+                return line;
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error:Nie udało się wczytać pliku" + Environment.NewLine + ex.Message);
             }
         }
     }

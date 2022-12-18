@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Inverter.Sets.ReadySetsV"
+             Title="Gotowe Projekty">
+
+    <ContentPage.Resources>
+        <Style TargetType="Editor">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="AutoSize" Value="TextChanges"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="Transparent"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Focused">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="White"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="FontSize" Value="{Binding FontSize}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="Transparent"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+
+    <VerticalStackLayout x:Name="vslMain" SizeChanged="vslMain_SizeChanged">
+        <Label 
+            Text="Nazwy zapisanych plików"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <CollectionView x:Name="cvInverterDatas" ItemsSource="{Binding InverterDatas}" SelectionMode="Single" SelectedItem="{Binding SelectedData}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                        <Grid ColumnDefinitions="*" RowSpacing="10">
+                        <Label Grid.Column="0" Text="{Binding Name}">
+                        </Label>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <HorizontalStackLayout x:Name="hslButtons">
+             <Button Text="Usuń" x:Name="bDelete" Clicked="bDelete_Clicked"/>
+             <Button Text="Wczytaj" x:Name="bLoad" Clicked="bLoad_Clicked"/>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>
+    

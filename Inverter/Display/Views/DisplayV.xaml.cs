@@ -3,6 +3,7 @@ using Inverter.Data.Draw;
 using Inverter.Data.Draw.Schema;
 using Inverter.Display.ViewsModel;
 using Inverter.Models;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Timers;
@@ -11,6 +12,9 @@ namespace Inverter.Display.Views;
 
 public partial class DisplayV : ContentPage
 {
+    FileManager _fm;
+    private string _name;
+
     private DisplayVM bc; //context
 
     //wykresy
@@ -31,7 +35,7 @@ public partial class DisplayV : ContentPage
         BindingContext = vm;
         symulationRunning = false;
         eStrokeSize.Text = strokeSize.ToString();
-
+        _fm = new FileManager();
         try
         {
             Initialization();
@@ -55,44 +59,57 @@ public partial class DisplayV : ContentPage
     {
         try
         {
-            #region Wykresy
-
-            bc = (DisplayVM)BindingContext;
-
-            bc.DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.DataGraphs);
-            DataGraphs = bc.DataGraphs;
-
-            DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.OutPutString.Mapping(bc.ResponseModel).DataGraphs);
-
-            _graphs = new();
-            if (DataGraphs == null)
+            if (BindingContext is DisplayVM)
             {
-                return;
-            }
-            for (int i = 0; i < DataGraphs.Count; i++)
-            {
-                _graphs.Add(new Graph());
-                Resources.Add(i.ToString(), _graphs[i]);
-            }
-            #endregion
+                bc = (DisplayVM)BindingContext;
+                bc.DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.DataGraphs);
+                DataGraphs = bc.DataGraphs;
+                _name = bc.ResponseModel.FileDataPath;
+                if (!bc.ResponseModel.IsReady)
+                {
+                    DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.OutPutString.Mapping(bc.ResponseModel).DataGraphs);
+                }
 
-            #region schemat
-            //schemat
-            _inverterSchema = new();
-            _gvSchema = new();
-            _gvSchema.Drawable = _inverterSchema;
-            Resources.Add(nameof(InverterSchema), _gvSchema);
-            gSchema.Add(_gvSchema);
-            SCurrentMaxIndex = DataGraphs.FirstOrDefault().X.Count;
-            bc.SCurrentMaxIndex = SCurrentMaxIndex;
-            SActualCurrentIndex = bc.SActualCurrentIndex;
-            _timer = new System.Timers.Timer(100);
-            _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
-            //linia
-            _lineTimeSchema = new();
-            gvLineTimeSchematV.Drawable = _lineTimeSchema;
-            _lineTimeIsHidden = true;
-            #endregion
+
+                #region Wykresy
+
+
+
+
+                _graphs = new();
+                if (DataGraphs == null)
+                {
+                    return;
+                }
+                for (int i = 0; i < DataGraphs.Count; i++)
+                {
+                    DataGraphs[i].SetMaxMin();
+                    _graphs.Add(new Graph());
+                    Resources.Add(i.ToString(), _graphs[i]);
+                }
+                #endregion
+
+                #region schemat
+                //schemat
+                _inverterSchema = new(DataGraphs.ToList());
+                _inverterSchema.MaxYValue = DataGraphs.Where(x => x.DataName == "I(VoA)").FirstOrDefault().Max;
+                _inverterSchema.MinYValue = DataGraphs.Where(x => x.DataName == "I(VoA)").FirstOrDefault().Min;
+
+                _gvSchema = new();
+                _gvSchema.Drawable = _inverterSchema;
+                Resources.Add(nameof(InverterSchema), _gvSchema);
+                gSchema.Add(_gvSchema);
+                SCurrentMaxIndex = DataGraphs.FirstOrDefault().X.Count - 1;
+                bc.SCurrentMaxIndex = SCurrentMaxIndex;
+                SActualCurrentIndex = bc.SActualCurrentIndex;
+                _timer = new System.Timers.Timer(100);
+                _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
+                //linia
+                _lineTimeSchema = new();
+                gvLineTimeSchematV.Drawable = _lineTimeSchema;
+                _lineTimeIsHidden = true;
+                #endregion
+            }
         }
         catch (Exception)
         {
@@ -100,6 +117,7 @@ public partial class DisplayV : ContentPage
         }
 
     }
+
     #region Wykres
 
 
@@ -133,13 +151,16 @@ public partial class DisplayV : ContentPage
     }
     private async void UpdateRow_Clicked(object sender, EventArgs e)
     {
-        lvDataGraphs.BeginRefresh();
         await ReDrawGraph();
     }
     private async Task ReDrawGraph()
     {
         try
         {
+
+            var ser = JsonConvert.SerializeObject(DataGraphs);
+            var der = JsonConvert.DeserializeObject<List<DataGraph>>(ser);
+
             List<int> axisX = new List<int>();
             gGraph.Clear();
             //Ustawienie ilości widocznych Wykresów
@@ -196,6 +217,10 @@ public partial class DisplayV : ContentPage
                             if (!string.IsNullOrWhiteSpace(eEndScope.Text))
                             {
                                 valueEnd = float.Parse(eEndScope.Text);
+                                if (valueEnd <= 0)
+                                {
+                                    valueEnd = DataGraphs[i].X.LastOrDefault();
+                                }
                             }
                         }
                         catch
@@ -238,17 +263,25 @@ public partial class DisplayV : ContentPage
                     data.Visible = DataGraphs[i].Visible;
                     data.LocationRow = DataGraphs[i].LocationRow;
                     data.locationRowSpan = DataGraphs[i].locationRowSpan;
-                    for (int k = startIndex; k < endIndex; k++)
+                    if (startIndex != DataGraphs.FirstOrDefault().Y.Count || endIndex != 0)
                     {
-                        data.X.Add(DataGraphs[i].X[k]);
-                        data.Y.Add(DataGraphs[i].Y[k]);
+                        for (int k = startIndex; k < endIndex; k++)
+                        {
+                            data.X.Add(DataGraphs[i].X[k]);
+                            data.Y.Add(DataGraphs[i].Y[k]);
+                        }
+                    }
+                    else
+                    {
+                        data.X = DataGraphs[i].X;
+                        data.Y = DataGraphs[i].Y;
                     }
                     #endregion
                     //os Y
-                    _graphs[i].MaxYValue = data.Y.Max();
-                    _graphs[i].MinYValue = data.Y.Min();
-                    _graphs[i].MaxYPosition = data.Y.Max() * data.Multiplier;
-                    _graphs[i].MinYPositions = data.Y.Min() * data.Multiplier;
+                    _graphs[i].MaxYValue = DataGraphs.Max(x => x.Max);
+                    _graphs[i].MinYValue = DataGraphs.Min(x => x.Min);
+                    _graphs[i].MaxYPosition = data.Max * data.Multiplier;
+                    _graphs[i].MinYPositions = data.Min * data.Multiplier;
                     //font size
                     _graphs[i].FontSize = bc.FontSize;
                     //Czy siatka jest widoczna
@@ -283,7 +316,7 @@ public partial class DisplayV : ContentPage
                         n++;
                         if (!multipledGraph)
                         {
-                            if (j + 1 >= data.Y.Count && secondLoop < 50)
+                            if (j + 1 >= data.Y.Count && secondLoop < 10)
                             {
                                 j = 0;
                                 secondLoop++;
@@ -352,16 +385,29 @@ public partial class DisplayV : ContentPage
         if (DataGraphs != null)
             await ReDrawGraph();
     }
+    private async void bClearVisible_Clicked(object sender, EventArgs e)
+    {
+        if (DataGraphs != null)
+        {
+            for (int i = 0; i < DataGraphs.Count; i++)
+            {
+                DataGraphs[i].Visible = false;
+            }
+            bc.DataGraphs = DataGraphs;
+            await ReDrawGraph();
+        }
+    }
+
     #endregion
 
     #region Symulacja
     public void TimerEvent(object source, ElapsedEventArgs e)
     {
-        SActualCurrentIndex++;
         if (SActualCurrentIndex >= SCurrentMaxIndex)
         {
             SActualCurrentIndex = 0;
         }
+        SActualCurrentIndex++;
         changeTime();
     }
     private bool symulationRunning;
@@ -429,4 +475,40 @@ public partial class DisplayV : ContentPage
         svMain.MaximumWidthRequest = this.Width;
         svMain.MaximumHeightRequest = this.Height;
     }
+
+    #region Zapisywanie
+
+    private async void bSave_Clicked(object sender, EventArgs e)
+    {
+        var json = JsonConvert.SerializeObject(DataGraphs);
+        bool complite = false;
+        string result = await DisplayPromptAsync("Zapisywanie", "Podaj nazwę pliku", "Zapisz", "Anuluj", _name, -1, null, _name);
+        if (!string.IsNullOrWhiteSpace(result))
+        {
+            bool exist = _fm.ExistFile(result);
+
+            if (exist)
+            {
+                complite = await _fm.SaveNewData(result, json);
+            }
+            else
+            {
+                bool overwrite = await DisplayAlert("Zapisywanie", "Istnieje już plik o takiej nazwię. Czy chcesz go nadpisać?", "Tak", "Nie");
+                if (overwrite)
+                {
+                    complite = await _fm.SaveNewData(result, json);
+                }
+            }
+        }
+        if (complite)
+        {
+            await DisplayAlert("Zapisywanie", "Zapisono nowy plik", "OK");
+        }
+        else
+        {
+            await DisplayAlert("Zapisywanie", "Nie udało się zapisać pliku", "OK");
+        }
+    }
+    #endregion
+
 }

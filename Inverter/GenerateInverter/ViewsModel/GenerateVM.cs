@@ -58,12 +58,8 @@ namespace Inverter.GenerateInverter.ViewsModel
             Message.Clear();
             _isBusy = false;
             Initialization();
-            try
-            {
-                FontSize = int.Parse(_fm.GetConfig(MyEnums.configName.FontSize));
-            }
-            catch
-            { }
+
+            FontSize = Config.FontSize;
         }
         public ICommand InitialValues => new Command(() =>
         {
@@ -140,7 +136,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                     AddMessage("Uruchamianie Aplikacji");
                     using (Process myprocess = new Process())
                     {
-                        myprocess.StartInfo.FileName = _fm.GetConfig(Helpers.MyEnums.configName.PspicePath);
+                        myprocess.StartInfo.FileName = Config.PspicePath;
                         myprocess.StartInfo.Arguments = _fm.FilePathData;
                         if (myprocess.Start())
                         {
@@ -192,7 +188,7 @@ namespace Inverter.GenerateInverter.ViewsModel
 
                     ResponseModel response = null;
                     response = await GetData(response);
-
+                    response.FileDataPath = null;
                     Message = new ObservableCollection<string>();
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
                           new Dictionary<string, object>

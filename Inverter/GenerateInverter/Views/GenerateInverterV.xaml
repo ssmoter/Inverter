@@ -119,11 +119,13 @@
                 <!--komunikaty-->
                 <ListView 
                 Grid.ColumnSpan="5" Grid.Row="0" BackgroundColor="Transparent"
-                MaximumHeightRequest="50"
+                MaximumHeightRequest="50" x:Name="lvErrors"
                  ItemsSource="{Binding Message}" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextCell Text="{Binding .}" TextColor="Red"/>
+                            <ViewCell>
+                                <Label Text="{Binding .}" TextColor="Red" FontSize="{Binding Source={x:Reference rvMain},Path=FontSize}"/>
+                            </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -353,7 +355,7 @@
                         </ListView>
                     </Grid>
 
-                    <Frame Grid.Row="5" Grid.RowSpan="3" Grid.ColumnSpan="10">
+                    <Frame Grid.Row="5" Grid.RowSpan="5" Grid.ColumnSpan="10">
                         <Grid RowDefinitions="auto,*">
                             <Label Grid.Row="0" Text="Podstawowe Print Tran" Margin="0" />
                             <ListView 
