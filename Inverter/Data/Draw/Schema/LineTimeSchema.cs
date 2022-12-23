@@ -22,16 +22,16 @@
             }
             if (IsHidden)
             {
-                canvas.StrokeSize = 1;
+                canvas.StrokeSize = 1 / scaleX;
 
                 canvas.StrokeColor = Colors.White;
-                canvas.DrawLine(dirtyRect.Left + Index, dirtyRect.Bottom, dirtyRect.Left + Index, dirtyRect.Top); //y
+                canvas.DrawLine(dirtyRect.Left + Index - 0.1f, dirtyRect.Bottom, dirtyRect.Left + Index - 0.1f, dirtyRect.Top); //y
 
                 canvas.StrokeColor = Colors.Black;
-                canvas.DrawLine(dirtyRect.Left + Index, dirtyRect.Bottom - 1, dirtyRect.Left + Index, dirtyRect.Top); //y
+                canvas.DrawLine(dirtyRect.Left + Index + 0.1f, dirtyRect.Bottom, dirtyRect.Left + Index + 0.1f, dirtyRect.Top); //y
 
                 canvas.StrokeColor = Colors.Red;
-                canvas.DrawLine(dirtyRect.Left + Index, dirtyRect.Bottom + 1, dirtyRect.Left + Index, dirtyRect.Top); //y
+                canvas.DrawLine(dirtyRect.Left + Index, dirtyRect.Bottom, dirtyRect.Left + Index, dirtyRect.Top); //y
                 canvas.ResetState();
             }
         }

@@ -21,6 +21,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<Config>();
 
+
         builder.Services.AddTransient<DisplayVM>();
         builder.Services.AddTransient<DisplayV>();
 

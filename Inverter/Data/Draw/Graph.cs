@@ -20,7 +20,7 @@
         public float StrokeSize { get; set; } = 1f;
         public int StartScopeIndex { get; set; } = 0;
         public int EndScopeIndex { get; set; } = 0;
-
+        private bool fft = false;
         public Graph()
         {
             AxisX = new List<float>();
@@ -32,6 +32,11 @@
         {
             try
             {
+                if (Name.Contains("fft"))
+                {
+                    fft = true;
+                }
+
                 int farFromUp = 10;
 
                 #region Wykresy
@@ -83,9 +88,9 @@
                 #endregion               
                 canvas.Scale(1, 1);
 
+
                 #region Osie
                 canvas.Translate(dirtyRect.Left, dirtyRect.Top);
-
 
                 canvas.SaveState();
                 //podpis wykresu
@@ -99,7 +104,7 @@
                 var yValue = MaxYValue.ToString().Split(',');
                 string visibleYValue = string.Empty;
 
-                if (AutoScaleY)
+                if (AutoScaleY && !fft)
                 {
                     if (yValue.Length > 1)
                         visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
@@ -120,7 +125,7 @@
                         canvas.FontColor = Colors.Black;
                     }
                 }
-                else
+                else if (!fft)
                 {
                     if (yValue.Length > 1)
                         visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
@@ -201,96 +206,123 @@
 
                     int secondLineI = 0;
                     bool secondLineB = false;
-                    for (int i = 0; i < AxisX.Count; i++, nIndicator += lenghtN, nPosition += lenghtN)
+                    if (fft)
                     {
-                        if (!MultipledGraph)
+                        for (int i = 0; i < AxisX.Count; i++)
                         {
-                            if (nIndicator >= AxisX.Count)
+                            if (i == 0)
                             {
-                                nIndicator = 0;
+                                continue;
                             }
-                        }
-                        if (MultipledGraph)
-                        {
-                            if (nIndicator >= AxisX.Count)
-                            {
-                                break;
-                            }
-                        }
-                        if (i == 0)
-                        {
-                            continue;
-                        }
 
-                        if (AutoScaleX)
-                        {
-                            canvas.DrawString("|", (nPosition) * scaleX, dirtyRect.Bottom - 48 + secondLineI, HorizontalAlignment.Center);
-                            canvas.DrawString(AxisX[nIndicator].ToString(), nPosition * scaleX, dirtyRect.Bottom - 25 + secondLineI, HorizontalAlignment.Center);
-                        }
-                        else
-                        {
-                            canvas.DrawString("|", nPosition, dirtyRect.Bottom - 48 + secondLineI, HorizontalAlignment.Center);
-                            canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 25 + secondLineI, HorizontalAlignment.Center);
-                        }
-                        if (secondLineB)
-                        {
-                            secondLineB = !secondLineB;
-                            secondLineI = 20;
-                        }
-                        else
-                        {
-                            secondLineB = !secondLineB;
-                            secondLineI = 0;
+                            if (AutoScaleX)
+                            {
+                                canvas.DrawString("|", (i + 0.5f) * scaleX, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
+                                canvas.DrawString(AxisX[i].ToString(), (i + 0.5f) * scaleX, dirtyRect.Bottom - 25, HorizontalAlignment.Right);
+                            }
+                            else
+                            {
+                                canvas.DrawString("|", i, dirtyRect.Bottom - 48, HorizontalAlignment.Center);
+                                canvas.DrawString(AxisX[i].ToString(), i, dirtyRect.Bottom - 25, HorizontalAlignment.Center);
+                            }
+
                         }
                     }
-                }
-
-
-                canvas.RestoreState();
-
-                #endregion
-
-                #region Siatka
-                if (!GridIsVisible)
-                {
-                    if (AxisXWrite)
+                    else
                     {
-
-
-                        IPattern pattern;
-                        //Tworzenie paternu 10x10
-                        using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
+                        for (int i = 0; i < AxisX.Count; i++, nIndicator += lenghtN, nPosition += lenghtN)
                         {
-                            pc.StrokeColor = Colors.White;
-                            pc.StrokeSize = 0.5f;
-                            pc.DrawLine(0, 0, 0, 10);
-                            pc.DrawLine(10, 0, 0, 0);
-                            pattern = new PicturePattern(pc.Picture, 10, 10);
+                            if (!MultipledGraph)
+                            {
+                                if (nIndicator >= AxisX.Count)
+                                {
+                                    nIndicator = 0;
+                                }
+                            }
+                            if (MultipledGraph)
+                            {
+                                if (nIndicator >= AxisX.Count)
+                                {
+                                    break;
+                                }
+                            }
+                            if (i == 0)
+                            {
+                                continue;
+                            }
+
+                            if (AutoScaleX)
+                            {
+                                canvas.DrawString("|", (nPosition) * scaleX, dirtyRect.Bottom - 48 + secondLineI, HorizontalAlignment.Center);
+                                canvas.DrawString(AxisX[nIndicator].ToString(), nPosition * scaleX, dirtyRect.Bottom - 25 + secondLineI, HorizontalAlignment.Center);
+                            }
+                            else
+                            {
+                                canvas.DrawString("|", nPosition, dirtyRect.Bottom - 48 + secondLineI, HorizontalAlignment.Center);
+                                canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 25 + secondLineI, HorizontalAlignment.Center);
+                            }
+                            if (secondLineB)
+                            {
+                                secondLineB = !secondLineB;
+                                secondLineI = 20;
+                            }
+                            else
+                            {
+                                secondLineB = !secondLineB;
+                                secondLineI = 0;
+                            }
                         }
-
-                        //wypełnienie obiektu danym paternem
-                        PatternPaint pp = new PatternPaint
-                        {
-                            Pattern = pattern
-                        };
-                        canvas.SetFillPaint(pp, RectF.Zero);
-                        canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
-                        //siatka w czarnym kolorze wyzej bialy
-                        using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
-                        {
-                            pc.StrokeColor = Colors.Black;
-                            pc.StrokeSize = 0.5f;
-                            pc.DrawLine(0, 0, 0, 10);
-                            pc.DrawLine(10, 0, 0, 0);
-                            pattern = new PicturePattern(pc.Picture, 10, 10);
-                        }
-                        pp.Pattern = pattern; ;
-                        canvas.SetFillPaint(pp, RectF.Zero);
-                        canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
                     }
-                }
-                #endregion
 
+
+
+                    canvas.RestoreState();
+
+                    #endregion
+
+
+
+                    #region Siatka
+                    if (!GridIsVisible)
+                    {
+                        if (AxisXWrite)
+                        {
+
+
+                            IPattern pattern;
+                            //Tworzenie paternu 10x10
+                            using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
+                            {
+                                pc.StrokeColor = Colors.White;
+                                pc.StrokeSize = 0.5f;
+                                pc.DrawLine(0, 0, 0, 10);
+                                pc.DrawLine(10, 0, 0, 0);
+                                pattern = new PicturePattern(pc.Picture, 10, 10);
+                            }
+
+                            //wypełnienie obiektu danym paternem
+                            PatternPaint pp = new PatternPaint
+                            {
+                                Pattern = pattern
+                            };
+                            canvas.SetFillPaint(pp, RectF.Zero);
+                            canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
+                            //siatka w czarnym kolorze wyzej bialy
+                            using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
+                            {
+                                pc.StrokeColor = Colors.Black;
+                                pc.StrokeSize = 0.5f;
+                                pc.DrawLine(0, 0, 0, 10);
+                                pc.DrawLine(10, 0, 0, 0);
+                                pattern = new PicturePattern(pc.Picture, 10, 10);
+                            }
+                            pp.Pattern = pattern; ;
+                            canvas.SetFillPaint(pp, RectF.Zero);
+                            canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
+                        }
+                    }
+                    #endregion
+                }
             }
             catch (Exception ex)
             {

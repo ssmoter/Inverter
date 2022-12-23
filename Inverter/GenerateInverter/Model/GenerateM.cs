@@ -261,16 +261,16 @@ namespace Inverter.GenerateInverter.Model
             }
         }
 
-        private string _T6Notify;
-        public string T6Notify
+        private int _NumberOfFftNotify;
+        public int NumberOfFftNotify
         {
-            get => _T6Notify;
+            get => _NumberOfFftNotify;
             set
             {
-                if (_T6Notify != value)
+                if (_NumberOfFftNotify != value)
                 {
-                    _T6Notify = value;
-                    OnPropertyChanged(nameof(T6Notify));
+                    _NumberOfFftNotify = value;
+                    OnPropertyChanged(nameof(NumberOfFftNotify));
                 }
             }
         }
@@ -369,10 +369,23 @@ namespace Inverter.GenerateInverter.Model
                 T3 = T3Notify,
                 T4 = T4Notify,
                 T5 = T5Notify,
-                T6 = T6Notify,
+                NumberOfFft= NumberOfFftNotify,
             };
             if (DataNotify != null)
-                _InverterParameters.ExtraPrintTran = DataNotify.ToList();
+            {
+                for (int i = 0; i < DataNotify.Count; i++)
+                {
+                    if (DataNotify[i].DataName.Contains("fft"))
+                    {
+                        _InverterParameters.Four.Add(DataNotify[i].DataName.Replace("fft", ""));
+                    }
+                    else
+                    {
+                        _InverterParameters.ExtraPrintTran = DataNotify.ToList();
+                    }
+                }
+
+            }
 
             if (SelectedDataNotify != null)
             {
@@ -393,6 +406,7 @@ namespace Inverter.GenerateInverter.Model
             {
                 return;
             }
+
             DataNotify.Add(SingleDataNotify);
             SingleDataNotify = null;
             SingleDataNotify = new();
@@ -402,7 +416,7 @@ namespace Inverter.GenerateInverter.Model
         {
             DataNotify.Remove(SelectedDataNotify);
             SelectedDataNotify = null;
-            SelectedDataNotify=new();
+            SelectedDataNotify = new();
             RefreshStringModel();
         });
 

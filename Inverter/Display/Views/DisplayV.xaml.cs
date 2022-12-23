@@ -38,10 +38,11 @@ public partial class DisplayV : ContentPage
         _fm = new FileManager();
         try
         {
-            Initialization();
+            // Initialization();
         }
         catch
-        { }
+        {
+        }
 
     }
 
@@ -50,9 +51,14 @@ public partial class DisplayV : ContentPage
     {
         base.OnNavigatedTo(args);
 
-        Task t = Initialization();
-        await t;
-        //await Initialization();
+        try
+        {
+            await Initialization();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Błędy:", ex.Message, "OK");
+        }
     }
 
     private async Task Initialization()
@@ -99,11 +105,12 @@ public partial class DisplayV : ContentPage
                 _gvSchema.Drawable = _inverterSchema;
                 Resources.Add(nameof(InverterSchema), _gvSchema);
                 gSchema.Add(_gvSchema);
-                SCurrentMaxIndex = DataGraphs.FirstOrDefault().X.Count - 1;
+                SCurrentMaxIndex = DataGraphs.LastOrDefault().X.Count - 1;
                 bc.SCurrentMaxIndex = SCurrentMaxIndex;
                 SActualCurrentIndex = bc.SActualCurrentIndex;
                 _timer = new System.Timers.Timer(100);
                 _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
+                _inverterSchema.BlackWhite = true;
                 //linia
                 _lineTimeSchema = new();
                 gvLineTimeSchematV.Drawable = _lineTimeSchema;
@@ -111,9 +118,9 @@ public partial class DisplayV : ContentPage
                 #endregion
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw;
+            throw ex;
         }
 
     }
@@ -157,10 +164,6 @@ public partial class DisplayV : ContentPage
     {
         try
         {
-
-            var ser = JsonConvert.SerializeObject(DataGraphs);
-            var der = JsonConvert.DeserializeObject<List<DataGraph>>(ser);
-
             List<int> axisX = new List<int>();
             gGraph.Clear();
             //Ustawienie ilości widocznych Wykresów
@@ -189,8 +192,12 @@ public partial class DisplayV : ContentPage
                     //Ustawienie wysokości wykresu
                     gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
                     //sprawdzenie czy tylko raz zostanie opisana oś X
+                    bool fft = DataGraphs[i].DataName.Contains("fft");
                     _graphs[i].AxisXWrite = !axisX.Any(x => x == DataGraphs[i].LocationRow);
-                    axisX.Add(DataGraphs[i].LocationRow);
+                    if (!fft)
+                    {
+                        axisX.Add(DataGraphs[i].LocationRow);
+                    }
                     //ustawienie koloru wykresu
                     _graphs[i].Color = DataGraphs[i].UserColor.Color;
                     _graphs[i].point = new PathF();
@@ -204,7 +211,7 @@ public partial class DisplayV : ContentPage
                     startIndex = 0;
                     endIndex = DataGraphs[i].Y.Count;
                     #region OsX =user
-                    if (scopeGraph)
+                    if (scopeGraph && !fft)
                     {
                         float valueStart = 0;
                         float valueEnd = DataGraphs[i].X.LastOrDefault();
@@ -280,6 +287,7 @@ public partial class DisplayV : ContentPage
                     //os Y
                     _graphs[i].MaxYValue = DataGraphs.Max(x => x.Max);
                     _graphs[i].MinYValue = DataGraphs.Min(x => x.Min);
+
                     _graphs[i].MaxYPosition = data.Max * data.Multiplier;
                     _graphs[i].MinYPositions = data.Min * data.Multiplier;
                     //font size
@@ -290,7 +298,7 @@ public partial class DisplayV : ContentPage
 
                     //Ustawienie wyświetlanych wartości osi x
                     _graphs[i].AxisX = data.X;
-                    int n = 1;
+                    int n = 0;
                     int secondLoop = 0;
                     //Ustawienie wyświetlanych wartości osi x
                     _graphs[i].AxisX = data.X;
@@ -306,17 +314,27 @@ public partial class DisplayV : ContentPage
                         {
                             _graphs[i].AutoScaleY = false;
                             _graphs[i].point.LineTo(n, -(data.Y[j] * data.Multiplier));
+                            if (fft)
+                            {
+                                _graphs[i].point.LineTo(n + 1, -(data.Y[j] * data.Multiplier));
+                            }
+
                         }
                         else
                         {
                             _graphs[i].AutoScaleY = true;
                             _graphs[i].point.LineTo(n, -data.Y[j]);
-                        }
 
+                            if (fft)
+                            {
+                                _graphs[i].point.LineTo(n + 1f, -data.Y[j]);
+                            }
+                        }
                         n++;
+
                         if (!multipledGraph)
                         {
-                            if (j + 1 >= data.Y.Count && secondLoop < 10)
+                            if (j + 1 >= data.Y.Count && secondLoop < 2)
                             {
                                 j = 0;
                                 secondLoop++;
@@ -331,7 +349,7 @@ public partial class DisplayV : ContentPage
         {
             Debug.WriteLine(Environment.NewLine);
             Debug.WriteLine(ex);
-            // throw;
+            await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
     DataGraph data = new DataGraph();
@@ -460,7 +478,20 @@ public partial class DisplayV : ContentPage
         }
     }
 
-
+    private void cbSchemaColor_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (cbSchemaColor.IsChecked)
+        {
+            bvSchemaColor.Color = Colors.Black;
+            _inverterSchema.BlackWhite = true;
+        }
+        else
+        {
+            bvSchemaColor.Color = Colors.White;
+            _inverterSchema.BlackWhite = false;
+        }
+        _gvSchema.Invalidate();
+    }
 
 
     #endregion
@@ -510,5 +541,6 @@ public partial class DisplayV : ContentPage
         }
     }
     #endregion
+
 
 }

@@ -114,8 +114,6 @@ namespace Inverter.Display.ViewsModel
                 SActualCurrentIndex = 0;
             }
             SActualCurrentIndex++;
-
-            //OnPropertyChanged(nameof(SActualCurrentIndex));
         }
         private int _sActualCurrentndex = 0;
         public int SActualCurrentIndex
@@ -196,8 +194,8 @@ namespace Inverter.Display.ViewsModel
                 newData.Insert(n, DataGraphSelectedItem);
                 newData.RemoveAt(n + 1);
             }
-            catch (Exception)
-            { }
+            catch
+            {}
             DataGraphs = new ObservableCollection<DataGraph>(newData);
         });
 

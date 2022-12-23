@@ -7,6 +7,7 @@ namespace Inverter;
 
 public partial class MainPage : ContentPage
 {
+    FileManager _fm;
     public MainPage()
     {
         InitializeComponent();
@@ -31,7 +32,7 @@ public partial class MainPage : ContentPage
     {
         await Shell.Current.GoToAsync($"{nameof(ReadySetsV)}");
     }
-    FileManager _fm;
+
     private async void PspiceLocation_Clicked(object sender, EventArgs e)
     {
         string result = string.Empty;
@@ -77,13 +78,12 @@ public partial class MainPage : ContentPage
         catch
         { }
         result = await DisplayPromptAsync("Konfiguracja", "Rozmiar czcionki", "OK", "cancel", result);
-
         if (!string.IsNullOrWhiteSpace(result))
         {
             bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.FontSize);
             if (isComplited)
             {
-                await DisplayAlert("Configuracja", "Zapisano Rozmiar czcionki" + Environment.NewLine + result, "OK");
+                 await DisplayAlert("Configuracja", "Zapisano Rozmiar czcionki" + Environment.NewLine + result, "OK");
                 try
                 {
                     FontSize = int.Parse(result);
@@ -93,16 +93,18 @@ public partial class MainPage : ContentPage
                 { }
             }
             else
-                await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
+
+             await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
         }
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        //  Application.Current.OpenWindow(new Window
-        //  {
-        //      Page = new InverterV(new GenerateInverter.ViewsModel.GenerateMV())
-        //  });
+
+        // Application.Current.OpenWindow(new Window
+        // {
+        //     Page = new MainPage()
+        // });
     }
 
     private void svMain_SizeChanged(object sender, EventArgs e)

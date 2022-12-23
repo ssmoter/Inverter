@@ -290,18 +290,17 @@
                             <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
                         </Grid>
                     </Frame>
-                    <Frame Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2"  CornerRadius="0" >
-                        <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
-                            <Label  Grid.Column="0" Text="T6: " TextColor="White"/>
-                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T6Notify}" Placeholder="{Binding InverterM.T6Notify}"/>
+                    <Frame Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2"  CornerRadius="0" ToolTipProperties.Text="Liczba harmonicznych">
+                        <Grid ColumnDefinitions="*,0.5*" RowDefinitions="*,1">
+                            <Label  Grid.Column="0" Text="Harmoniczne: " TextColor="White"/>
+                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.NumberOfFftNotify}" Placeholder="{Binding InverterM.NumberOfFftNotify}"/>
 
                             <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
                         </Grid>
                     </Frame>
 
 
-
-                    <Grid 
+                    <Grid ToolTipProperties.Text="Lista dodatkowych Print Tran oraz analiz Fouriera &#10;Aby dodać analize Fouriera należy dopisać fft do pola Id &#10;fftV(101) lub V(101)fft"
                                     ColumnDefinitions=".5*,*,auto" Grid.Row="4" Grid.ColumnSpan="6"
                                     RowSpacing="5"
                                     ColumnSpacing="5"
@@ -314,7 +313,8 @@
                         <Button Grid.Column="2" Grid.Row="1" Text="Dodaj"  Command="{Binding InverterM.AddNewTranPrint}"/>
                         <Button Grid.Column="2" Grid.Row="2" HeightRequest="80" VerticalOptions="Start" Text="Usuń" 
                                             Command="{Binding InverterM.RemoveTranPrint}" IsEnabled="{Binding InverterM.IsSelectedDataNotify}"/>
-                        <ListView 
+
+                        <ListView       
                                         MaximumHeightRequest="80" BackgroundColor="White" Grid.Row="2" Grid.ColumnSpan="2"
                                         ItemsSource="{Binding InverterM.DataNotify}" SelectedItem="{Binding InverterM.SelectedDataNotify}">
                             <ListView.ItemTemplate>

@@ -8,11 +8,13 @@ namespace Inverter.Data.Draw.Schema
         public float MaxYValue { get; set; } = 1;
         public float MinYValue { get; set; } = -1;
         public List<DataGraph> Graphs { get; set; }
+        public bool BlackWhite { get; set; }
 
         private readonly int Scala = 2;
         private int StrokeSize = 5;
         public int Index { get; set; }
         readonly float stillOpen = 0.1f;
+
         public InverterSchema(List<DataGraph> graphs)
         {
             Graphs = graphs;
@@ -23,9 +25,18 @@ namespace Inverter.Data.Draw.Schema
         public override void Draw(ICanvas canvas, RectF dirtyRect)
         {
             canvas.SaveState();
-            canvas.StrokeColor = Colors.Black;
-            canvas.FillColor = Colors.Black;
-            canvas.FontColor = Colors.Black;
+            if (BlackWhite)
+            {
+                canvas.StrokeColor = Colors.White;
+                canvas.FillColor = Colors.White;
+                canvas.FontColor = Colors.White;
+            }
+            else
+            {
+                canvas.StrokeColor = Colors.Black;
+                canvas.FillColor = Colors.Black;
+                canvas.FontColor = Colors.Black;
+            }
 
             float scaleX = 1, scaleY = 1;
 
@@ -467,8 +478,17 @@ namespace Inverter.Data.Draw.Schema
         }
         private void OdbLine(ICanvas canvas, RectF dirtyRect)
         {
-            canvas.StrokeColor = Colors.Black;
-            canvas.FontColor = Colors.Black;
+            if (BlackWhite)
+            {
+                canvas.StrokeColor = Colors.White;
+                canvas.FillColor = Colors.White;
+            }
+            else
+            {
+                canvas.StrokeColor = Colors.Black;
+                canvas.FillColor = Colors.Black;
+            }
+
             canvas.DrawRectangle(0, -10, 400, 35);
             canvas.FontSize = 28;
             canvas.DrawString("Odbiornik 3-fazy", 200, 18, HorizontalAlignment.Center);
@@ -485,7 +505,10 @@ namespace Inverter.Data.Draw.Schema
             }
             else
             {
-                c = Colors.Black;
+                if (BlackWhite)
+                    c = Colors.White;
+                else
+                    c = Colors.Black;
             }
 
             canvas.StrokeColor = c;

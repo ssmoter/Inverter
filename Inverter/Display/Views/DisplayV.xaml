@@ -112,6 +112,7 @@
             <Button HorizontalOptions="Start" Text="Zapisz" Grid.Row="0" Grid.Column="0" x:Name="bSave" Clicked="bSave_Clicked"/>
             <Label FontSize="Title" HorizontalOptions="Center" Text="Konfiguracja" Grid.Row="0" Grid.Column="0"/>
             <Label FontSize="Title" HorizontalOptions="Center" Text="Schemat" Grid.Row="0" Grid.Column="1"/>
+            <CheckBox HorizontalOptions="EndAndExpand"  Grid.Row="0" Grid.Column="1" x:Name="cbSchemaColor" ToolTipProperties.Text="Kolor tła schematu &#10;Tak - Czarny &#10;Nie-Biały" IsChecked="True" CheckedChanged="cbSchemaColor_CheckedChanged"/>
             <Label FontSize="Title" HorizontalOptions="Center" Text="Wykresy" Grid.Row="2" Grid.ColumnSpan="1"/>
 
 
@@ -123,7 +124,7 @@
                 <Editor Grid.Column="2" ToolTipProperties.Text="Początek zakresu" TextChanged="eScope_TextChanged"  x:Name="eStartScope" Placeholder="0" WidthRequest="150"/>
                 <Editor Grid.Column="3" ToolTipProperties.Text="Koniec zakresu" TextChanged="eScope_TextChanged" x:Name="eEndScope" Placeholder="1" WidthRequest="150"/>
                 <CheckBox Grid.Column="4" ToolTipProperties.Text="Widoczność lini czasu" CheckedChanged="ckLineTime_CheckedChanged" x:Name="ckLineTime" IsChecked="True"/>
-                <CheckBox Grid.Column="5"  ToolTipProperties.Text="auto skala osi X" CheckedChanged="ckExtendAxisX_CheckedChanged" x:Name="ckExtendAxisX" IsChecked="False"/>
+                <CheckBox Grid.Column="5"  ToolTipProperties.Text="auto skala osi X" CheckedChanged="ckExtendAxisX_CheckedChanged" x:Name="ckExtendAxisX" IsChecked="True"/>
                 <CheckBox Grid.Column="6" ToolTipProperties.Text="Powielanie wykresu" CheckedChanged="ckMultipledGraph_CheckedChanged" x:Name="ckMultipledGraph" IsChecked="False"/>
                 <CheckBox Grid.Column="7" ToolTipProperties.Text="Widoczność siatki" CheckedChanged="ckGridVisible_CheckedChanged" x:Name="ckGridVisible" IsChecked="True"/>
                 <ListView Grid.Column="8" ToolTipProperties.Text="Wyświetlany kolor tła" 
@@ -159,7 +160,7 @@
             </Grid>
 
             <ContentView Grid.Row="1" Grid.Column="0" >
-                <Grid     ColumnDefinitions="150,auto,*,0.5*,0.5*,0.7*,0.5*" ColumnSpacing="5"
+                <Grid     ColumnDefinitions="*,auto,*,.5*,.5*,.7*,.5*" ColumnSpacing="5"
                           RowDefinitions="auto,*,auto,auto,auto,auto,auto">
                     <!--Edycja-->
                     <Label Grid.Row="2" Grid.ColumnSpan="8"  HorizontalOptions="Center" Text="Edycja" Margin="0,5,0,5"/>
@@ -196,10 +197,11 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <Editor Grid.Row="3" Grid.Column="3" ToolTipProperties.Text="Nowa skala&#10;0-auto" Text="{Binding DataGraphUpdateItem.Multiplier}" Placeholder="Skala" HorizontalOptions="Center" Keyboard="Numeric" />
-                    <Editor Grid.Row="3" Grid.Column="4" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry)" Text="{Binding DataGraphUpdateItem.LocationRow}"  Placeholder="Wiersz" HorizontalOptions="Center" Keyboard="Numeric" />
-                    <Editor Grid.Row="3" Grid.Column="5" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry)" Text="{Binding DataGraphUpdateItem.locationRowSpan}"  Placeholder="Rozpiętość wierszy" HorizontalOptions="Center" Keyboard="Numeric" />
-                    <CheckBox Grid.Row="3" Grid.Column="6" ToolTipProperties.Text="Czy wykres jest widoczny"  IsChecked="{Binding DataGraphUpdateItem.Visible}" HorizontalOptions="Center" Margin="0,5,0,5"/>
+                    <Editor Grid.Row="3" Grid.Column="3" ToolTipProperties.Text="Nowa skala&#10;0-auto" Text="{Binding DataGraphUpdateItem.Multiplier}" Placeholder="Skala" HorizontalOptions="EndAndExpand" Keyboard="Numeric" />
+                    <Editor Grid.Row="3" Grid.Column="4" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry)" Text="{Binding DataGraphUpdateItem.LocationRow}"  Placeholder="Wiersz" HorizontalOptions="EndAndExpand" Keyboard="Numeric" />
+                    <Editor Grid.Row="3" Grid.Column="5" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry)" Text="{Binding DataGraphUpdateItem.locationRowSpan}"  Placeholder="Rozpiętość wierszy" HorizontalOptions="EndAndExpand" Keyboard="Numeric" />
+                    <CheckBox Grid.Row="3" Grid.Column="6" ToolTipProperties.Text="Czy wykres jest widoczny"  IsChecked="{Binding DataGraphUpdateItem.Visible}" HorizontalOptions="EndAndExpand" Margin="0,5,0,5"/>
+                    
                     <Label  Grid.Row="4" Grid.ColumnSpan="3" ZIndex="10" TextColor="White" Text="{Binding MaxMinValue}"/>
                     <Button Grid.Row="4" Grid.ColumnSpan="7" ZIndex="10" ToolTipProperties.Text="Zapisz ustawienia i odśwież osie"  Clicked="UpdateRow_Clicked" Command="{Binding UpdateRowCommand}" HorizontalOptions="Center" Text="Aktualizuj" Margin="0,5,0,0"/>
                     <Button Grid.Row="4" Grid.ColumnSpan="7" ZIndex="10" ToolTipProperties.Text="Anuluj wyświetlanie wykresów" x:Name="bClearVisible" Clicked="bClearVisible_Clicked" HorizontalOptions="End" Text="Wyczyść" Margin="0,5,0,0"/>
@@ -242,31 +244,10 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <VerticalStackLayout>
-                                        <Grid
+                                    <Grid
                                            ColumnDefinitions="*,2*,*,0.5*,0.5*,0.7*,0.5*" 
                                             RowDefinitions="*" >
-                                            
-                                            <!--<VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup>
-                                                    <VisualState x:Name="Normal">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="BackgroundColor" Value="Transparent"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="PointerOver">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="Selected">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>-->
-                                            
-                                            <Label  Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" Text="{Binding DataName}" VerticalOptions="CenterAndExpand"/>
+                                        <Label  Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" Text="{Binding DataName}" VerticalOptions="CenterAndExpand"/>
                                             <Label Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" Text="{Binding UserDataName}" VerticalOptions="CenterAndExpand"/>
                                             <Grid Grid.Row="0" Grid.Column="2"  VerticalOptions="CenterAndExpand"
                                                  RowDefinitions="auto" ColumnDefinitions="5,auto" ColumnSpacing="5" >
@@ -286,7 +267,7 @@
             </ContentView>
             <ScrollView Grid.Row="1" Grid.Column="1" VerticalOptions="Fill" HorizontalOptions="Fill">
                 <Grid x:Name="gSchema">
-                    <BoxView Color="White"/>
+                    <BoxView Color="Black" x:Name="bvSchemaColor"/>
                 </Grid>
             </ScrollView>
             <Slider Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Value="{Binding SActualCurrentIndex}" Maximum="{Binding SCurrentMaxIndex}" x:Name="sSymulationTimer" ValueChanged="sSymulationTimer_ValueChanged"/>

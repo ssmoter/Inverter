@@ -9,6 +9,8 @@ namespace Inverter.Models
         public string OutPutString { get; set; }
         public List<DataGraph> DataGraphs { get; set; }
         public bool IsReady { get; set; }
+        public int NumberOfHarmonic { get; set; } = 10;
+
         public ResponseModel()
         {
             DataGraphs = new();

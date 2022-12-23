@@ -87,7 +87,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 _InverterM.T3Notify = _InverterParameters.T3;
                 _InverterM.T4Notify = _InverterParameters.T4;
                 _InverterM.T5Notify = _InverterParameters.T5;
-                _InverterM.T6Notify = _InverterParameters.T6;
+                _InverterM.NumberOfFftNotify = _InverterParameters.NumberOfFft;
                 _InverterM.DataNotify = new();
                 foreach (var item in _InverterParameters.DefaultPrintTran)
                 {
@@ -114,7 +114,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 OnPropertyChanged(nameof(Message));
             }
         }
-        private async void AddMessage(string message)
+        private void AddMessage(string message)
         {
             Message.Add(message);
             Message.Move(Message.Count - 1, 0);

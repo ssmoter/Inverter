@@ -33,7 +33,6 @@ namespace Inverter.Models
         public string T3 { get; set; } = "20m";
         public string T4 { get; set; } = "10u";
         public string T5 { get; set; } = "UIC";
-        public string T6 { get; set; } = "";
         #endregion
 
         #region Options
@@ -202,7 +201,6 @@ namespace Inverter.Models
             sr.Append(" ");
             sr.Append(T5);
             sr.Append(" ");
-            sr.Append(T6);
             sr.AppendLine();
             #endregion
 
@@ -225,7 +223,7 @@ namespace Inverter.Models
 
             #region FOURIER
 
-            if (Four != null)
+            if (Four.Count > 0)
             {
                 sr.AppendLine();
                 sr.Append(".FOUR ");
