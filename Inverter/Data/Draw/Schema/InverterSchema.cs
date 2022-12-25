@@ -13,13 +13,23 @@ namespace Inverter.Data.Draw.Schema
         private readonly int Scala = 2;
         private int StrokeSize = 5;
         public int Index { get; set; }
-        readonly float stillOpen = 0.1f;
+        private float stillOpen = 0.1f;
 
         public InverterSchema(List<DataGraph> graphs)
         {
             Graphs = graphs;
-            stillOpen = graphs.Where(x => x.DataName == "I(S_PA)").FirstOrDefault().Min;
-            stillOpen *= 3;
+            stillOpen = 0;
+            for (int i = 0; i < Graphs.Count; i++)
+            {
+                if (Graphs[i].UserDataName == "Tyrystor")
+                {
+                    stillOpen += Math.Abs(Graphs[i].Min);
+                }
+            }
+            if (stillOpen < 0.1)
+            {
+                stillOpen = 0.1f;
+            }
         }
 
         public override void Draw(ICanvas canvas, RectF dirtyRect)
@@ -65,7 +75,12 @@ namespace Inverter.Data.Draw.Schema
 
         private void SourceLine(ICanvas canvas, RectF dirtyRect)
         {
+
+
+            ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VzP)").FirstOrDefault().Y[Index]);
             Source(canvas, dirtyRect, -10, 0, "UD 1/2"); //A
+            canvas.DrawLine(dirtyRect.Left, 30, dirtyRect.Left, 110);//190
+
 
             float sum = Graphs.Where(x => x.DataName == "I(S_PA)").FirstOrDefault().Y[Index] +
                      Graphs.Where(x => x.DataName == "I(D_PAz)").FirstOrDefault().Y[Index] +
@@ -80,8 +95,7 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 110, -30);
 
 
-            ReturnColor(canvas, 0);
-            canvas.DrawLine(dirtyRect.Left, 30, dirtyRect.Left, 190);
+
             sum = Graphs.Where(x => x.DataName == "I(DPA)").FirstOrDefault().Y[Index] +
                         Graphs.Where(x => x.DataName == "I(DNA)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
@@ -95,9 +109,15 @@ namespace Inverter.Data.Draw.Schema
                          Graphs.Where(x => x.DataName == "I(DNC)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
 
-            DrawDot(canvas, dirtyRect, -10, 100);
+          
             DrawDot(canvas, dirtyRect, 20, 100);
             canvas.DrawLine(dirtyRect.Left, 110, 30, 110);
+
+            sum += Graphs.Where(x => x.DataName == "I(VzP)").FirstOrDefault().Y[Index] +
+            Graphs.Where(x => x.DataName == "I(VzN)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
+            DrawDot(canvas, dirtyRect, -10, 100);
+
             canvas.Font = Font.DefaultBold;
             canvas.DrawString("M", -10, 110, HorizontalAlignment.Right);
             canvas.Font = Font.Default;
@@ -127,19 +147,23 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 410, 30);
 
 
-            ReturnColor(canvas, 0);
+            ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VzN)").FirstOrDefault().Y[Index]);
             Source(canvas, dirtyRect, -10, 200, "UD 1/2"); //B
+            canvas.DrawLine(dirtyRect.Left, 110, dirtyRect.Left, 190);//190
 
-            sum = Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index];
+            sum = Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_NCz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
             canvas.DrawLine(dirtyRect.Left + 300, 240, dirtyRect.Left + 490, 240);
 
-            sum += Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index];
+            sum += Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index] +
+                   Graphs.Where(x => x.DataName == "I(D_NBz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
             canvas.DrawLine(dirtyRect.Left + 120, 240, dirtyRect.Left + 300, 240);
             DrawDot(canvas, dirtyRect, 290, 230);
 
-            sum += Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index];
+            sum += Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index] +
+                   Graphs.Where(x => x.DataName == "I(D_NAz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 110, 230);
             canvas.DrawLine(dirtyRect.Left, 230, dirtyRect.Left, 240);
@@ -161,7 +185,8 @@ namespace Inverter.Data.Draw.Schema
             DiodeRight(canvas, dirtyRect, 60, 30, "Dmpa");
             canvas.DrawLine(70, 40, 110, 40);
             float sum = Graphs.Where(x => x.DataName == "I(DPA)").FirstOrDefault().Y[Index] +
-              Graphs.Where(x => x.DataName == "I(S_PA)").FirstOrDefault().Y[Index];
+              Graphs.Where(x => x.DataName == "I(S_PA)").FirstOrDefault().Y[Index] +
+              Graphs.Where(x => x.DataName == "I(D_PAz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 30);
 
@@ -205,6 +230,9 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PMA)").FirstOrDefault().Y[Index]);
             Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMA)").FirstOrDefault().Y[Index], -40, 60, "Spma");
             canvas.DrawLine(dirtyRect.Left + 110, 100, dirtyRect.Left + 110, 120);
+            sum = Graphs.Where(x => x.DataName == "I(S_PMA)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_PMAz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 90);
 
 
@@ -227,13 +255,16 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, sum);
             canvas.DrawLine(dirtyRect.Left + 110, 110, dirtyRect.Left + 110, 130);
 
-            ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index], -40, 130, "Snma");
+            sum = Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_NMAz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 110);
             DrawDot(canvas, dirtyRect, 100, 160);
-            DrawDot(canvas, dirtyRect, 100, 170);
+            ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index]);
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index], -40, 130, "Snma");
             sum = Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index] + Graphs.Where(x => x.DataName == "I(D_NAz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
+            DrawDot(canvas, dirtyRect, 100, 170);
             canvas.DrawLine(dirtyRect.Left + 110, 170, dirtyRect.Left + 110, 180);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NAz)").FirstOrDefault().Y[Index]);
@@ -246,8 +277,11 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 110, 190);
             Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index], -40, 190, "Sna");
-            canvas.DrawLine(dirtyRect.Left + 110, 230, dirtyRect.Left + 110, 240);
+            sum = Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_NAz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 220);
+            canvas.DrawLine(dirtyRect.Left + 110, 230, dirtyRect.Left + 110, 240);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VoA)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(110, 110, 190, 110);
@@ -279,7 +313,8 @@ namespace Inverter.Data.Draw.Schema
             canvas.DrawLine(70, 40, 110, 40);
 
             sum = Graphs.Where(x => x.DataName == "I(DPB)").FirstOrDefault().Y[Index] +
-                    Graphs.Where(x => x.DataName == "I(S_PB)").FirstOrDefault().Y[Index];
+                    Graphs.Where(x => x.DataName == "I(S_PB)").FirstOrDefault().Y[Index] +
+                    Graphs.Where(x => x.DataName == "I(D_PBz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 30);
 
@@ -316,6 +351,9 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PMB)").FirstOrDefault().Y[Index]);
             Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMB)").FirstOrDefault().Y[Index], -40, 60, "Spmb");
             canvas.DrawLine(dirtyRect.Left + 110, 100, dirtyRect.Left + 110, 120);
+            sum = Graphs.Where(x => x.DataName == "I(S_PMB)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_PMBz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 90);
 
             //dol
@@ -338,15 +376,18 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, sum);
             canvas.DrawLine(dirtyRect.Left + 110, 110, dirtyRect.Left + 110, 130);
 
+            sum = Graphs.Where(x => x.DataName == "I(S_NMB)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_NMBz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
+            DrawDot(canvas, dirtyRect, 100, 110);
+            DrawDot(canvas, dirtyRect, 100, 160);
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NMB)").FirstOrDefault().Y[Index]);
             Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMB)").FirstOrDefault().Y[Index], -40, 130, "Snmb");
             canvas.DrawLine(dirtyRect.Left + 110, 170, dirtyRect.Left + 110, 180);
-            DrawDot(canvas, dirtyRect, 100, 110);
-            DrawDot(canvas, dirtyRect, 100, 160);
-            DrawDot(canvas, dirtyRect, 100, 170);
 
             sum = Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index] + Graphs.Where(x => x.DataName == "I(D_NBz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
+            DrawDot(canvas, dirtyRect, 100, 170);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 110, 190);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NBz)").FirstOrDefault().Y[Index]);
@@ -358,6 +399,10 @@ namespace Inverter.Data.Draw.Schema
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index]);
             Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index], -40, 190, "Snb");
+
+            sum = Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_NBz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
             canvas.DrawLine(dirtyRect.Left + 110, 230, dirtyRect.Left + 110, 240);
             DrawDot(canvas, dirtyRect, 100, 220);
 
@@ -387,7 +432,8 @@ namespace Inverter.Data.Draw.Schema
             canvas.DrawLine(70, 40, 110, 40);
 
             sum = Graphs.Where(x => x.DataName == "I(DPC)").FirstOrDefault().Y[Index] +
-                   Graphs.Where(x => x.DataName == "I(S_PC)").FirstOrDefault().Y[Index];
+                   Graphs.Where(x => x.DataName == "I(S_PC)").FirstOrDefault().Y[Index] +
+                   Graphs.Where(x => x.DataName == "I(D_PCz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 30);
 
@@ -424,6 +470,9 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PMC)").FirstOrDefault().Y[Index]);
             Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMC)").FirstOrDefault().Y[Index], -40, 60, "Spmc");
             canvas.DrawLine(dirtyRect.Left + 110, 100, dirtyRect.Left + 110, 120);
+            sum = Graphs.Where(x => x.DataName == "I(S_PMC)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_PMCz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 90);
 
             //dol
@@ -446,15 +495,19 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, sum);
             canvas.DrawLine(dirtyRect.Left + 110, 110, dirtyRect.Left + 110, 130);
 
+            sum = Graphs.Where(x => x.DataName == "I(S_NMC)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_NMCz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
+            DrawDot(canvas, dirtyRect, 100, 110);
+            DrawDot(canvas, dirtyRect, 100, 160);
+
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NMC)").FirstOrDefault().Y[Index]);
             Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMC)").FirstOrDefault().Y[Index], -40, 130, "Snmc");
             canvas.DrawLine(dirtyRect.Left + 110, 170, dirtyRect.Left + 110, 180);
-            DrawDot(canvas, dirtyRect, 100, 110);
-            DrawDot(canvas, dirtyRect, 100, 160);
-            DrawDot(canvas, dirtyRect, 100, 170);
 
             sum = Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index] + Graphs.Where(x => x.DataName == "I(D_NCz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
+            DrawDot(canvas, dirtyRect, 100, 170);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NCz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 130, 180);   //odnoga dla diody 
@@ -466,6 +519,10 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 110, 190);
             Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index], -40, 190, "Snc");
+
+            sum = Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index] +
+                  Graphs.Where(x => x.DataName == "I(D_NCz)").FirstOrDefault().Y[Index];
+            ReturnColor(canvas, sum);
             canvas.DrawLine(dirtyRect.Left + 110, 230, dirtyRect.Left + 110, 240);
             DrawDot(canvas, dirtyRect, 100, 220);
 

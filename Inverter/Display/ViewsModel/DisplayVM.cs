@@ -63,6 +63,12 @@ namespace Inverter.Display.ViewsModel
                     {
                         _maxMinValue = "Maksymalna = " + _dataGraphSelectedItem.Max.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
                            Environment.NewLine + "Minimalna = " + _dataGraphSelectedItem.Min.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
+                        if (_dataGraphSelectedItem.DataName.Contains("fft"))
+                        {
+                            _maxMinValue = $"THD={GetTHD(_dataGraphSelectedItem)}" +
+                                $"{Environment.NewLine}THD%={GetTHD(_dataGraphSelectedItem) * 100}";
+                        }
+
                     }
                     catch
                     { }
@@ -70,6 +76,17 @@ namespace Inverter.Display.ViewsModel
                 }
                 OnPropertyChanged(nameof(DataGraphSelectedItem));
             }
+        }
+
+        private float GetTHD(DataGraph DataGraphSelectedItem)
+        {
+            float counter = 0;
+            for (int i = 2; i < DataGraphSelectedItem.Y.Count; i++)
+            {
+                counter += DataGraphSelectedItem.Y[i] * DataGraphSelectedItem.Y[i];
+            }
+
+            return (float)Math.Sqrt(counter) / DataGraphSelectedItem.Y[1];
         }
         private DataGraph _dataGraphUpdateItem;
         public DataGraph DataGraphUpdateItem
@@ -195,7 +212,7 @@ namespace Inverter.Display.ViewsModel
                 newData.RemoveAt(n + 1);
             }
             catch
-            {}
+            { }
             DataGraphs = new ObservableCollection<DataGraph>(newData);
         });
 

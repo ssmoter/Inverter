@@ -95,6 +95,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 }
 
                 _InverterM.StringModelNotify = _InverterParameters.StringModel;
+                
             }
             catch (Exception ex)
             {
@@ -189,6 +190,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                     ResponseModel response = null;
                     response = await GetData(response);
                     response.FileDataPath = null;
+
                     Message = new ObservableCollection<string>();
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
                           new Dictionary<string, object>
@@ -216,6 +218,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 response.DataGraphs.AddRange(InverterM.DataNotify);
 
             response.OutPutString = await _fm.OpenFile();
+            response.NumberOfHarmonic = InverterM.NumberOfFftNotify;
 
             List<NamedColor> colors = NamedColor.All.ToList();
             int n = 0;
@@ -233,27 +236,27 @@ namespace Inverter.GenerateInverter.ViewsModel
 
         public ICommand LoadDataRight => new Command(async () =>
         {
-            try
-            {
-                IsBusy = true;
-                AddMessage("Wczytywanie nowego modelu");
-
-                ResponseModel response = null;
-                response = await GetData(response);
-
-                Application.Current.OpenWindow(new Window
-                {
-                    Page = new DisplayV(new Display.ViewsModel.DisplayVM(response))
-                });
-            }
-            catch (Exception ex)
-            {
-                AddMessage(ex.Message);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            // try
+            // {
+            //     IsBusy = true;
+            //     AddMessage("Wczytywanie nowego modelu");
+            //
+            //     ResponseModel response = null;
+            //     response = await GetData(response);
+            //
+            //     Application.Current.OpenWindow(new Window
+            //     {
+            //         Page = new DisplayV(new Display.ViewsModel.DisplayVM(response))
+            //     });
+            // }
+            // catch (Exception ex)
+            // {
+            //     AddMessage(ex.Message);
+            // }
+            // finally
+            // {
+            //     IsBusy = false;
+            // }
         });
 
         #endregion

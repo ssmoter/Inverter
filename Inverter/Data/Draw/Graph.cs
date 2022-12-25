@@ -9,6 +9,7 @@
         public float MaxYPosition { get; set; } = 1;
         public float MinYPositions { get; set; } = 1;
         public List<float> AxisX { get; set; }
+        public List<float> AxisY { get; set; }
         public bool AxisXWrite { get; set; }
         public string Name { get; set; }
         public int PositionName { get; set; } = 1;
@@ -24,6 +25,7 @@
         public Graph()
         {
             AxisX = new List<float>();
+            AxisY = new List<float>();
             Color = new Color();
             point = new PathF();
         }
@@ -37,7 +39,7 @@
                     fft = true;
                 }
 
-                int farFromUp = 10;
+                int farFromUp = 20;
 
                 #region Wykresy
                 canvas.SaveState();
@@ -96,10 +98,9 @@
                 //podpis wykresu
                 canvas.FontColor = Color;
                 canvas.FontSize = FontSize;
-                canvas.DrawString(Name, -10 + (PositionName * (Name.Length * (FontSize / 2))), dirtyRect.Bottom - 3, HorizontalAlignment.Left);
+                canvas.DrawString(Name, (PositionName * (Name.Length * (FontSize / 2))), dirtyRect.Bottom - 3, HorizontalAlignment.Left);
 
                 //wartości na osi Y
-                //poprawic
 
                 var yValue = MaxYValue.ToString().Split(',');
                 string visibleYValue = string.Empty;
@@ -115,7 +116,14 @@
                     if (Math.Abs(MinYValue) > 0.001)
                     {
                         yValue = MinYValue.ToString().Split(',');
-                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
+                        if (yValue.Length > 1)
+                        {
+                            visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
+                        }
+                        else
+                        {
+                            visibleYValue = yValue.FirstOrDefault();
+                        }
                         canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Center.Y - (MinYValue * scaleY) - farFromUp, HorizontalAlignment.Right);
                     }
                     if (MaxYValue > 0)
@@ -131,19 +139,54 @@
                         visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
                     else
                         visibleYValue = yValue.FirstOrDefault();
+                    //  canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
+                    // canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + farFromUp, HorizontalAlignment.Right);
 
-                    canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + farFromUp, HorizontalAlignment.Right);
+                    canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Center.Y - farFromUp - MaxYPosition, HorizontalAlignment.Right);
                     if (Math.Abs(MinYValue) > 0.001)
                     {
                         yValue = MinYValue.ToString().Split(',');
                         visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
-                        canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp, HorizontalAlignment.Right);
+                        canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Center.Y - farFromUp - MinYPositions, HorizontalAlignment.Right);
+                        // canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp, HorizontalAlignment.Right);
                     }
                     if (MaxYValue > 0)
                     {
                         canvas.FontColor = Color;
-                        canvas.DrawString("0-", 70, (dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp) - Math.Abs(MinYPositions), HorizontalAlignment.Right);
+                        canvas.DrawString("0-", 70, dirtyRect.Center.Y - farFromUp, HorizontalAlignment.Right);
+                        // canvas.DrawString("0-", 70, (dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp) - Math.Abs(MinYPositions), HorizontalAlignment.Right);
                         canvas.FontColor = Colors.Black;
+                    }
+                }
+                else if (fft)
+                {
+                    int secondLineI = 0;
+                    bool secondLineB = true;
+                    for (int i = 0; i < AxisY.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            continue;
+                        }
+
+                        if (AutoScaleX)
+                        {
+                            canvas.DrawString(AxisY[i].ToString(), (i + 0.5f) * scaleX + 75, dirtyRect.Top + farFromUp + secondLineI, HorizontalAlignment.Center);
+                        }
+                        else
+                        {
+                            canvas.DrawString(AxisY[i].ToString(), (i + 0.5f) + 75, dirtyRect.Top + farFromUp + secondLineI, HorizontalAlignment.Center);
+                        }
+                        if (secondLineB)
+                        {
+                            secondLineB = !secondLineB;
+                            secondLineI = 20;
+                        }
+                        else
+                        {
+                            secondLineB = !secondLineB;
+                            secondLineI = 0;
+                        }
                     }
                 }
                 canvas.StrokeColor = Colors.Black;
@@ -219,11 +262,14 @@
                             {
                                 canvas.DrawString("|", (i + 0.5f) * scaleX, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
                                 canvas.DrawString(AxisX[i].ToString(), (i + 0.5f) * scaleX, dirtyRect.Bottom - 25, HorizontalAlignment.Right);
+                                canvas.DrawString(i.ToString(), (i + 0.5f) * scaleX, dirtyRect.Bottom - 5, HorizontalAlignment.Right);
+
                             }
                             else
                             {
-                                canvas.DrawString("|", i, dirtyRect.Bottom - 48, HorizontalAlignment.Center);
+                                canvas.DrawString("|", (i + 0.5f), dirtyRect.Bottom - 48, HorizontalAlignment.Center);
                                 canvas.DrawString(AxisX[i].ToString(), i, dirtyRect.Bottom - 25, HorizontalAlignment.Center);
+                                canvas.DrawString(i.ToString(), (i + 0.5f), dirtyRect.Bottom - 5, HorizontalAlignment.Right);
                             }
 
                         }
@@ -278,51 +324,51 @@
 
                     canvas.RestoreState();
 
-                    #endregion
-
-
-
-                    #region Siatka
-                    if (!GridIsVisible)
-                    {
-                        if (AxisXWrite)
-                        {
-
-
-                            IPattern pattern;
-                            //Tworzenie paternu 10x10
-                            using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
-                            {
-                                pc.StrokeColor = Colors.White;
-                                pc.StrokeSize = 0.5f;
-                                pc.DrawLine(0, 0, 0, 10);
-                                pc.DrawLine(10, 0, 0, 0);
-                                pattern = new PicturePattern(pc.Picture, 10, 10);
-                            }
-
-                            //wypełnienie obiektu danym paternem
-                            PatternPaint pp = new PatternPaint
-                            {
-                                Pattern = pattern
-                            };
-                            canvas.SetFillPaint(pp, RectF.Zero);
-                            canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
-                            //siatka w czarnym kolorze wyzej bialy
-                            using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
-                            {
-                                pc.StrokeColor = Colors.Black;
-                                pc.StrokeSize = 0.5f;
-                                pc.DrawLine(0, 0, 0, 10);
-                                pc.DrawLine(10, 0, 0, 0);
-                                pattern = new PicturePattern(pc.Picture, 10, 10);
-                            }
-                            pp.Pattern = pattern; ;
-                            canvas.SetFillPaint(pp, RectF.Zero);
-                            canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
-                        }
-                    }
-                    #endregion
                 }
+                #endregion
+
+
+                #region Siatka
+                if (!GridIsVisible)
+                {
+                    if (AxisXWrite)
+                    {
+
+
+                        IPattern pattern;
+                        //Tworzenie paternu 10x10
+                        using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
+                        {
+                            pc.StrokeColor = Colors.White;
+                            pc.StrokeSize = 0.5f;
+                            pc.DrawLine(0, 0, 0, 10);
+                            pc.DrawLine(10, 0, 0, 0);
+                            pattern = new PicturePattern(pc.Picture, 10, 10);
+                        }
+
+                        //wypełnienie obiektu danym paternem
+                        PatternPaint pp = new PatternPaint
+                        {
+                            Pattern = pattern
+                        };
+                        canvas.SetFillPaint(pp, RectF.Zero);
+                        canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
+                        //siatka w czarnym kolorze wyzej bialy
+                        using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
+                        {
+                            pc.StrokeColor = Colors.Black;
+                            pc.StrokeSize = 0.5f;
+                            pc.DrawLine(0, 0, 0, 10);
+                            pc.DrawLine(10, 0, 0, 0);
+                            pattern = new PicturePattern(pc.Picture, 10, 10);
+                        }
+                        pp.Pattern = pattern; ;
+                        canvas.SetFillPaint(pp, RectF.Zero);
+                        canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
+                    }
+                }
+                #endregion
+
             }
             catch (Exception ex)
             {

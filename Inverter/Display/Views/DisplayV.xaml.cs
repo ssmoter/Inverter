@@ -36,13 +36,13 @@ public partial class DisplayV : ContentPage
         symulationRunning = false;
         eStrokeSize.Text = strokeSize.ToString();
         _fm = new FileManager();
-        try
-        {
-            // Initialization();
-        }
-        catch
-        {
-        }
+       // try
+       // {
+       //      Initialization();
+       // }
+       // catch
+       // {
+       // }
 
     }
 
@@ -270,6 +270,9 @@ public partial class DisplayV : ContentPage
                     data.Visible = DataGraphs[i].Visible;
                     data.LocationRow = DataGraphs[i].LocationRow;
                     data.locationRowSpan = DataGraphs[i].locationRowSpan;
+                    data.Max = DataGraphs[i].Max;
+                    data.Min = DataGraphs[i].Min;
+
                     if (startIndex != DataGraphs.FirstOrDefault().Y.Count || endIndex != 0)
                     {
                         for (int k = startIndex; k < endIndex; k++)
@@ -285,9 +288,16 @@ public partial class DisplayV : ContentPage
                     }
                     #endregion
                     //os Y
-                    _graphs[i].MaxYValue = DataGraphs.Max(x => x.Max);
-                    _graphs[i].MinYValue = DataGraphs.Min(x => x.Min);
-
+                    if (data.Multiplier == 0)
+                    {
+                        _graphs[i].MaxYValue = DataGraphs.Max(x => x.Max);
+                        _graphs[i].MinYValue = -DataGraphs.Max(x => x.Max);
+                    }
+                    else
+                    {
+                        _graphs[i].MaxYValue = data.Max;
+                        _graphs[i].MinYValue = data.Min;
+                    }
                     _graphs[i].MaxYPosition = data.Max * data.Multiplier;
                     _graphs[i].MinYPositions = data.Min * data.Multiplier;
                     //font size
@@ -301,7 +311,7 @@ public partial class DisplayV : ContentPage
                     int n = 0;
                     int secondLoop = 0;
                     //Ustawienie wyświetlanych wartości osi x
-                    _graphs[i].AxisX = data.X;
+                    _graphs[i].AxisY = data.Y;
                     //zakres wyświetlanych wartości na X
                     _graphs[i].StartScopeIndex = startIndex;
                     _graphs[i].EndScopeIndex = endIndex;
@@ -327,7 +337,7 @@ public partial class DisplayV : ContentPage
 
                             if (fft)
                             {
-                                _graphs[i].point.LineTo(n + 1f, -data.Y[j]);
+                                _graphs[i].point.LineTo(n + 1, -(data.Y[j]));
                             }
                         }
                         n++;

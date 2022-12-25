@@ -47,8 +47,11 @@ namespace Inverter.Models
 
         public void SetMaxMin()
         {
-            Max = Y.Max();
-            Min = Y.Min();
+          //  if (!DataName.Contains("fft"))
+            {
+                Max = Y.Max();
+                Min = Y.Min();
+            }
         }
     }
 

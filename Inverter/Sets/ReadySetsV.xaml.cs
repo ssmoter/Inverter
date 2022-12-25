@@ -96,22 +96,32 @@ public partial class ReadySetsV : ContentPage
                 await DisplayAlert("Configuracja", "Nie udało się usunać pliku", "OK");
 
         }
+        else
+        {
+            await DisplayAlert("Configuracja", "Nie wybrano pliku", "OK");
+        }
     }
 
     private async void bLoad_Clicked(object sender, EventArgs e)
     {
-        var json = await _fm.LoadDataPath(SelectedData.Path);
+        if (SelectedData != null)
+        {
+            var json = await _fm.LoadDataPath(SelectedData.Path);
 
-        ResponseModel response = new ResponseModel(SelectedData.Name);
-        response.IsReady = true;
-        response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
-        
-        await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
-            new Dictionary<string, object>
-            {
-                [nameof(ResponseModel)] = response,
-            });
+            ResponseModel response = new ResponseModel(SelectedData.Name);
+            response.IsReady = true;
+            response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
 
+            await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
+                new Dictionary<string, object>
+                {
+                    [nameof(ResponseModel)] = response,
+                });
+        }
+        else
+        {
+            await DisplayAlert("Configuracja", "Nie wybrano pliku", "OK");
+        }
     }
     public class SaveData
     {

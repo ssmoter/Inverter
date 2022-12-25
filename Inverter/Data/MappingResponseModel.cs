@@ -71,7 +71,7 @@ namespace Inverter.Data
 
         private static int FFT(ResponseModel responseModel, CultureInfo cultureInfo, string[] lines, int i)
         {
-            if (lines[i].Contains("FOURIER COMPONENTS"))
+            if (lines[i].Contains("FOURIER COMPONENTS") && responseModel.DataGraphs.Any(x => x.DataName.Contains("fft")))
             {
                 var name = TrimWhiteSpace(lines[i].Trim().Split(' ').ToList());
                 int index = responseModel.DataGraphs.FindIndex(x => x.DataName.Replace("fft", "") == name.LastOrDefault() && x.DataName.Contains("fft"));
