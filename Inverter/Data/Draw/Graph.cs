@@ -1,4 +1,5 @@
-﻿namespace Inverter.Data.Draw
+﻿
+namespace Inverter.Data.Draw
 {
     internal class Graph : BaseDrawable
     {

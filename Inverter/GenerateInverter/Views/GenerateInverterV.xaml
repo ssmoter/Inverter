@@ -380,8 +380,8 @@
                 <!--Podglad-->
                 <Grid 
                 Grid.Column="4"
-                  Grid.Row="1"
-                  RowDefinitions="auto,auto"
+                  Grid.Row="1" x:Name="gPreview"
+                  RowDefinitions="auto,auto,*"
                   ColumnDefinitions="auto">
                     <Label Grid.Column="0" Margin="0,5,0,0"
                        Grid.Row="0" Text="Podgląd pliku:"/>
@@ -390,7 +390,6 @@
                             <Label  Text="{Binding InverterM.StringModelNotify}"/>
                         </ScrollView>
                     </Border>
-
                 </Grid>
                 <!--Przyciski-->
                 <Grid 

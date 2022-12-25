@@ -52,28 +52,59 @@
     </ContentPage.Resources>
 
     <ScrollView x:Name="svMain" SizeChanged="svMain_SizeChanged">
-        <VerticalStackLayout 
-            HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand"
-            Padding="30"
-            Spacing="25">
-            <Button Text="Wygeneruj Nowy Falownik" VerticalOptions="Fill"
-                    Clicked="CreateNewInverter">
-                <Button.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"
-                                          Buttons="Secondary"/>
-                </Button.GestureRecognizers>
-            </Button>
+        <VerticalStackLayout>
 
-            <Button Text="Wczytaj Gotowy Zestaw" 
-                    Clicked="Configuration"/>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Image Source="pkblack.png" HeightRequest="75"/>
+                <Image Source="wieikblack.png" HeightRequest="75"/>
+            </HorizontalStackLayout>
+            <Label Text="Politechnika Krakowska" HorizontalOptions="Center" FontSize="Title"/>
+            <Label Text="Wydział Inżynierii Elektrycznej i Komputerowej" HorizontalOptions="Center" FontSize="Title"/>
+            <Label Text="Program do Wizualizacji Pracy Trójfazowego Trójpoziomowego Falownika Napięcia" HorizontalOptions="Center" FontSize="Title"/>
+            <VerticalStackLayout 
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Padding="30"
+                Spacing="25">
 
-            <Button Text="Lokalizacja Pspice" 
-                    Clicked="PspiceLocation_Clicked"/>
+                <Button Text="Wygeneruj Nowy Falownik" VerticalOptions="Fill"
+                        Clicked="CreateNewInverter">
+                    <Button.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"
+                                              Buttons="Secondary"/>
+                    </Button.GestureRecognizers>
+                </Button>
 
-            <Button Text="Rozmiar Czcionki" 
-                    Clicked="FontSize_Clicked"/>
+                <Button Text="Wczytaj Gotowy Zestaw" 
+                        Clicked="Configuration"/>
 
+                <Button Text="Lokalizacja Pspice" 
+                        Clicked="PspiceLocation_Clicked"/>
+
+                <Button Text="Rozmiar Czcionki" 
+                        Clicked="FontSize_Clicked"/>
+
+            </VerticalStackLayout>
+            <Frame HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand" x:Name="fEasterEgg">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup >
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="Opacity" Value="0" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="Opacity" Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+                <VerticalStackLayout >
+                    <Label Text="Praca Dyplomowa: &#10;Sławomir Smoter" FontSize="5"/>
+                    <Image Source="easteregg.gif" IsAnimationPlaying="True" HeightRequest="50"/>
+                </VerticalStackLayout>
+            </Frame>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

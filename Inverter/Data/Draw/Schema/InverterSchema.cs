@@ -76,7 +76,6 @@ namespace Inverter.Data.Draw.Schema
         private void SourceLine(ICanvas canvas, RectF dirtyRect)
         {
 
-
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VzP)").FirstOrDefault().Y[Index]);
             Source(canvas, dirtyRect, -10, 0, "UD 1/2"); //A
             canvas.DrawLine(dirtyRect.Left, 30, dirtyRect.Left, 110);//190
