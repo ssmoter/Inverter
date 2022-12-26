@@ -86,14 +86,17 @@ public partial class ReadySetsV : ContentPage
     {
         if (SelectedData != null)
         {
-            bool result = _fm.DeleteFile(SelectedData.Path);
-            if (result)
+            if (await DisplayAlert("Usuwanie", $"Czy na pewno chcesz usunąć plik {SelectedData.Name}", "Tak", "Nie"))
             {
-                await DisplayAlert("Usuwanie", "Plik został usunięty", "OK");
-                _InverterDatas.Remove(SelectedData);
+                bool result = _fm.DeleteFile(SelectedData.Path);
+                if (result)
+                {
+                    await DisplayAlert("Usuwanie", "Plik został usunięty", "OK");
+                    _InverterDatas.Remove(SelectedData);
+                }
+                else
+                    await DisplayAlert("Configuracja", "Nie udało się usunać pliku", "OK");
             }
-            else
-                await DisplayAlert("Configuracja", "Nie udało się usunać pliku", "OK");
 
         }
         else
@@ -106,17 +109,20 @@ public partial class ReadySetsV : ContentPage
     {
         if (SelectedData != null)
         {
-            var json = await _fm.LoadDataPath(SelectedData.Path);
+            if (await DisplayAlert("Wczytywanie", $"Czy na pewno chcesz wczytać plik {SelectedData.Name}", "Tak", "Nie"))
+            {
+                var json = await _fm.LoadDataPath(SelectedData.Path);
 
-            ResponseModel response = new ResponseModel(SelectedData.Name);
-            response.IsReady = true;
-            response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
+                ResponseModel response = new ResponseModel(SelectedData.Name);
+                response.IsReady = true;
+                response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
 
-            await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
-                new Dictionary<string, object>
-                {
-                    [nameof(ResponseModel)] = response,
-                });
+                await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
+                    new Dictionary<string, object>
+                    {
+                        [nameof(ResponseModel)] = response,
+                    });
+            }
         }
         else
         {

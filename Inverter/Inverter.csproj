@@ -48,13 +48,16 @@
 	  <AppInstallerUri>C:\temp</AppInstallerUri>
 	  <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 	  <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-	  <PackageCertificateThumbprint>738BC34AAB89F56C5296EABB5AC6063D9257DDAC</PackageCertificateThumbprint>
+	  <PackageCertificateThumbprint>94E9BDF873EEC48F83A2EE2AB6FF9E23634A27D1</PackageCertificateThumbprint>
 	  <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+	  <Description>Program do Wizualizacji Pracy Trójfazowego Trójpoziomowego Falownika Napięcia</Description>
+	  <Company>$(Authors) Politechnika Krakowska Wydział Inżynierii Elektrycznej i Komputerowej</Company>
+	  <Authors>$(AssemblyName) Sławomir Smoter</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\wieikblack.png" Resize="False" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />

@@ -11,7 +11,7 @@ public partial class InverterV : ContentPage
         InitializeComponent();
         BindingContext = vm;
 
-        GraphicsView graphics= new GraphicsView();
+        GraphicsView graphics = new GraphicsView();
         List<DataGraph> dataGraphs = new List<DataGraph>();
         dataGraphs = new InverterParameters().DefaultPrintTran;
         for (int i = 0; i < dataGraphs.Count; i++)
@@ -23,12 +23,12 @@ public partial class InverterV : ContentPage
 
 
         _inverterSchema.BlackWhite = true;
-        _inverterSchema.MinYValue= 0;
-        _inverterSchema.MaxYValue= 0;
+        _inverterSchema.MinYValue = 0;
+        _inverterSchema.MaxYValue = 0;
         _inverterSchema.Index = 0;
         graphics.Drawable = _inverterSchema;
         Resources.Add(nameof(InverterSchema), graphics);
-        gPreview.Add(graphics,0,2);
+        gPreview.Add(graphics, 0, 2);
     }
 
     private void rvMain_SizeChanged(object sender, EventArgs e)

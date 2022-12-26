@@ -2,6 +2,7 @@
 using Inverter.Data.Draw;
 using Inverter.Data.Draw.Schema;
 using Inverter.Display.ViewsModel;
+using Inverter.Helpers;
 using Inverter.Models;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
@@ -36,14 +37,31 @@ public partial class DisplayV : ContentPage
         symulationRunning = false;
         eStrokeSize.Text = strokeSize.ToString();
         _fm = new FileManager();
-       // try
-       // {
-       //      Initialization();
-       // }
-       // catch
-       // {
-       // }
+        //try
+        //{
+        //    Initialization();
+        //}
+        //catch
+        //{
+        //}
 
+    }
+
+    public DisplayV(ResponseModel responseModel)
+    {
+        Resources.Clear();
+        InitializeComponent();
+        DisplayVM vm = new DisplayVM()
+        {
+            ResponseModel = responseModel,
+            FontSize = Config.FontSize,
+        };
+
+        BindingContext = new object();
+        BindingContext = vm;
+        symulationRunning = false;
+        eStrokeSize.Text = strokeSize.ToString();
+        _fm = new FileManager();
     }
 
 
@@ -79,9 +97,6 @@ public partial class DisplayV : ContentPage
 
                 #region Wykresy
 
-
-
-
                 _graphs = new();
                 if (DataGraphs == null)
                 {
@@ -91,7 +106,13 @@ public partial class DisplayV : ContentPage
                 {
                     DataGraphs[i].SetMaxMin();
                     _graphs.Add(new Graph());
-                    Resources.Add(i.ToString(), _graphs[i]);
+
+                    var find = Resources.Where(x => x.Key == i.ToString() && x.Value == _graphs[i]).FirstOrDefault();
+                    if (find.Key != null)
+                    {
+                        Resources.Add(i.ToString(), _graphs[i]);
+                    }
+
                 }
                 #endregion
 
@@ -103,7 +124,13 @@ public partial class DisplayV : ContentPage
 
                 _gvSchema = new();
                 _gvSchema.Drawable = _inverterSchema;
-                Resources.Add(nameof(InverterSchema), _gvSchema);
+                var findSchemat = Resources.Where(x => x.Key == nameof(InverterSchema) && x.Value == _gvSchema).FirstOrDefault();
+                if (findSchemat.Key != null)
+                {
+                    Resources.Add(nameof(InverterSchema), _gvSchema);
+                }
+                gSchema.Clear();
+                gSchema.Add(bvSchemaColor);
                 gSchema.Add(_gvSchema);
                 SCurrentMaxIndex = DataGraphs.LastOrDefault().X.Count - 1;
                 bc.SCurrentMaxIndex = SCurrentMaxIndex;
@@ -517,7 +544,7 @@ public partial class DisplayV : ContentPage
         svMain.MaximumHeightRequest = this.Height;
     }
 
-    #region Zapisywanie
+    #region ZapisywanieWczytywanie
 
     private async void bSave_Clicked(object sender, EventArgs e)
     {
@@ -545,9 +572,43 @@ public partial class DisplayV : ContentPage
         {
             await DisplayAlert("Zapisywanie", "Zapisono nowy plik", "OK");
         }
-        else
+        else if (!complite && result != null)
         {
             await DisplayAlert("Zapisywanie", "Nie udało się zapisać pliku", "OK");
+        }
+    }
+
+    private async void bLoad_Clicked(object sender, EventArgs e)
+    {
+        var list = _fm.GetFilesName();
+
+        string[] nameList = new string[list.Count];
+        for (int i = 0; i < list.Count; i++)
+        {
+            nameList[i] = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", "");
+        }
+
+        string result = await DisplayActionSheet("Wczytaj:", "Anuluj", null, nameList);
+
+        if (result != null && result != "Anuluj")
+        {
+            ResponseModel response = new ResponseModel(result);
+            response.IsReady = true;
+
+            for (int i = 0; i < nameList.Length; i++)
+            {
+                if (nameList[i] == result)
+                {
+                    result = list[i];
+                    break;
+                }
+            }
+
+            var json = await _fm.LoadDataPath(result);
+            response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
+
+            await Navigation.PushAsync(new DisplayV(response));
+            Navigation.RemovePage(this);
         }
     }
     #endregion

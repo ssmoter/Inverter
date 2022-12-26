@@ -55,7 +55,7 @@
         <VerticalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="Center">
-                <Image Source="pkblack.png" HeightRequest="75"/>
+                <Image Source="pkblack.png" HeightRequest="85"/>
                 <Image Source="wieikblack.png" HeightRequest="75"/>
             </HorizontalStackLayout>
             <Label Text="Politechnika Krakowska" HorizontalOptions="Center" FontSize="Title"/>
