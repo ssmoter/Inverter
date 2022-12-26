@@ -109,14 +109,18 @@
                 RowDefinitions="auto,auto,auto,auto,*" RowSpacing="10">
 
             <!--Konfiguracja-->
-            <Button HorizontalOptions="Start" Text="Zapisz" Grid.Row="0" Grid.Column="0" x:Name="bSave" Clicked="bSave_Clicked"/>
+            <HorizontalStackLayout>
+                <Button HorizontalOptions="Start" Text="Zapisz" Grid.Row="0" Grid.Column="0" x:Name="bSave" Clicked="bSave_Clicked"/>
+                <Button HorizontalOptions="Start" Text="Wczytaj" Grid.Row="0" Grid.Column="0" x:Name="bLoad" Clicked="bLoad_Clicked"/>
+            </HorizontalStackLayout>
+
             <Label FontSize="Title" HorizontalOptions="Center" Text="Konfiguracja" Grid.Row="0" Grid.Column="0"/>
             <Label FontSize="Title" HorizontalOptions="Center" Text="Schemat" Grid.Row="0" Grid.Column="1"/>
             <CheckBox HorizontalOptions="EndAndExpand"  Grid.Row="0" Grid.Column="1" x:Name="cbSchemaColor" ToolTipProperties.Text="Kolor tła schematu &#10;Tak - Czarny &#10;Nie-Biały" IsChecked="True" CheckedChanged="cbSchemaColor_CheckedChanged"/>
             <Label FontSize="Title" HorizontalOptions="Center" Text="Wykresy" Grid.Row="2" Grid.ColumnSpan="1"/>
 
 
-            <Grid Grid.Row="2" Grid.Column="2" HorizontalOptions="End" VerticalOptions="End"
+            <Grid Grid.Row="2" Grid.Column="2" HorizontalOptions="End" VerticalOptions="End" 
                   ColumnDefinitions="*,*,*,*,*,*,*,*,*">
 
                 <Editor Grid.Column="0" ToolTipProperties.Text="Grubość lini&#10;0-auto" x:Name="eStrokeSize" TextChanged="eStrokeSize_TextChanged"/>
@@ -218,7 +222,7 @@
                                         RowDefinitions="*" RowSpacing="10">
                                     <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold" HorizontalOptions="Center" Text="ID" />
                                     <Label Grid.Row="0" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Center" Text="Nazwa"/>
-                                    <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Start" Text="Color"/>
+                                    <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Start" Text="Kolor"/>
                                     <Label Grid.Row="0" Grid.Column="3" FontAttributes="Bold" HorizontalOptions="Center" Text="Skala"/>
                                     <Label Grid.Row="0" Grid.Column="4" FontAttributes="Bold" HorizontalOptions="Center" Text="Wiersz"/>
                                     <Label Grid.Row="0" Grid.Column="5" FontAttributes="Bold" HorizontalOptions="Center" Text="Rozpiętość&#10;Wierszy" />
@@ -233,7 +237,7 @@
                                      RowDefinitions="*" RowSpacing="10">
                                     <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold" HorizontalOptions="Center" Text="ID" />
                                     <Label Grid.Row="0" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Center" Text="Nazwa"/>
-                                    <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Start" Text="Color"/>
+                                    <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="Start" Text="Kolor"/>
                                     <Label Grid.Row="0" Grid.Column="3" FontAttributes="Bold" HorizontalOptions="Center" Text="Skala"/>
                                     <Label Grid.Row="0" Grid.Column="4" FontAttributes="Bold" HorizontalOptions="Center" Text="Wiersz"/>
                                     <Label Grid.Row="0" Grid.Column="5" FontAttributes="Bold" HorizontalOptions="Center" Text="Rozpiętość&#10;Wierszy" />
@@ -265,6 +269,7 @@
                     </CollectionView>
                 </Grid>
             </ContentView>
+            
             <ScrollView Grid.Row="1" Grid.Column="1" VerticalOptions="Fill" HorizontalOptions="Fill">
                 <Grid x:Name="gSchema">
                     <BoxView Color="Black" x:Name="bvSchemaColor"/>

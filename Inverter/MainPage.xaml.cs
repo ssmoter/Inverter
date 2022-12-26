@@ -83,7 +83,7 @@ public partial class MainPage : ContentPage
             bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.FontSize);
             if (isComplited)
             {
-                 await DisplayAlert("Configuracja", "Zapisano Rozmiar czcionki" + Environment.NewLine + result, "OK");
+                await DisplayAlert("Configuracja", "Zapisano Rozmiar czcionki" + Environment.NewLine + result, "OK");
                 try
                 {
                     FontSize = int.Parse(result);
@@ -94,13 +94,12 @@ public partial class MainPage : ContentPage
             }
             else
 
-             await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
+                await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
         }
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-
         // Application.Current.OpenWindow(new Window
         // {
         //     Page = new MainPage()

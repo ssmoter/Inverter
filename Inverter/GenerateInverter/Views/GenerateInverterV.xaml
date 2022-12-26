@@ -107,13 +107,12 @@
         </Style>
     </ContentPage.Resources>
 
-    <RefreshView IsRefreshing="{Binding IsBusy}" Margin="0" Padding="0" x:Name="rvMain" SizeChanged="rvMain_SizeChanged" >
-        <ScrollView Margin="1,0,1,0" Padding="0" Orientation="Both" 
-                    >
+    <RefreshView IsRefreshing="{Binding IsBusy}" Margin="0" Padding="0" x:Name="rvMain" SizeChanged="rvMain_SizeChanged">
+        <ScrollView Margin="1,0,1,0" Padding="0" Orientation="Both">
 
             <Grid
             RowDefinitions="auto,auto,auto"
-            RowSpacing="5"
+            RowSpacing="1"
             ColumnDefinitions="auto,15,auto,15,auto" Margin="10,0,0,0">
 
                 <!--komunikaty-->
@@ -135,7 +134,7 @@
                 Grid.Row="1"           
                 Grid.Column="0"
                 ColumnDefinitions="*" 
-                RowSpacing="2" RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*">
+                RowSpacing="2" RowDefinitions="auto,*,*,*,*,*,*,*,*,*,*,*,*">
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Konfiguracja parametrów:"/>
 
                     <Frame Grid.Row="1" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Napięcie zasilania falownika [V]">
@@ -246,7 +245,7 @@
                 RowSpacing="2"
                 ColumnSpacing="10"
                 ColumnDefinitions="*,*,*,*"
-                RowDefinitions="*,*,*,*,2*,*,*,*,*"
+                RowDefinitions="auto,*,*,*,2*,*,*,*,*"
                 >
                     <Label Grid.Row="0" Grid.ColumnSpan="4" Text="Konfiguracja Tran:"/>
 
