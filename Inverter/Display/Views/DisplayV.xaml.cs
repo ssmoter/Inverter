@@ -83,6 +83,9 @@ public partial class DisplayV : ContentPage
     {
         try
         {
+            sbFind.MaximumWidthRequest = Config.FontSize * 10;
+            sbFind.MinimumWidthRequest = Config.FontSize * 6;
+
             if (BindingContext is DisplayVM)
             {
                 bc = (DisplayVM)BindingContext;
@@ -130,14 +133,16 @@ public partial class DisplayV : ContentPage
                     Resources.Add(nameof(InverterSchema), _gvSchema);
                 }
                 gSchema.Clear();
-                gSchema.Add(bvSchemaColor);
                 gSchema.Add(_gvSchema);
                 SCurrentMaxIndex = DataGraphs.LastOrDefault().X.Count - 1;
                 bc.SCurrentMaxIndex = SCurrentMaxIndex;
                 SActualCurrentIndex = bc.SActualCurrentIndex;
                 _timer = new System.Timers.Timer(100);
                 _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
-                _inverterSchema.BlackWhite = true;
+                if (Application.Current.RequestedTheme == AppTheme.Dark)
+                    _inverterSchema.BlackWhite = true;
+                else
+                    _inverterSchema.BlackWhite = false;
                 //linia
                 _lineTimeSchema = new();
                 gvLineTimeSchematV.Drawable = _lineTimeSchema;
@@ -453,6 +458,19 @@ public partial class DisplayV : ContentPage
         }
     }
 
+    private void sbFind_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (sbFind != null)
+        {
+            if (!string.IsNullOrEmpty(sbFind.Text))
+                cvDataGraphs.ItemsSource = DataGraphs.Where
+                    (x => x.DataName.ToUpper().Contains(sbFind.Text.ToUpper())
+                    || x.UserDataName.ToUpper().Contains(sbFind.Text.ToUpper()));
+            else
+                cvDataGraphs.ItemsSource = DataGraphs;
+        }
+    }
+
     #endregion
 
     #region Symulacja
@@ -514,23 +532,6 @@ public partial class DisplayV : ContentPage
             gvLineTimeSchematV.Invalidate();
         }
     }
-
-    private void cbSchemaColor_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        if (cbSchemaColor.IsChecked)
-        {
-            bvSchemaColor.Color = Colors.Black;
-            _inverterSchema.BlackWhite = true;
-        }
-        else
-        {
-            bvSchemaColor.Color = Colors.White;
-            _inverterSchema.BlackWhite = false;
-        }
-        _gvSchema.Invalidate();
-    }
-
-
     #endregion
 
     private void svGraph_SizeChanged(object sender, EventArgs e)
@@ -542,6 +543,19 @@ public partial class DisplayV : ContentPage
     {
         svMain.MaximumWidthRequest = this.Width;
         svMain.MaximumHeightRequest = this.Height;
+
+        Application.Current.RequestedThemeChanged += (s, a) =>
+        {
+            if (_inverterSchema != null)
+            {
+                if (Application.Current.RequestedTheme == AppTheme.Dark)
+                    _inverterSchema.BlackWhite = true;
+                else
+                    _inverterSchema.BlackWhite = false;
+
+                _gvSchema.Invalidate();
+            }
+        };
     }
 
     #region ZapisywanieWczytywanie
@@ -611,6 +625,7 @@ public partial class DisplayV : ContentPage
             Navigation.RemovePage(this);
         }
     }
+
     #endregion
 
 

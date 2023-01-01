@@ -40,6 +40,8 @@ namespace Inverter.Models
 
         public DataGraph()
         {
+            DataName = "";
+            UserDataName = "";
             UserColor = new NamedColor();
             X = new();
             Y = new();

@@ -14,12 +14,15 @@ public partial class ReadySetsV : ContentPage
 
     public ReadySetsV()
     {
-        InitializeComponent();
         _fm = new FileManager();
         SetInverterData();
 
-        BindingContext = this;
         FontSize = Config.FontSize;
+        BindingContext = this;
+        InitializeComponent();
+
+        sbFind.MinimumWidthRequest = FontSize * 6;
+        sbFind.MaximumWidthRequest = FontSize * 10;
     }
 
     private void SetInverterData()
@@ -60,7 +63,7 @@ public partial class ReadySetsV : ContentPage
     }
 
 
-    private int _fontSize = 14;
+    private int _fontSize = 20;
     public int FontSize
     {
         get => _fontSize;
@@ -93,6 +96,7 @@ public partial class ReadySetsV : ContentPage
                 {
                     await DisplayAlert("Usuwanie", "Plik został usunięty", "OK");
                     _InverterDatas.Remove(SelectedData);
+                    SelectedData = new();
                 }
                 else
                     await DisplayAlert("Configuracja", "Nie udało się usunać pliku", "OK");
@@ -133,5 +137,16 @@ public partial class ReadySetsV : ContentPage
     {
         public string Name { get; set; }
         public string Path { get; set; }
+    }
+
+    private void sbFind_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (sbFind != null)
+        {
+            if (!string.IsNullOrEmpty(sbFind.Text))
+                cvInverterDatas.ItemsSource = InverterDatas.Where(x => x.Name.ToUpper().Contains(sbFind.Text.ToUpper()));
+            else
+                cvInverterDatas.ItemsSource = InverterDatas;
+        }
     }
 }

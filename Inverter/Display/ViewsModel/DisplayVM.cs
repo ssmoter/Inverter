@@ -66,7 +66,7 @@ namespace Inverter.Display.ViewsModel
                         if (_dataGraphSelectedItem.DataName.Contains("fft"))
                         {
                             _maxMinValue = $"THD={GetTHD(_dataGraphSelectedItem)}" +
-                                $"{Environment.NewLine}THD%={GetTHD(_dataGraphSelectedItem) * 100}";
+                                $"{Environment.NewLine}THD%={GetTHD(_dataGraphSelectedItem) * 100}%";
                         }
 
                     }
@@ -186,7 +186,7 @@ namespace Inverter.Display.ViewsModel
         {
             DataGraphUpdateItem = new();
             DataGraphUpdateItem.UserColor = new();
-            OnPropertyChanged("DataGraphUpdateItem");
+            OnPropertyChanged(nameof(DataGraphUpdateItem));
         }
 
         public ICommand UpdateRowCommand => new Command(() =>
@@ -197,23 +197,31 @@ namespace Inverter.Display.ViewsModel
             {
                 return;
             }
-            List<DataGraph> newData = DataGraphs.ToList();
+
             try
             {
-                if (DataGraphSelectedItem.locationRowSpan < 0)
+                if (DataGraphSelectedItem.locationRowSpan > 0)
                 {
-                    DataGraphSelectedItem.locationRowSpan = 1;
+                    DataGraphs[n].locationRowSpan = DataGraphSelectedItem.locationRowSpan;
                 }
-                if (DataGraphSelectedItem.LocationRow <= 0)
+                if (DataGraphSelectedItem.LocationRow >= 0)
                 {
-                    DataGraphSelectedItem.LocationRow = 0;
+                    DataGraphs[n].LocationRow = DataGraphSelectedItem.LocationRow;
                 }
-                newData.Insert(n, DataGraphSelectedItem);
-                newData.RemoveAt(n + 1);
+                DataGraphs[n].UserDataName = DataGraphSelectedItem.UserDataName;
+                DataGraphs[n].UserColor = DataGraphSelectedItem.UserColor;
+                DataGraphs[n].Visible = DataGraphSelectedItem.Visible;
+                DataGraphs[n].Multiplier = DataGraphSelectedItem.Multiplier;
+                DataGraphs = new ObservableCollection<DataGraph>(DataGraphs);
+                OnPropertyChanged(nameof(DataGraphs));
             }
             catch
             { }
-            DataGraphs = new ObservableCollection<DataGraph>(newData);
+        });
+        public ICommand RefreshListCommand => new Command(() =>
+        {
+            DataGraphs = new ObservableCollection<DataGraph>(DataGraphs);
+            OnPropertyChanged(nameof(DataGraphs));
         });
 
         public event PropertyChangedEventHandler PropertyChanged;

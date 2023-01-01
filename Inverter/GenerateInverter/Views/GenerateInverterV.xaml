@@ -3,14 +3,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Inverter.GenerateInverter.Views.InverterV"
              xmlns:VM="clr-namespace:Inverter.GenerateInverter.ViewsModel"
-             Title="Konfiguracja" BackgroundColor="Black">
+             Title="Konfiguracja" BackgroundColor="Transparent">
 
     <!--<ContentPage.BindingContext>
         <VM:GenerateMV/>
     </ContentPage.BindingContext>-->
     <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
         <Style TargetType="Entry">
             <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
             <!--<Setter Property="Margin" Value="0,2,0,2"/>-->
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -19,57 +48,17 @@
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" Value="LightGreen"/>
                                 <Setter Property="Opacity" Value="0.9"/>
-                                <Setter Property="TextColor" Value="Black"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="White"/>
-                                <Setter Property="TextColor" Value="Black"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Focused">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="TextColor" Value="Black"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="0,5,0,5"/>
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup>
-                        <VisualState x:Name="PointerOver">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.9"/>
-                                <Setter Property="TextColor" Value="Black"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="Normal">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="White"/>
-                                <Setter Property="TextColor" Value="Black"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <!--<Setter Property="Margin" Value="0,2,0,2"/>-->
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup>
-                        <VisualState x:Name="Normal">
-                            <VisualState.Setters>
-                                <Setter Property="FontSize" Value="{Binding FontSize}"/>
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -77,6 +66,8 @@
             </Setter>
         </Style>
         <Style TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="BorderColor" Value="Black"/>
             <!--<Setter Property="Margin" Value="0,2,0,2"/>-->
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -102,8 +93,8 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
-        <Style TargetType="ListView">
-            <Setter Property="Margin" Value="0,2,0,2"/>
+        <Style TargetType="Line">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
         </Style>
     </ContentPage.Resources>
 
@@ -139,98 +130,98 @@
 
                     <Frame Grid.Row="1" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Napięcie zasilania falownika [V]">
                         <Grid ColumnDefinitions=".5*,*"  RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Uz: "  TextColor="White" />
-                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.UzNotify}" Placeholder="{Binding InverterM.UzNotify}"/>
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label Grid.Column="0" Text="Uz: "/>
+                            <Entry Grid.Column="1"  Text="{Binding InverterM.UzNotify}" Placeholder="{Binding InverterM.UzNotify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2"/>
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="2" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Częstotliwość napięcia wyjściowego [Hz]">
                         <Grid ColumnDefinitions=".5*,*"  RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Fo: " TextColor="White"/>
-                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.FoNotify}" Placeholder="{Binding InverterM.FoNotify}"/>
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label Grid.Column="0" Text="Fo: "/>
+                            <Entry Grid.Column="1" Text="{Binding InverterM.FoNotify}" Placeholder="{Binding InverterM.FoNotify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2"/>
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="3" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Współczynik głębokości modulacji [-] (Ma&lt;1)">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Ma: " TextColor="White" />
-                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.MaNotify}" Placeholder="{Binding InverterM.MaNotify}" />
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label Grid.Column="0" Text="Ma: " />
+                            <Entry Grid.Column="1"  Text="{Binding InverterM.MaNotify}" Placeholder="{Binding InverterM.MaNotify}" />
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="4" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Rezystancja stycznika w stanie załączenia [&#8486;]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label  Grid.Column="0" Text="R_on: " TextColor="White" />
-                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.R_onNotify}" Placeholder="{Binding InverterM.R_onNotify}" />
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label  Grid.Column="0" Text="R_on: " />
+                            <Entry  Grid.Column="1"  Text="{Binding InverterM.R_onNotify}" Placeholder="{Binding InverterM.R_onNotify}" />
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="5" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Rezystancja stycznika w stanie Wyłączenia [&#8486;]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label  Grid.Column="0" Text="R_off: " TextColor="White" />
-                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.R_offNotify}" Placeholder="{Binding InverterM.R_offNotify}" />
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label  Grid.Column="0" Text="R_off: "  />
+                            <Entry  Grid.Column="1"  Text="{Binding InverterM.R_offNotify}" Placeholder="{Binding InverterM.R_offNotify}" />
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="6" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Rezystancja fazy odbiornika [&#8486;]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Ro: " TextColor="White" />
-                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.RoNotify}" Placeholder="{Binding InverterM.RoNotify}"/>
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label Grid.Column="0" Text="Ro: "  />
+                            <Entry Grid.Column="1"   Text="{Binding InverterM.RoNotify}" Placeholder="{Binding InverterM.RoNotify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="7" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Indukcyjność fazy odbiornika [H]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Lo: " TextColor="White" />
-                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.LoNotify}" Placeholder="{Binding InverterM.LoNotify}"/>
+                            <Label Grid.Column="0" Text="Lo: "  />
+                            <Entry Grid.Column="1"   Text="{Binding InverterM.LoNotify}" Placeholder="{Binding InverterM.LoNotify}"/>
 
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="8" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Amplituda napięcia SEM fazy odbiornika [V]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Eo: " TextColor="White" />
-                            <Entry Grid.Column="1" TextColor="Black"  Text="{Binding InverterM.EoNotify}" Placeholder="{Binding InverterM.EoNotify}"/>
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label Grid.Column="0" Text="Eo: "  />
+                            <Entry Grid.Column="1"   Text="{Binding InverterM.EoNotify}" Placeholder="{Binding InverterM.EoNotify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="9" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Przesunięcie fazowe SEM względem harmonicznej podstawowej fazy napięcia wyjściowego [deg]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Fio: " TextColor="White" />
-                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.FioNotify}" Placeholder="{Binding InverterM.FioNotify}"/>
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label Grid.Column="0" Text="Fio: "  />
+                            <Entry Grid.Column="1"  Text="{Binding InverterM.FioNotify}" Placeholder="{Binding InverterM.FioNotify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="10" Grid.Column="0"  CornerRadius="0" ToolTipProperties.Text="Częstotliwość przełączeń styczników [Hz]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Fi: " TextColor="White" />
-                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.FiNotify}" Placeholder="{Binding InverterM.FiNotify}" />
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label Grid.Column="0" Text="Fi: "  />
+                            <Entry Grid.Column="1"  Text="{Binding InverterM.FiNotify}" Placeholder="{Binding InverterM.FiNotify}" />
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="11" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Kąt przesunięcia załączenia tranzystorów [deg]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="Alfa: " TextColor="White" />
-                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.AlfaNotify}" Placeholder="{Binding InverterM.AlfaNotify}"/>
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Label Grid.Column="0" Text="Alfa: "  />
+                            <Entry Grid.Column="1"  Text="{Binding InverterM.AlfaNotify}" Placeholder="{Binding InverterM.AlfaNotify}"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="12" Grid.Column="0"  CornerRadius="0" ToolTipProperties.Text="Typ pracy falownika &#10;0-Fala prostokatna&#10;1-PWM">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="K: " TextColor="White" />
-                            <ListView  Grid.Column="1" MaximumHeightRequest="50" BackgroundColor="White"
+                            <Label Grid.Column="0" Text="K: "  />
+                            <ListView  Grid.Column="1" MaximumHeightRequest="50"
                                        ItemsSource="{Binding InverterM.KNotify}"  SelectedItem="{Binding InverterM.SelectedKNotify}" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate >
                                         <ViewCell>
                                             <Frame>
-                                                <Label Text="{Binding Key}" TextColor="Black" />
+                                                <Label Text="{Binding Key}"   />
                                             </Frame>
                                         </ViewCell>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
 
@@ -251,122 +242,76 @@
 
                     <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  CornerRadius="0" >
                         <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
-                            <Label  Grid.Column="0" Text="T1: " TextColor="White"/>
-                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T1Notify}" Placeholder="{Binding InverterM.T1Notify}"/>
+                            <Label  Grid.Column="0" Text="T1: " />
+                            <Entry  Grid.Column="1"  Text="{Binding InverterM.T1Notify}" Placeholder="{Binding InverterM.T1Notify}"/>
 
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"  CornerRadius="0" >
                         <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
-                            <Label  Grid.Column="0" Text="T2: " TextColor="White"/>
-                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T2Notify}" Placeholder="{Binding InverterM.T2Notify}"/>
+                            <Label  Grid.Column="0" Text="T2: " />
+                            <Entry  Grid.Column="1"  Text="{Binding InverterM.T2Notify}" Placeholder="{Binding InverterM.T2Notify}"/>
 
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  CornerRadius="0" >
                         <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
-                            <Label  Grid.Column="0" Text="T3: " TextColor="White"/>
-                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T3Notify}" Placeholder="{Binding InverterM.T3Notify}"/>
+                            <Label  Grid.Column="0" Text="T3: " />
+                            <Entry  Grid.Column="1"  Text="{Binding InverterM.T3Notify}" Placeholder="{Binding InverterM.T3Notify}"/>
 
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2"  CornerRadius="0" >
                         <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
-                            <Label Grid.Column="0" Text="T4: " TextColor="White"/>
-                            <Entry Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T4Notify}" Placeholder="{Binding InverterM.T4Notify}"/>
+                            <Label Grid.Column="0" Text="T4: " />
+                            <Entry Grid.Column="1"  Text="{Binding InverterM.T4Notify}" Placeholder="{Binding InverterM.T4Notify}"/>
 
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  CornerRadius="0" >
                         <Grid ColumnDefinitions=".5*,*" RowDefinitions="*,1">
-                            <Label  Grid.Column="0" Text="T5: " TextColor="White"/>
-                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.T5Notify}" Placeholder="{Binding InverterM.T5Notify}"/>
+                            <Label  Grid.Column="0" Text="T5: " />
+                            <Entry  Grid.Column="1"  Text="{Binding InverterM.T5Notify}" Placeholder="{Binding InverterM.T5Notify}"/>
 
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                     <Frame Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2"  CornerRadius="0" ToolTipProperties.Text="Liczba harmonicznych">
                         <Grid ColumnDefinitions="*,0.5*" RowDefinitions="*,1">
-                            <Label  Grid.Column="0" Text="Harmoniczne: " TextColor="White"/>
-                            <Entry  Grid.Column="1" TextColor="Black" Text="{Binding InverterM.NumberOfFftNotify}" Placeholder="{Binding InverterM.NumberOfFftNotify}"/>
+                            <Label  Grid.Column="0" Text="Harmoniczne: " />
+                            <Entry  Grid.Column="1"  Text="{Binding InverterM.NumberOfFftNotify}" Placeholder="{Binding InverterM.NumberOfFftNotify}"/>
 
-                            <Line  Grid.Row="1" Grid.ColumnSpan="2" BackgroundColor="White"/>
+                            <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
 
+                    <Frame ToolTipProperties.Text="Lista dodatkowych Print Tran oraz analiz Fouriera &#10;Aby dodać analize Fouriera należy dopisać fft do pola Id &#10;fftV(101) lub V(101)fft"
+                            Grid.Row="4" Grid.ColumnSpan="6" Grid.RowSpan="2">
+                        <Grid  ColumnDefinitions=".5*,*,auto" ColumnSpacing="5"
+                               RowDefinitions="auto,auto,*" RowSpacing="5">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Id"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="Nazwa Użytkownika"/>
 
-                    <Grid ToolTipProperties.Text="Lista dodatkowych Print Tran oraz analiz Fouriera &#10;Aby dodać analize Fouriera należy dopisać fft do pola Id &#10;fftV(101) lub V(101)fft"
-                                    ColumnDefinitions=".5*,*,auto" Grid.Row="4" Grid.ColumnSpan="6"
-                                    RowSpacing="5"
-                                    ColumnSpacing="5"
-                                    RowDefinitions="auto,auto,*">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Id"/>
-                        <Label Grid.Row="0" Grid.Column="1" Text="Nazwa Użytkownika"/>
-
-                        <Entry Grid.Column="0" Grid.Row="1" Text="{Binding InverterM.SingleDataNotify.DataName}"/>
-                        <Entry Grid.Column="1"  Grid.Row="1" Text="{Binding InverterM.SingleDataNotify.UserDataName}"/>
-                        <Button Grid.Column="2" Grid.Row="1" Text="Dodaj"  Command="{Binding InverterM.AddNewTranPrint}"/>
-                        <Button Grid.Column="2" Grid.Row="2" HeightRequest="80" VerticalOptions="Start" Text="Usuń" 
+                            <Entry Grid.Column="0" Grid.Row="1" Text="{Binding InverterM.SingleDataNotify.DataName}"/>
+                            <Entry Grid.Column="1"  Grid.Row="1" Text="{Binding InverterM.SingleDataNotify.UserDataName}"/>
+                            <Button Grid.Column="2" Grid.Row="1" Text="Dodaj"  Command="{Binding InverterM.AddNewTranPrint}"/>
+                            <Button Grid.Column="2" Grid.Row="2" HeightRequest="80" VerticalOptions="Start" Text="Usuń" 
                                             Command="{Binding InverterM.RemoveTranPrint}" IsEnabled="{Binding InverterM.IsSelectedDataNotify}"/>
 
-                        <ListView       
-                                        MaximumHeightRequest="80" BackgroundColor="White" Grid.Row="2" Grid.ColumnSpan="2"
+                            <ListView       
+                                        MaximumHeightRequest="200"  Grid.Row="2" Grid.ColumnSpan="2"
                                         ItemsSource="{Binding InverterM.DataNotify}" SelectedItem="{Binding InverterM.SelectedDataNotify}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Frame Margin="2" Padding="2">
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup>
-                                                    <VisualState x:Name="PointerOver">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                                            <Setter Property="Opacity" Value="0.7"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="Normal">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="BackgroundColor" Value="White"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="Selected">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                                            <Setter Property="Opacity" Value="0.5"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-                                            <Grid 
-                                                            ColumnDefinitions=".5*,*"
-                                                            ColumnSpacing="20">
-                                                <Label Grid.Column="0" Text="{Binding DataName}" TextColor="Black" />
-                                                <Label Grid.Column="1" Text="{Binding UserDataName}" TextColor="Black"/>
-                                            </Grid>
-                                        </Frame>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-
-                    <Frame Grid.Row="5" Grid.RowSpan="5" Grid.ColumnSpan="10">
-                        <Grid RowDefinitions="auto,*">
-                            <Label Grid.Row="0" Text="Podstawowe Print Tran" Margin="0" />
-                            <ListView 
-                                   Grid.Row="1" Margin="0" ItemsSource="{Binding InverterM.DefaultDataNotify}"
-                                     MaximumHeightRequest="300">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
-                                            <Grid ColumnDefinitions="auto,auto" ColumnSpacing="5">
-                                                <Label Grid.Column="0" VerticalTextAlignment="Start" Text="{Binding DataName}"/>
-                                                <Label Grid.Column="1" VerticalTextAlignment="End" Text="{Binding UserDataName}"/>
-                                            </Grid>
+                                            <HorizontalStackLayout Spacing="10">
+                                                <Label Text="{Binding DataName}"/>
+                                                <Label Text="{Binding UserDataName}"/>
+                                            </HorizontalStackLayout>
                                         </ViewCell>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -374,11 +319,30 @@
                         </Grid>
                     </Frame>
 
+                    <Frame Grid.Row="6" Grid.RowSpan="3" Grid.ColumnSpan="10">
+                        <Grid RowDefinitions="auto,*">
+                            <Label Grid.Row="0" Text="Podstawowe Print Tran" />
+                            <ListView 
+                                       Grid.Row="1" ItemsSource="{Binding InverterM.DefaultDataNotify}"
+                                         MaximumHeightRequest="250">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <HorizontalStackLayout Spacing="10">
+                                                <Label VerticalTextAlignment="Start" Text="{Binding DataName}"/>
+                                                <Label VerticalTextAlignment="End" Text="{Binding UserDataName}"/>
+                                            </HorizontalStackLayout>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Frame>
 
                 </Grid>
                 <!--Podglad-->
                 <Grid 
-                Grid.Column="4"
+                Grid.Column="4" 
                   Grid.Row="1" x:Name="gPreview"
                   RowDefinitions="auto,auto,*"
                   ColumnDefinitions="auto">

@@ -136,13 +136,13 @@ namespace Inverter.Models
             DefaultPrintTran.Add(new DataGraph() { DataName = "I(VoB)", UserDataName = "Odbiornik B" });
             DefaultPrintTran.Add(new DataGraph() { DataName = "I(VoC)", UserDataName = "Odbiornik C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "V(VzP)", UserDataName = "Żródło P" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "V(VzN)", UserDataName = "Żródło N" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "V(VzP)", UserDataName = "Źródło P" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "V(VzN)", UserDataName = "Źródło N" });
 
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VzP)", UserDataName = "Żródło P" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VzN)", UserDataName = "Żródło N" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(V0)", UserDataName = "Żródło 0" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VzP)", UserDataName = "Źródło P" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(VzN)", UserDataName = "Źródło N" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(V0)", UserDataName = "Źródło 0" });
 
 
 

@@ -2,6 +2,7 @@
 using Inverter.GenerateInverter.Views;
 using Inverter.Helpers;
 using Inverter.Sets;
+using Microsoft.Maui.Controls;
 
 namespace Inverter;
 
