@@ -13,7 +13,7 @@ namespace Inverter.Display.ViewsModel
     public class DisplayVM : INotifyPropertyChanged
     {
         public ResponseModel ResponseModel { get; set; }
-        private int _fontSize = 14;
+        private int _fontSize = 20;
         public int FontSize
         {
             get => _fontSize;

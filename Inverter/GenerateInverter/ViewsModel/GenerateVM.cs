@@ -36,7 +36,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 OnPropertyChanged(nameof(IsBusy));
             }
         }
-        private int _fontSize = 14;
+        private int _fontSize = 20;
         public int FontSize
         {
             get => _fontSize;
