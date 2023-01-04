@@ -9,7 +9,7 @@ namespace Inverter.Data
         public string FilePathData;
         public string path { get; private set; }
         private const string configName = "config";
-        private const string log = "logger";
+        private const string logger = "logger";
 
         public FileManager()
         {
@@ -163,7 +163,7 @@ namespace Inverter.Data
                 fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(FileName)));
                 fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(FileName)));
                 fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(configName)));
-                fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(log)));
+                fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(logger)));
 
                 return fileEntries;
             }
@@ -291,7 +291,7 @@ namespace Inverter.Data
             {
                 log = $"{DateTime.Now} :Error:{Environment.NewLine}{log}";
 
-                string filePath = $"{path}\\{log}.txt";
+                string filePath = $"{path}\\{logger}.txt";
                 if (ExistFile(log))
                 {
                     using (System.IO.FileStream fs = System.IO.File.Create(filePath))

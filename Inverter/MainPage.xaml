@@ -14,7 +14,6 @@
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.9"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">

@@ -67,27 +67,18 @@
             </Setter>
         </Style>
         <Style TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
             <Setter Property="BorderColor" Value="Black"/>
-            <!--<Setter Property="Margin" Value="0,2,0,2"/>-->
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.7"/>
+                                <Setter Property="Opacity" Value="{AppThemeBinding Light=0.5,Dark=2}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" Value="Transparent"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.5"/>
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -168,20 +159,6 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Frame  Margin="0" Padding="0" CornerRadius="0" >
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup>
-                                            <VisualState x:Name="PointerOver">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BorderColor" Value="LightGreen"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BorderColor" Value="Transparent"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                     <Grid RowDefinitions="auto" ColumnDefinitions="5,auto" ColumnSpacing="5" >
                                         <BoxView Grid.Row="0" Grid.Column="0" Color="{Binding Color}"/>
                                         <Label Grid.Row="0" Grid.Column="1" Text="{Binding FriendlyName}" VerticalOptions="CenterAndExpand"/>
@@ -269,17 +246,18 @@
                         <DataTemplate>
                             <Frame Margin="0" Padding="5,10,5,10">
                                 <Grid
-                                          ColumnDefinitions="*,2*,*,.5*,.5*,.5*,.5*" ColumnSpacing="5">
+                                          ColumnDefinitions="*,2*,*,.5*,.5*,.5*,auto" ColumnSpacing="5">
                                     <Label Grid.Column="0" Text="{Binding DataName}"/>
                                     <Entry Grid.Column="1" Text="{Binding UserDataName}" ToolTipProperties.Text="Nazwa"/>
                                     <HorizontalStackLayout Grid.Column="2">
                                         <BoxView WidthRequest="5" Color="{Binding UserColor.Color}"/>
                                         <Label Text="{Binding UserColor.FriendlyName}" />
                                     </HorizontalStackLayout>
-                                    <Entry Grid.Column="3" Text="{Binding Multiplier}" ToolTipProperties.Text="Nowa skala&#10;0-auto"/>
-                                    <Entry Grid.Column="4" Text="{Binding LocationRow}" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry)"/>
-                                    <Entry Grid.Column="5" Text="{Binding locationRowSpan}" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry)"/>
-                                    <CheckBox Grid.Column="6" IsVisible="True" Margin="1" IsChecked="{Binding Visible}" ToolTipProperties.Text="Czy wykres jest widoczny"/>
+                                    <Entry Grid.Column="3" Text="{Binding Multiplier}" ToolTipProperties.Text="Nowa skala&#10;0-auto" Keyboard="Numeric"/>
+                                    <Entry Grid.Column="4" Text="{Binding LocationRow}" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 0" Keyboard="Numeric"/>
+                                    <Entry Grid.Column="5" Text="{Binding locationRowSpan}" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 1" Keyboard="Numeric"/>
+                                    <CheckBox Grid.Column="6" ZIndex="10" IsChecked="{Binding Visible}" ToolTipProperties.Text="Czy wykres jest widoczny"/>
+                                    <BoxView Grid.Column="6" Color="LightBlue"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>

@@ -223,10 +223,16 @@ public partial class DisplayV : ContentPage
                         strokeSize = 1.5f;
                     }
                     _graphs[i].StrokeSize = strokeSize;
-                    //Ustawienie lokacji wykresu
-                    gGraph.Add(_gvGraphs, 0, DataGraphs[i].LocationRow);
-                    //Ustawienie wysokości wykresu
-                    gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
+                    if (DataGraphs[i].LocationRow >= 0)
+                    {
+                        //Ustawienie lokacji wykresu
+                        gGraph.Add(_gvGraphs, 0, DataGraphs[i].LocationRow);
+                    }
+                    if (DataGraphs[i].locationRowSpan > 0)
+                    {
+                        //Ustawienie wysokości wykresu
+                        gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
+                    }
                     //sprawdzenie czy tylko raz zostanie opisana oś X
                     bool fft = DataGraphs[i].DataName.Contains("fft");
                     _graphs[i].AxisXWrite = !axisX.Any(x => x == DataGraphs[i].LocationRow);

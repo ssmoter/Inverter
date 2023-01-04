@@ -66,27 +66,18 @@
             </Setter>
         </Style>
         <Style TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
             <Setter Property="BorderColor" Value="Black"/>
-            <!--<Setter Property="Margin" Value="0,2,0,2"/>-->
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.7"/>
+                                <Setter Property="Opacity" Value="{AppThemeBinding Light=0.5,Dark=2}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" Value="Transparent"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.5"/>
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -225,10 +216,6 @@
                         </Grid>
                     </Frame>
 
-
-
-
-
                 </Grid>
                 <Grid
                 Grid.Row="1" MaximumWidthRequest="600"
@@ -291,8 +278,8 @@
 
                     <Frame ToolTipProperties.Text="Lista dodatkowych Print Tran oraz analiz Fouriera &#10;Aby dodać analize Fouriera należy dopisać fft do pola Id &#10;fftV(101) lub V(101)fft"
                             Grid.Row="4" Grid.ColumnSpan="6" Grid.RowSpan="2">
-                        <Grid  ColumnDefinitions=".5*,*,auto" ColumnSpacing="5"
-                               RowDefinitions="auto,auto,*" RowSpacing="5">
+                        <Grid ColumnDefinitions=".5*,*,auto" ColumnSpacing="5"
+                              RowDefinitions="auto,auto,*" RowSpacing="5">
                             <Label Grid.Row="0" Grid.Column="0" Text="Id"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Nazwa Użytkownika"/>
 
@@ -302,16 +289,17 @@
                             <Button Grid.Column="2" Grid.Row="2" HeightRequest="80" VerticalOptions="Start" Text="Usuń" 
                                             Command="{Binding InverterM.RemoveTranPrint}" IsEnabled="{Binding InverterM.IsSelectedDataNotify}"/>
 
-                            <ListView       
-                                        MaximumHeightRequest="200"  Grid.Row="2" Grid.ColumnSpan="2"
-                                        ItemsSource="{Binding InverterM.DataNotify}" SelectedItem="{Binding InverterM.SelectedDataNotify}">
+                            <ListView MaximumHeightRequest="200"  Grid.Row="2" Grid.ColumnSpan="2"
+                                      ItemsSource="{Binding InverterM.DataNotify}" SelectedItem="{Binding InverterM.SelectedDataNotify}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
-                                            <HorizontalStackLayout Spacing="10">
+                                            <Frame>
+                                                <HorizontalStackLayout Spacing="10">
                                                 <Label Text="{Binding DataName}"/>
                                                 <Label Text="{Binding UserDataName}"/>
                                             </HorizontalStackLayout>
+                                            </Frame>
                                         </ViewCell>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>

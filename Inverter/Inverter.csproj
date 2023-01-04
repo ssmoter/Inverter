@@ -101,6 +101,10 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
+	  <None Update="Inverter_TemporaryKey.pfx">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	  <None Update="Resources\Images\pk.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
