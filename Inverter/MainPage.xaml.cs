@@ -2,7 +2,6 @@
 using Inverter.GenerateInverter.Views;
 using Inverter.Helpers;
 using Inverter.Sets;
-using Microsoft.Maui.Controls;
 
 namespace Inverter;
 
@@ -20,8 +19,10 @@ public partial class MainPage : ContentPage
             Config.FontSize = FontSize;
             Config.PspicePath = _fm.GetConfig(MyEnums.configName.PspicePath);
         }
-        catch
-        { }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
 
     private async void CreateNewInverter(object sender, EventArgs e)
@@ -36,25 +37,32 @@ public partial class MainPage : ContentPage
 
     private async void PspiceLocation_Clicked(object sender, EventArgs e)
     {
-        string result = string.Empty;
-        result = _fm.GetConfig(MyEnums.configName.PspicePath);
-        result = await DisplayPromptAsync("Konfiguracja", "Podaj ścieżkę do Pspice", "OK", "cancel", result);
-
-
-        if (!string.IsNullOrWhiteSpace(result))
+        try
         {
-            if (!result.Contains(".exe"))
+            string result = string.Empty;
+            result = _fm.GetConfig(MyEnums.configName.PspicePath);
+            result = await DisplayPromptAsync("Konfiguracja", "Podaj ścieżkę do Pspice", "OK", "cancel", result);
+
+
+            if (!string.IsNullOrWhiteSpace(result))
             {
-                result += ".exe";
+                if (!result.Contains(".exe"))
+                {
+                    result += ".exe";
+                }
+                bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.PspicePath);
+                if (isComplited)
+                {
+                    Config.PspicePath = result;
+                    await DisplayAlert("Configuracja", "Zapisano ścieżkę" + Environment.NewLine + result, "OK");
+                }
+                else
+                    await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
             }
-            bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.PspicePath);
-            if (isComplited)
-            {
-                Config.PspicePath = result;
-                await DisplayAlert("Configuracja", "Zapisano ścieżkę" + Environment.NewLine + result, "OK");
-            }
-            else
-                await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
         }
     }
     private int _fontSize = 14;
@@ -70,32 +78,42 @@ public partial class MainPage : ContentPage
 
     private async void FontSize_Clicked(object sender, EventArgs e)
     {
-        string result = string.Empty;
-        result = _fm.GetConfig(MyEnums.configName.FontSize);
         try
         {
-            FontSize = int.Parse(result);
-        }
-        catch
-        { }
-        result = await DisplayPromptAsync("Konfiguracja", "Rozmiar czcionki", "OK", "cancel", result);
-        if (!string.IsNullOrWhiteSpace(result))
-        {
-            bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.FontSize);
-            if (isComplited)
+            string result = string.Empty;
+            result = _fm.GetConfig(MyEnums.configName.FontSize);
+            try
             {
-                await DisplayAlert("Configuracja", "Zapisano Rozmiar czcionki" + Environment.NewLine + result, "OK");
-                try
-                {
-                    FontSize = int.Parse(result);
-                    Config.FontSize = FontSize;
-                }
-                catch
-                { }
+                FontSize = int.Parse(result);
             }
-            else
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.ToString());
+            }
+            result = await DisplayPromptAsync("Konfiguracja", "Rozmiar czcionki", "OK", "cancel", result);
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.FontSize);
+                if (isComplited)
+                {
+                    await DisplayAlert("Configuracja", "Zapisano Rozmiar czcionki" + Environment.NewLine + result, "OK");
+                    try
+                    {
+                        FontSize = int.Parse(result);
+                        Config.FontSize = FontSize;
+                    }
+                    catch
+                    { }
+                }
+                else
 
-                await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
+                    await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
         }
     }
 

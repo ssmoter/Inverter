@@ -9,6 +9,7 @@ namespace Inverter.Data
         public string FilePathData;
         public string path { get; private set; }
         private const string configName = "config";
+        private const string log = "logger";
 
         public FileManager()
         {
@@ -73,6 +74,7 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Tworzenie pliku nie powiodło się" + Environment.NewLine + ex.Message);
             }
         }
@@ -103,6 +105,7 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Wczytywanie konfiguracji nie powiodło się" + Environment.NewLine + ex.Message);
             }
         }
@@ -125,6 +128,7 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Tworzenie pliku nie powiodło się" + Environment.NewLine + ex.Message);
             }
         }
@@ -145,6 +149,7 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Wczytywanie pliku nie powiodło się" + Environment.NewLine + ex.Message);
             }
         }
@@ -158,11 +163,13 @@ namespace Inverter.Data
                 fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(FileName)));
                 fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(FileName)));
                 fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(configName)));
+                fileEntries.Remove(fileEntries.FirstOrDefault(x => x.Contains(log)));
 
                 return fileEntries;
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Wczytywanie plików nie powiodło się" + Environment.NewLine + ex.Message);
             }
         }
@@ -186,6 +193,7 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Usuwanie pliku nie powiodło się" + Environment.NewLine + ex.Message);
             }
 
@@ -204,6 +212,7 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Wystąpił błąd przy sprawdzaniu czy plik istnieje" + Environment.NewLine + ex.Message);
             }
         }
@@ -227,6 +236,7 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Nie udało zapisać się pliku" + Environment.NewLine + ex.Message);
             }
         }
@@ -249,6 +259,7 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Nie udało się wczytać pliku" + Environment.NewLine + ex.Message);
             }
         }
@@ -269,8 +280,38 @@ namespace Inverter.Data
             }
             catch (IOException ex)
             {
+                SaveLog(ex.ToString());
                 throw new IOException("Error:Nie udało się wczytać pliku" + Environment.NewLine + ex.Message);
             }
+        }
+
+        public void SaveLog(string log)
+        {
+            try
+            {
+                log = $"{DateTime.Now} :Error:{Environment.NewLine}{log}";
+
+                string filePath = $"{path}\\{log}.txt";
+                if (ExistFile(log))
+                {
+                    using (System.IO.FileStream fs = System.IO.File.Create(filePath))
+                    {
+                        StreamWriter writer = new(fs);
+                        writer.WriteLine(log);
+                        writer.Close();
+                        writer.Dispose();
+                    }
+                }
+                else
+                {
+                    System.IO.File.AppendAllText(filePath, log);
+                }
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error:Nie udało zapisać się pliku" + Environment.NewLine + ex.Message);
+            }
+
         }
     }
 }

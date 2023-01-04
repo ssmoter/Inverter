@@ -6,7 +6,6 @@ using Inverter.Helpers;
 using Inverter.Models;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Timers;
 
 namespace Inverter.Display.Views;
@@ -37,14 +36,6 @@ public partial class DisplayV : ContentPage
         symulationRunning = false;
         eStrokeSize.Text = strokeSize.ToString();
         _fm = new FileManager();
-        //try
-        //{
-        //    Initialization();
-        //}
-        //catch
-        //{
-        //}
-
     }
 
     public DisplayV(ResponseModel responseModel)
@@ -71,20 +62,21 @@ public partial class DisplayV : ContentPage
 
         try
         {
-            await Initialization();
+            Initialization();
         }
         catch (Exception ex)
         {
+            _fm.SaveLog(ex.ToString());
             await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
 
-    private async Task Initialization()
+    private void Initialization()
     {
         try
         {
-            sbFind.MaximumWidthRequest = Config.FontSize * 10;
-            sbFind.MinimumWidthRequest = Config.FontSize * 6;
+            sbFind.MaximumWidthRequest = Config.FontSize * 15;
+            sbFind.MinimumWidthRequest = Config.FontSize * 10;
 
             if (BindingContext is DisplayVM)
             {
@@ -96,8 +88,7 @@ public partial class DisplayV : ContentPage
                 {
                     DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.OutPutString.Mapping(bc.ResponseModel).DataGraphs);
                 }
-
-
+                sSymulationTimer.Value = SActualCurrentIndex;
                 #region Wykresy
 
                 _graphs = new();
@@ -152,13 +143,13 @@ public partial class DisplayV : ContentPage
         }
         catch (Exception ex)
         {
+            _fm.SaveLog(ex.ToString());
             throw ex;
         }
 
     }
 
     #region Wykres
-
 
     private GraphicsView SetGraphicsView(GraphicsView graphicsView)
     {
@@ -190,12 +181,25 @@ public partial class DisplayV : ContentPage
     }
     private async void UpdateRow_Clicked(object sender, EventArgs e)
     {
-        await ReDrawGraph();
+        try
+        {
+            await ReDrawGraph();
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private async Task ReDrawGraph()
     {
         try
         {
+            if (BindingContext is DisplayVM)
+            {
+                bc = (DisplayVM)BindingContext;
+                DataGraphs = bc.DataGraphs;
+            }
+
             List<int> axisX = new List<int>();
             gGraph.Clear();
             //Ustawienie ilości widocznych Wykresów
@@ -389,8 +393,7 @@ public partial class DisplayV : ContentPage
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine(ex);
+            _fm.SaveLog(ex.ToString());
             await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
@@ -405,69 +408,123 @@ public partial class DisplayV : ContentPage
     bool autoScaleX = false;
     private async void ckMultipledGraph_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        multipledGraph = !multipledGraph;
-        if (DataGraphs != null)
-            await ReDrawGraph();
+        try
+        {
+            multipledGraph = !multipledGraph;
+            if (DataGraphs != null)
+                await ReDrawGraph();
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private async void ckGridVisible_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        gridVisible = !gridVisible;
-        if (DataGraphs != null)
-            await ReDrawGraph();
+        try
+        {
+            gridVisible = !gridVisible;
+            if (DataGraphs != null)
+                await ReDrawGraph();
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private async void ckGridScope_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        scopeGraph = !scopeGraph;
-        if (DataGraphs != null)
-            await ReDrawGraph();
+        try
+        {
+            scopeGraph = !scopeGraph;
+            if (DataGraphs != null)
+                await ReDrawGraph();
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private async void ckExtendAxisX_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        autoScaleX = !autoScaleX;
-        if (DataGraphs != null)
-            await ReDrawGraph();
-        if (_lineTimeSchema != null)
+        try
         {
-            _lineTimeSchema.StartScopeIndex = startIndex;
-            _lineTimeSchema.EndScopeIndex = endIndex;
-            _lineTimeSchema.AutoScaleX = autoScaleX;
-            gvLineTimeSchematV.Invalidate();
+            autoScaleX = !autoScaleX;
+            if (DataGraphs != null)
+                await ReDrawGraph();
+            if (_lineTimeSchema != null)
+            {
+                _lineTimeSchema.StartScopeIndex = startIndex;
+                _lineTimeSchema.EndScopeIndex = endIndex;
+                _lineTimeSchema.AutoScaleX = autoScaleX;
+                gvLineTimeSchematV.Invalidate();
+            }
         }
-
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private async void eStrokeSize_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (DataGraphs != null)
-            await ReDrawGraph();
+        try
+        {
+            if (DataGraphs != null)
+                await ReDrawGraph();
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private async void eScope_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (DataGraphs != null)
-            await ReDrawGraph();
+        try
+        {
+            if (DataGraphs != null)
+                await ReDrawGraph();
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private async void bClearVisible_Clicked(object sender, EventArgs e)
     {
-        if (DataGraphs != null)
+        try
         {
-            for (int i = 0; i < DataGraphs.Count; i++)
+            if (DataGraphs != null)
             {
-                DataGraphs[i].Visible = false;
+                for (int i = 0; i < DataGraphs.Count; i++)
+                {
+                    DataGraphs[i].Visible = false;
+                }
+                bc.DataGraphs = DataGraphs;
+                await ReDrawGraph();
             }
-            bc.DataGraphs = DataGraphs;
-            await ReDrawGraph();
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
         }
     }
-
     private void sbFind_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (sbFind != null)
+        try
         {
-            if (!string.IsNullOrEmpty(sbFind.Text))
-                cvDataGraphs.ItemsSource = DataGraphs.Where
-                    (x => x.DataName.ToUpper().Contains(sbFind.Text.ToUpper())
-                    || x.UserDataName.ToUpper().Contains(sbFind.Text.ToUpper()));
-            else
-                cvDataGraphs.ItemsSource = DataGraphs;
+            if (sbFind != null)
+            {
+                if (!string.IsNullOrEmpty(sbFind.Text))
+                    cvDataGraphs.ItemsSource = DataGraphs.Where
+                        (x => x.DataName.ToUpper().Contains(sbFind.Text.ToUpper())
+                        || x.UserDataName.ToUpper().Contains(sbFind.Text.ToUpper()));
+                else
+                    cvDataGraphs.ItemsSource = DataGraphs;
+            }
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
         }
     }
 
@@ -476,61 +533,94 @@ public partial class DisplayV : ContentPage
     #region Symulacja
     public void TimerEvent(object source, ElapsedEventArgs e)
     {
-        if (SActualCurrentIndex >= SCurrentMaxIndex)
+        try
         {
-            SActualCurrentIndex = 0;
+            if (SActualCurrentIndex >= SCurrentMaxIndex)
+            {
+                SActualCurrentIndex = 0;
+            }
+            SActualCurrentIndex++;
+            changeTime();
         }
-        SActualCurrentIndex++;
-        changeTime();
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private bool symulationRunning;
     private void Symulation_Clicked(object sender, EventArgs e)
     {
-        SActualCurrentIndex = bc.SActualCurrentIndex;
+        try
+        {
+            if (!symulationRunning)
+            {
+                symulationRunning = !symulationRunning;
+                _timer.Start();
+            }
+            else if (symulationRunning)
+            {
+                symulationRunning = !symulationRunning;
+                _timer.Stop();
+            }
+            bc.SActualCurrentIndex = SActualCurrentIndex;
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
 
-        if (!symulationRunning)
-        {
-            symulationRunning = !symulationRunning;
-            _timer.Start();
-        }
-        else if (symulationRunning)
-        {
-            symulationRunning = !symulationRunning;
-            _timer.Stop();
-        }
 
     }
     private void sSymulationTimer_ValueChanged(object sender, ValueChangedEventArgs e)
     {
-        SActualCurrentIndex = bc.SActualCurrentIndex;
-        _lineTimeSchema.StartScopeIndex = startIndex;
-        _lineTimeSchema.EndScopeIndex = endIndex;
-        _lineTimeSchema.AutoScaleX = autoScaleX;
-        changeTime();
-    }
-    private void changeTime()
-    {
-        _inverterSchema.Index = SActualCurrentIndex;
-        _gvSchema.Invalidate();
-
-        _lineTimeSchema.Index = SActualCurrentIndex;
-        if (autoScaleX)
+        try
         {
+            SActualCurrentIndex = bc.SActualCurrentIndex;
             _lineTimeSchema.StartScopeIndex = startIndex;
             _lineTimeSchema.EndScopeIndex = endIndex;
             _lineTimeSchema.AutoScaleX = autoScaleX;
+            changeTime();
         }
-        gvLineTimeSchematV.Invalidate();
+        catch (Exception ex) { _fm.SaveLog(ex.ToString()); }
+    }
+    private void changeTime()
+    {
+        try
+        {
+            _inverterSchema.Index = SActualCurrentIndex;
+            _gvSchema.Invalidate();
+
+            _lineTimeSchema.Index = SActualCurrentIndex;
+            if (autoScaleX)
+            {
+                _lineTimeSchema.StartScopeIndex = startIndex;
+                _lineTimeSchema.EndScopeIndex = endIndex;
+                _lineTimeSchema.AutoScaleX = autoScaleX;
+            }
+            gvLineTimeSchematV.Invalidate();
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
     private bool _lineTimeIsHidden = true;
     private void ckLineTime_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        if (_lineTimeSchema != null)
+        try
         {
-            _lineTimeIsHidden = !_lineTimeIsHidden;
-            _lineTimeSchema.IsHidden = _lineTimeIsHidden;
-            gvLineTimeSchematV.Invalidate();
+            if (_lineTimeSchema != null)
+            {
+                _lineTimeIsHidden = !_lineTimeIsHidden;
+                _lineTimeSchema.IsHidden = _lineTimeIsHidden;
+                gvLineTimeSchematV.Invalidate();
+            }
         }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
+
     }
     #endregion
 
@@ -541,92 +631,116 @@ public partial class DisplayV : ContentPage
 
     private void svMain_SizeChanged(object sender, EventArgs e)
     {
-        svMain.MaximumWidthRequest = this.Width;
-        svMain.MaximumHeightRequest = this.Height;
-
-        Application.Current.RequestedThemeChanged += (s, a) =>
+        try
         {
-            if (_inverterSchema != null)
-            {
-                if (Application.Current.RequestedTheme == AppTheme.Dark)
-                    _inverterSchema.BlackWhite = true;
-                else
-                    _inverterSchema.BlackWhite = false;
+            svMain.MaximumWidthRequest = this.Width;
+            svMain.MaximumHeightRequest = this.Height;
 
-                _gvSchema.Invalidate();
-            }
-        };
+            Application.Current.RequestedThemeChanged += (s, a) =>
+            {
+                if (_inverterSchema != null)
+                {
+                    if (Application.Current.RequestedTheme == AppTheme.Dark)
+                        _inverterSchema.BlackWhite = true;
+                    else
+                        _inverterSchema.BlackWhite = false;
+
+                    _gvSchema.Invalidate();
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
+
     }
 
     #region ZapisywanieWczytywanie
 
     private async void bSave_Clicked(object sender, EventArgs e)
     {
-        var json = JsonConvert.SerializeObject(DataGraphs);
-        bool complite = false;
-        string result = await DisplayPromptAsync("Zapisywanie", "Podaj nazwę pliku", "Zapisz", "Anuluj", _name, -1, null, _name);
-        if (!string.IsNullOrWhiteSpace(result))
+        try
         {
-            bool exist = _fm.ExistFile(result);
+            var json = JsonConvert.SerializeObject(DataGraphs);
+            bool complite = false;
+            string result = await DisplayPromptAsync("Zapisywanie", "Podaj nazwę pliku", "Zapisz", "Anuluj", _name, -1, null, _name);
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                bool exist = _fm.ExistFile(result);
 
-            if (exist)
-            {
-                complite = await _fm.SaveNewData(result, json);
-            }
-            else
-            {
-                bool overwrite = await DisplayAlert("Zapisywanie", "Istnieje już plik o takiej nazwię. Czy chcesz go nadpisać?", "Tak", "Nie");
-                if (overwrite)
+                if (exist)
                 {
                     complite = await _fm.SaveNewData(result, json);
                 }
+                else
+                {
+                    bool overwrite = await DisplayAlert("Zapisywanie", "Istnieje już plik o takiej nazwię. Czy chcesz go nadpisać?", "Tak", "Nie");
+                    if (overwrite)
+                    {
+                        complite = await _fm.SaveNewData(result, json);
+                    }
+                }
+            }
+            if (complite)
+            {
+                await DisplayAlert("Zapisywanie", "Zapisono nowy plik", "OK");
+            }
+            else if (!complite && result != null)
+            {
+                await DisplayAlert("Zapisywanie", "Nie udało się zapisać pliku", "OK");
             }
         }
-        if (complite)
+        catch (Exception ex)
         {
-            await DisplayAlert("Zapisywanie", "Zapisono nowy plik", "OK");
-        }
-        else if (!complite && result != null)
-        {
-            await DisplayAlert("Zapisywanie", "Nie udało się zapisać pliku", "OK");
+            _fm.SaveLog(ex.ToString());
+            await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
 
     private async void bLoad_Clicked(object sender, EventArgs e)
     {
-        var list = _fm.GetFilesName();
-
-        string[] nameList = new string[list.Count];
-        for (int i = 0; i < list.Count; i++)
+        try
         {
-            nameList[i] = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", "");
-        }
+            var list = _fm.GetFilesName();
 
-        string result = await DisplayActionSheet("Wczytaj:", "Anuluj", null, nameList);
-
-        if (result != null && result != "Anuluj")
-        {
-            ResponseModel response = new ResponseModel(result);
-            response.IsReady = true;
-
-            for (int i = 0; i < nameList.Length; i++)
+            string[] nameList = new string[list.Count];
+            for (int i = 0; i < list.Count; i++)
             {
-                if (nameList[i] == result)
-                {
-                    result = list[i];
-                    break;
-                }
+                nameList[i] = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", "");
             }
 
-            var json = await _fm.LoadDataPath(result);
-            response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
+            string result = await DisplayActionSheet("Wczytaj:", "Anuluj", null, nameList);
 
-            await Navigation.PushAsync(new DisplayV(response));
-            Navigation.RemovePage(this);
+            if (result != null && result != "Anuluj")
+            {
+                ResponseModel response = new ResponseModel(result);
+                response.IsReady = true;
+
+                for (int i = 0; i < nameList.Length; i++)
+                {
+                    if (nameList[i] == result)
+                    {
+                        result = list[i];
+                        break;
+                    }
+                }
+
+                var json = await _fm.LoadDataPath(result);
+                response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
+
+                await Navigation.PushAsync(new DisplayV(response));
+                Navigation.RemovePage(this);
+            }
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+            await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
 
-    #endregion
 
+    #endregion
 
 }

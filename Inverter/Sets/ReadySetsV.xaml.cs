@@ -27,17 +27,24 @@ public partial class ReadySetsV : ContentPage
 
     private void SetInverterData()
     {
-        var list = _fm.GetFilesName();
-        _InverterDatas = new ObservableCollection<SaveData>();
-        for (int i = 0; i < list.Count; i++)
+        try
         {
-            _InverterDatas.Add(new SaveData()
+            var list = _fm.GetFilesName();
+            _InverterDatas = new ObservableCollection<SaveData>();
+            for (int i = 0; i < list.Count; i++)
             {
-                Name = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", ""),
-                Path = list[i],
-            });
+                _InverterDatas.Add(new SaveData()
+                {
+                    Name = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", ""),
+                    Path = list[i],
+                });
+            }
+            OnPropertyChanged(nameof(InverterDatas));
         }
-        OnPropertyChanged(nameof(InverterDatas));
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
     }
 
     private ObservableCollection<SaveData> _InverterDatas;
@@ -87,50 +94,67 @@ public partial class ReadySetsV : ContentPage
 
     private async void bDelete_Clicked(object sender, EventArgs e)
     {
-        if (SelectedData != null)
+        try
         {
-            if (await DisplayAlert("Usuwanie", $"Czy na pewno chcesz usunąć plik {SelectedData.Name}", "Tak", "Nie"))
-            {
-                bool result = _fm.DeleteFile(SelectedData.Path);
-                if (result)
-                {
-                    await DisplayAlert("Usuwanie", "Plik został usunięty", "OK");
-                    _InverterDatas.Remove(SelectedData);
-                    SelectedData = new();
-                }
-                else
-                    await DisplayAlert("Configuracja", "Nie udało się usunać pliku", "OK");
-            }
 
+            if (SelectedData != null)
+            {
+                if (await DisplayAlert("Usuwanie", $"Czy na pewno chcesz usunąć plik {SelectedData.Name}", "Tak", "Nie"))
+                {
+                    bool result = _fm.DeleteFile(SelectedData.Path);
+                    if (result)
+                    {
+                        await DisplayAlert("Usuwanie", "Plik został usunięty", "OK");
+                        _InverterDatas.Remove(SelectedData);
+                        SelectedData = new();
+                    }
+                    else
+                        await DisplayAlert("Configuracja", "Nie udało się usunać pliku", "OK");
+                }
+
+            }
+            else
+            {
+                await DisplayAlert("Configuracja", "Nie wybrano pliku", "OK");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("Configuracja", "Nie wybrano pliku", "OK");
+            _fm.SaveLog(ex.ToString());
+            await DisplayAlert("Error", ex.Message, "OK");
         }
     }
 
     private async void bLoad_Clicked(object sender, EventArgs e)
     {
-        if (SelectedData != null)
+        try
         {
-            if (await DisplayAlert("Wczytywanie", $"Czy na pewno chcesz wczytać plik {SelectedData.Name}", "Tak", "Nie"))
+            if (SelectedData != null)
             {
-                var json = await _fm.LoadDataPath(SelectedData.Path);
+                if (await DisplayAlert("Wczytywanie", $"Czy na pewno chcesz wczytać plik {SelectedData.Name}", "Tak", "Nie"))
+                {
+                    var json = await _fm.LoadDataPath(SelectedData.Path);
 
-                ResponseModel response = new ResponseModel(SelectedData.Name);
-                response.IsReady = true;
-                response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
+                    ResponseModel response = new ResponseModel(SelectedData.Name);
+                    response.IsReady = true;
+                    response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
 
-                await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
-                    new Dictionary<string, object>
-                    {
-                        [nameof(ResponseModel)] = response,
-                    });
+                    await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
+                        new Dictionary<string, object>
+                        {
+                            [nameof(ResponseModel)] = response,
+                        });
+                }
+            }
+            else
+            {
+                await DisplayAlert("Configuracja", "Nie wybrano pliku", "OK");
             }
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("Configuracja", "Nie wybrano pliku", "OK");
+            _fm.SaveLog(ex.ToString());
+            await DisplayAlert("Error", ex.Message, "OK");
         }
     }
     public class SaveData
@@ -141,12 +165,20 @@ public partial class ReadySetsV : ContentPage
 
     private void sbFind_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (sbFind != null)
+        try
         {
-            if (!string.IsNullOrEmpty(sbFind.Text))
-                cvInverterDatas.ItemsSource = InverterDatas.Where(x => x.Name.ToUpper().Contains(sbFind.Text.ToUpper()));
-            else
-                cvInverterDatas.ItemsSource = InverterDatas;
+            if (sbFind != null)
+            {
+                if (!string.IsNullOrEmpty(sbFind.Text))
+                    cvInverterDatas.ItemsSource = InverterDatas.Where(x => x.Name.ToUpper().Contains(sbFind.Text.ToUpper()));
+                else
+                    cvInverterDatas.ItemsSource = InverterDatas;
+            }
         }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
+
     }
 }

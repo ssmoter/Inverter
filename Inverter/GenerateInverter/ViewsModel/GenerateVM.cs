@@ -99,6 +99,7 @@ namespace Inverter.GenerateInverter.ViewsModel
             }
             catch (Exception ex)
             {
+                _fm.SaveLog(ex.ToString());
                 AddMessage(ex.Message);
             }
 
@@ -154,6 +155,7 @@ namespace Inverter.GenerateInverter.ViewsModel
             catch (Exception ex)
             {
                 Message.Add(ex.Message);
+                _fm.SaveLog(ex.ToString());
             }
             finally
             { IsBusy = false; }
@@ -202,6 +204,7 @@ namespace Inverter.GenerateInverter.ViewsModel
             catch (Exception ex)
             {
                 AddMessage(ex.Message);
+                _fm.SaveLog(ex.ToString());
             }
             finally
             {

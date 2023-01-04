@@ -79,8 +79,8 @@ namespace Inverter.Data.Draw
 
                 if (StrokeSize == 0)
                 {
-                    canvas.StrokeSize = 1 / scaleX;
-                    if (1 / scaleX <= 0.5f)
+                    canvas.StrokeSize = 1 / (scaleX / scaleY);
+                    if (1 / (scaleX / scaleY) <= 0.5f)
                     {
                         canvas.StrokeSize = 0.5f;
                     }

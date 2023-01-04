@@ -8,7 +8,6 @@ using System.Windows.Input;
 
 namespace Inverter.Display.ViewsModel
 {
-    //[QueryProperty(nameof(DataGraphs), nameof(DataGraph))]
     [QueryProperty(nameof(ResponseModel), nameof(ResponseModel))]
     public class DisplayVM : INotifyPropertyChanged
     {
@@ -61,12 +60,12 @@ namespace Inverter.Display.ViewsModel
                 {
                     try
                     {
-                        _maxMinValue = "Maksymalna = " + _dataGraphSelectedItem.Max.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
-                           Environment.NewLine + "Minimalna = " + _dataGraphSelectedItem.Min.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
+                        _maxMinValue = "Max = " + _dataGraphSelectedItem.Max.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
+                           " Min = " + _dataGraphSelectedItem.Min.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
                         if (_dataGraphSelectedItem.DataName.Contains("fft"))
                         {
                             _maxMinValue = $"THD={GetTHD(_dataGraphSelectedItem)}" +
-                                $"{Environment.NewLine}THD%={GetTHD(_dataGraphSelectedItem) * 100}%";
+                                $" THD%={GetTHD(_dataGraphSelectedItem) * 100}%";
                         }
 
                     }
@@ -168,13 +167,13 @@ namespace Inverter.Display.ViewsModel
             if (!symulationRunning)
             {
                 symulationRunning = !symulationRunning;
-                _timer.Start();
+              //  _timer.Start();
                 NameSimulationbutton = "Zatrzymaj";
             }
             else if (symulationRunning)
             {
                 symulationRunning = !symulationRunning;
-                _timer.Stop();
+               // _timer.Stop();
                 NameSimulationbutton = "Uruchom";
             }
         });
@@ -191,32 +190,32 @@ namespace Inverter.Display.ViewsModel
 
         public ICommand UpdateRowCommand => new Command(() =>
         {
-            var n = -1;
-            n = DataGraphs.IndexOf(DataGraphSelectedItem);
-            if (n < 0)
-            {
-                return;
-            }
+            //var n = -1;
+            //n = DataGraphs.IndexOf(DataGraphSelectedItem);
+            //if (n < 0)
+            //{
+            //    return;
+            //}
 
-            try
-            {
-                if (DataGraphSelectedItem.locationRowSpan > 0)
-                {
-                    DataGraphs[n].locationRowSpan = DataGraphSelectedItem.locationRowSpan;
-                }
-                if (DataGraphSelectedItem.LocationRow >= 0)
-                {
-                    DataGraphs[n].LocationRow = DataGraphSelectedItem.LocationRow;
-                }
-                DataGraphs[n].UserDataName = DataGraphSelectedItem.UserDataName;
-                DataGraphs[n].UserColor = DataGraphSelectedItem.UserColor;
-                DataGraphs[n].Visible = DataGraphSelectedItem.Visible;
-                DataGraphs[n].Multiplier = DataGraphSelectedItem.Multiplier;
-                DataGraphs = new ObservableCollection<DataGraph>(DataGraphs);
-                OnPropertyChanged(nameof(DataGraphs));
-            }
-            catch
-            { }
+            //try
+            //{
+            //    if (DataGraphSelectedItem.locationRowSpan > 0)
+            //    {
+            //        DataGraphs[n].locationRowSpan = DataGraphSelectedItem.locationRowSpan;
+            //    }
+            //    if (DataGraphSelectedItem.LocationRow >= 0)
+            //    {
+            //        DataGraphs[n].LocationRow = DataGraphSelectedItem.LocationRow;
+            //    }
+            //    DataGraphs[n].UserDataName = DataGraphSelectedItem.UserDataName;
+            //    DataGraphs[n].UserColor = DataGraphSelectedItem.UserColor;
+            //    DataGraphs[n].Visible = DataGraphSelectedItem.Visible;
+            //    DataGraphs[n].Multiplier = DataGraphSelectedItem.Multiplier;
+            //   // DataGraphs = new ObservableCollection<DataGraph>(DataGraphs);
+            //    OnPropertyChanged(nameof(DataGraphs));
+            //}
+            //catch
+            //{ }
         });
         public ICommand RefreshListCommand => new Command(() =>
         {

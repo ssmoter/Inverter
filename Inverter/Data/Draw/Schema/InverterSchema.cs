@@ -34,6 +34,8 @@ namespace Inverter.Data.Draw.Schema
 
         public override void Draw(ICanvas canvas, RectF dirtyRect)
         {
+            try
+            {
             canvas.SaveState();
             if (BlackWhite)
             {
@@ -71,6 +73,11 @@ namespace Inverter.Data.Draw.Schema
             canvas.Translate(-195, 260);
             OdbLine(canvas, dirtyRect);
             canvas.RestoreState();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private void SourceLine(ICanvas canvas, RectF dirtyRect)
