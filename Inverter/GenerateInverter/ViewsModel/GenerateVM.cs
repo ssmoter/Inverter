@@ -95,7 +95,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 }
 
                 _InverterM.StringModelNotify = _InverterParameters.StringModel;
-                
+
             }
             catch (Exception ex)
             {
@@ -138,6 +138,12 @@ namespace Inverter.GenerateInverter.ViewsModel
                     AddMessage("Uruchamianie Aplikacji");
                     using (Process myprocess = new Process())
                     {
+                        if (string.IsNullOrWhiteSpace(Config.PspicePath))
+                        {
+                            AddMessage("Nie podano lokalizaci programu PSpice");
+                            Config.PspicePath = await Shell.Current.DisplayPromptAsync("Error", $"Nie podano lokalizaci programu PSpice{Environment.NewLine}Czy chesz teraz podać lokalizacje?", "Zapisz", "Anuluj");
+                            await _fm.CreateConfig(Config.PspicePath, MyEnums.configName.PspicePath);
+                        }
                         myprocess.StartInfo.FileName = Config.PspicePath;
                         myprocess.StartInfo.Arguments = _fm.FilePathData;
                         if (myprocess.Start())
@@ -183,7 +189,7 @@ namespace Inverter.GenerateInverter.ViewsModel
                 IsBusy = true;
                 bool Load = false;
                 Load = await Shell.Current.DisplayAlert("Wizualizacja", "Czy chcesz kontynuować", "Tak", "Nie");
-                
+
 
                 if (Load)
                 {

@@ -223,10 +223,16 @@ public partial class DisplayV : ContentPage
                         strokeSize = 1.5f;
                     }
                     _graphs[i].StrokeSize = strokeSize;
-                    //Ustawienie lokacji wykresu
-                    gGraph.Add(_gvGraphs, 0, DataGraphs[i].LocationRow);
-                    //Ustawienie wysokości wykresu
-                    gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
+                    if (DataGraphs[i].LocationRow >= 0)
+                    {
+                        //Ustawienie lokacji wykresu
+                        gGraph.Add(_gvGraphs, 0, DataGraphs[i].LocationRow);
+                    }
+                    if (DataGraphs[i].locationRowSpan > 0)
+                    {
+                        //Ustawienie wysokości wykresu
+                        gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
+                    }
                     //sprawdzenie czy tylko raz zostanie opisana oś X
                     bool fft = DataGraphs[i].DataName.Contains("fft");
                     _graphs[i].AxisXWrite = !axisX.Any(x => x == DataGraphs[i].LocationRow);
@@ -356,6 +362,11 @@ public partial class DisplayV : ContentPage
 
                     for (int j = 0; j < (endIndex - startIndex); j++)
                     {
+                        if (_graphs[i].point.Closed)
+                        {
+                            _graphs[i].point.Open();
+                        }
+
                         if (data.Multiplier != 0)
                         {
                             _graphs[i].AutoScaleY = false;
@@ -363,6 +374,7 @@ public partial class DisplayV : ContentPage
                             if (fft)
                             {
                                 _graphs[i].point.LineTo(n + 1, -(data.Y[j] * data.Multiplier));
+                                _graphs[i].point.Close();
                             }
 
                         }
@@ -374,6 +386,7 @@ public partial class DisplayV : ContentPage
                             if (fft)
                             {
                                 _graphs[i].point.LineTo(n + 1, -(data.Y[j]));
+                                _graphs[i].point.Close();
                             }
                         }
                         n++;

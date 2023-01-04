@@ -67,27 +67,18 @@
             </Setter>
         </Style>
         <Style TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
             <Setter Property="BorderColor" Value="Black"/>
-            <!--<Setter Property="Margin" Value="0,2,0,2"/>-->
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.7"/>
+                                <Setter Property="Opacity" Value="{AppThemeBinding Light=0.5,Dark=2}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" Value="Transparent"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.5"/>
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -153,10 +144,10 @@
             <Grid Grid.Row="2" Grid.Column="2" HorizontalOptions="End" VerticalOptions="End" 
                   ColumnDefinitions="*,*,*,*,*,*,*,*,*">
 
-                <Editor Grid.Column="0" ToolTipProperties.Text="Grubość lini&#10;0-auto" x:Name="eStrokeSize" TextChanged="eStrokeSize_TextChanged"/>
+                <Entry Grid.Column="0" ToolTipProperties.Text="Grubość lini&#10;0-auto" x:Name="eStrokeSize" TextChanged="eStrokeSize_TextChanged"/>
                 <CheckBox Grid.Column="1" ToolTipProperties.Text="Przybliżać w danym zakresie&#10;Tak/Nie" CheckedChanged="ckGridScope_CheckedChanged" IsChecked="False"/>
-                <Editor Grid.Column="2" ToolTipProperties.Text="Początek zakresu" TextChanged="eScope_TextChanged"  x:Name="eStartScope" Placeholder="0" WidthRequest="150"/>
-                <Editor Grid.Column="3" ToolTipProperties.Text="Koniec zakresu" TextChanged="eScope_TextChanged" x:Name="eEndScope" Placeholder="1" WidthRequest="150"/>
+                <Entry Grid.Column="2" ToolTipProperties.Text="Początek zakresu" TextChanged="eScope_TextChanged"  x:Name="eStartScope" Placeholder="0" WidthRequest="150"/>
+                <Entry Grid.Column="3" ToolTipProperties.Text="Koniec zakresu" TextChanged="eScope_TextChanged" x:Name="eEndScope" Placeholder="1" WidthRequest="150"/>
                 <CheckBox Grid.Column="4" ToolTipProperties.Text="Widoczność lini czasu" CheckedChanged="ckLineTime_CheckedChanged" x:Name="ckLineTime" IsChecked="True"/>
                 <CheckBox Grid.Column="5"  ToolTipProperties.Text="auto skala osi X" CheckedChanged="ckExtendAxisX_CheckedChanged" x:Name="ckExtendAxisX" IsChecked="True"/>
                 <CheckBox Grid.Column="6" ToolTipProperties.Text="Powielanie wykresu" CheckedChanged="ckMultipledGraph_CheckedChanged" x:Name="ckMultipledGraph" IsChecked="False"/>
@@ -168,20 +159,6 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Frame  Margin="0" Padding="0" CornerRadius="0" >
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup>
-                                            <VisualState x:Name="PointerOver">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BorderColor" Value="LightGreen"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BorderColor" Value="Transparent"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                     <Grid RowDefinitions="auto" ColumnDefinitions="5,auto" ColumnSpacing="5" >
                                         <BoxView Grid.Row="0" Grid.Column="0" Color="{Binding Color}"/>
                                         <Label Grid.Row="0" Grid.Column="1" Text="{Binding FriendlyName}" VerticalOptions="CenterAndExpand"/>
@@ -202,25 +179,11 @@
                 <Entry Grid.Row="3" Grid.Column="0" ToolTipProperties.Text="Identyfikator" Text="{Binding DataGraphUpdateItem.DataName}" Placeholder="ID" IsEnabled="False" TextColor="Red"/>
                 <ListView Grid.Row="3" Grid.Column="1" ToolTipProperties.Text="Wyświetlany kolor" x:Name="lvDataColor"
                               ItemsSource="{x:Static vm2:NamedColor.All}" SelectedItem="{Binding DataGraphSelectedItem.UserColor}" 
-                              MaximumHeightRequest="40">
+                              MaximumHeightRequest="40" MaximumWidthRequest="150">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <Frame  Margin="0" Padding="0" CornerRadius="0">
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup>
-                                            <VisualState x:Name="PointerOver">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BorderColor" Value="LightGreen"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BorderColor" Value="Transparent"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                     <Grid RowDefinitions="auto" ColumnDefinitions="5,auto" ColumnSpacing="5" >
                                         <BoxView Grid.Row="0" Grid.Column="0" Color="{Binding Color}"/>
                                         <Label Grid.Row="0" Grid.Column="1" Text="{Binding FriendlyName}" VerticalOptions="CenterAndExpand" />
@@ -238,48 +201,44 @@
                 <!--Tabela z danymi-->
                 <CollectionView 
                             Grid.Row="1" Grid.ColumnSpan="6" SelectionMode="Single" x:Name="cvDataGraphs"  SizeChanged="svGraph_SizeChanged" VerticalScrollBarVisibility="Always"
-                            ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem }" HeightRequest="200">
+                            ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem }" HeightRequest="200" Margin="10,0,10,0">
                     <CollectionView.Header>
-                        <Grid
-                                 ColumnDefinitions="*,2*,*,.5*,.5*,.5*,.5*" ColumnSpacing="5"
-                                 RowDefinitions="*" RowSpacing="10">
-                            <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold" Text="ID" />
-                            <Label Grid.Row="0" Grid.Column="1" FontAttributes="Bold" Text="Nazwa"/>
-                            <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" Text="Kolor"/>
-                            <Label Grid.Row="0" Grid.Column="3" FontAttributes="Bold" Text="Skala"/>
-                            <Label Grid.Row="0" Grid.Column="4" FontAttributes="Bold" Text="Wiersz"/>
-                            <Label Grid.Row="0" Grid.Column="5" FontAttributes="Bold" Text="Rozpiętość&#10;Wierszy" />
-                            <Label Grid.Row="0" Grid.Column="6" FontAttributes="Bold" Text="Widoczny"/>
+                        <Grid ColumnDefinitions="*,2*,*,*,*,*,*" ColumnSpacing="5" Margin="10,0,10,0">
+                            <Label Grid.Column="0" FontAttributes="Bold" Text="ID" />
+                            <Label Grid.Column="1" FontAttributes="Bold" Text="Nazwa"/>
+                            <Label Grid.Column="2" FontAttributes="Bold" Text="Kolor"/>
+                            <Label Grid.Column="3" FontAttributes="Bold" Text="Skala"/>
+                            <Label Grid.Column="4" FontAttributes="Bold" Text="Wiersz"/>
+                            <Label Grid.Column="5" FontAttributes="Bold" Text="Rozpiętość&#10;Wierszy" />
+                            <Label Grid.Column="6" FontAttributes="Bold" Text="Widoczny"/>
                         </Grid>
                     </CollectionView.Header>
                     <CollectionView.Footer>
-                        <Grid
-                                    ColumnDefinitions="*,2*,*,.5*,.5*,.5*,.5*" ColumnSpacing="5"
-                                     RowDefinitions="*" RowSpacing="10">
-                            <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold" Text="ID" />
-                            <Label Grid.Row="0" Grid.Column="1" FontAttributes="Bold" Text="Nazwa"/>
-                            <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" Text="Kolor"/>
-                            <Label Grid.Row="0" Grid.Column="3" FontAttributes="Bold" Text="Skala"/>
-                            <Label Grid.Row="0" Grid.Column="4" FontAttributes="Bold" Text="Wiersz"/>
-                            <Label Grid.Row="0" Grid.Column="5" FontAttributes="Bold" Text="Rozpiętość&#10;Wierszy" />
-                            <Label Grid.Row="0" Grid.Column="6" FontAttributes="Bold" Text="Widoczny"/>
+                        <Grid ColumnDefinitions="*,2*,*,*,*,*,*" ColumnSpacing="5">
+                            <Label Grid.Column="0" FontAttributes="Bold" Text="ID" />
+                            <Label Grid.Column="1" FontAttributes="Bold" Text="Nazwa"/>
+                            <Label Grid.Column="2" FontAttributes="Bold" Text="Kolor"/>
+                            <Label Grid.Column="3" FontAttributes="Bold" Text="Skala"/>
+                            <Label Grid.Column="4" FontAttributes="Bold" Text="Wiersz"/>
+                            <Label Grid.Column="5" FontAttributes="Bold" Text="Rozpiętość&#10;Wierszy" />
+                            <Label Grid.Column="6" FontAttributes="Bold" Text="Widoczny"/>
                         </Grid>
                     </CollectionView.Footer>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Margin="0" Padding="5,10,5,10">
-                                <Grid
-                                          ColumnDefinitions="*,2*,*,.5*,.5*,.5*,.5*" ColumnSpacing="5">
+                            <Frame Margin="0" Padding="0,10,0,10">
+                                <Grid ColumnDefinitions="*,*,*,.5*,.5*,.5*,auto" ColumnSpacing="5">
                                     <Label Grid.Column="0" Text="{Binding DataName}"/>
                                     <Entry Grid.Column="1" Text="{Binding UserDataName}" ToolTipProperties.Text="Nazwa"/>
-                                    <HorizontalStackLayout Grid.Column="2">
+                                    <HorizontalStackLayout Grid.Column="2" >
                                         <BoxView WidthRequest="5" Color="{Binding UserColor.Color}"/>
                                         <Label Text="{Binding UserColor.FriendlyName}" />
                                     </HorizontalStackLayout>
-                                    <Entry Grid.Column="3" Text="{Binding Multiplier}" ToolTipProperties.Text="Nowa skala&#10;0-auto"/>
-                                    <Entry Grid.Column="4" Text="{Binding LocationRow}" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry)"/>
-                                    <Entry Grid.Column="5" Text="{Binding locationRowSpan}" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry)"/>
-                                    <CheckBox Grid.Column="6" IsVisible="True" Margin="1" IsChecked="{Binding Visible}" ToolTipProperties.Text="Czy wykres jest widoczny"/>
+                                    <Entry Grid.Column="3" Text="{Binding Multiplier}" ToolTipProperties.Text="Nowa skala&#10;0-auto" Keyboard="Numeric"/>
+                                    <Entry Grid.Column="4" Text="{Binding LocationRow}" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 0" Keyboard="Numeric"/>
+                                    <Entry Grid.Column="5" Text="{Binding locationRowSpan}" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 1" Keyboard="Numeric"/>
+                                    <CheckBox Grid.Column="6" ZIndex="10" IsChecked="{Binding Visible}" ToolTipProperties.Text="Czy wykres jest widoczny"/>
+                                    <BoxView Grid.Column="6" Color="LightBlue"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>

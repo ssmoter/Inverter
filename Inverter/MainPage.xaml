@@ -4,6 +4,11 @@
              x:Class="Inverter.MainPage" BackgroundColor="Transparent">
 
     <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+        </Style>
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="{Binding FontSize}"/>
             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
@@ -14,7 +19,6 @@
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.9"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
@@ -25,11 +29,6 @@
                     </VisualStateGroup>
                 </VisualStateGroupList>
             </Setter>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
         </Style>
     </ContentPage.Resources>
 
