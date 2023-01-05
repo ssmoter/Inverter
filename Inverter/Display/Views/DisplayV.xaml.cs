@@ -99,7 +99,7 @@ public partial class DisplayV : ContentPage
                 for (int i = 0; i < DataGraphs.Count; i++)
                 {
                     DataGraphs[i].SetMaxMin();
-                    _graphs.Add(new Graph());
+                    _graphs.Add(new Graph(_fm));
 
                     var find = Resources.Where(x => x.Key == i.ToString() && x.Value == _graphs[i]).FirstOrDefault();
                     if (find.Key != null)
@@ -139,6 +139,7 @@ public partial class DisplayV : ContentPage
                 gvLineTimeSchematV.Drawable = _lineTimeSchema;
                 _lineTimeIsHidden = true;
                 #endregion
+
             }
         }
         catch (Exception ex)
@@ -362,19 +363,14 @@ public partial class DisplayV : ContentPage
 
                     for (int j = 0; j < (endIndex - startIndex); j++)
                     {
-                        if (_graphs[i].point.Closed)
-                        {
-                            _graphs[i].point.Open();
-                        }
-
                         if (data.Multiplier != 0)
                         {
                             _graphs[i].AutoScaleY = false;
                             _graphs[i].point.LineTo(n, -(data.Y[j] * data.Multiplier));
                             if (fft)
                             {
-                                _graphs[i].point.LineTo(n + 1, -(data.Y[j] * data.Multiplier));
-                                _graphs[i].point.Close();
+                                _graphs[i].point.LineTo(n, -(data.Y[j] * data.Multiplier));
+                                _graphs[i].point.MoveTo(n + 1, 0);
                             }
 
                         }
@@ -385,8 +381,8 @@ public partial class DisplayV : ContentPage
 
                             if (fft)
                             {
-                                _graphs[i].point.LineTo(n + 1, -(data.Y[j]));
-                                _graphs[i].point.Close();
+                                _graphs[i].point.LineTo(n, -(data.Y[j]));
+                                _graphs[i].point.MoveTo(n + 1, 0);
                             }
                         }
                         n++;
@@ -661,6 +657,9 @@ public partial class DisplayV : ContentPage
                     _gvSchema.Invalidate();
                 }
             };
+
+            x = gMain.RowDefinitions[1].Height.Value * this.Width;
+            y = gMain.ColumnDefinitions[1].Width.Value * this.Height;
         }
         catch (Exception ex)
         {
@@ -754,6 +753,43 @@ public partial class DisplayV : ContentPage
     }
 
 
+
+
     #endregion
 
+    double x = 0, y = 0;
+    private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
+    {
+        //switch (e.StatusType)
+        //{
+        //    case GestureStatus.Running:
+        //        // Translate and ensure we don't pan beyond the wrapped user interface element bounds.
+        //        Content.TranslationX = Math.Max(Math.Min(0, x + e.TotalX), -Math.Abs(Content.Width - DeviceDisplay.MainDisplayInfo.Width));
+        //        Content.TranslationY = Math.Max(Math.Min(0, y + e.TotalY), -Math.Abs(Content.Height - DeviceDisplay.MainDisplayInfo.Height));
+        //        break;
+
+        //    case GestureStatus.Completed:
+        //        // Store the translation applied during the pan
+        //        x = Content.TranslationX;
+        //        y = Content.TranslationY;
+        //        break;
+        //}
+
+        switch (e.StatusType)
+        {
+            case GestureStatus.Started:
+                break;
+            case GestureStatus.Running:
+                gMain.RowDefinitions[1].Height = new GridLength(y - e.TotalY, GridUnitType.Absolute);
+                gMain.ColumnDefinitions[1].Width = new GridLength(x - e.TotalX, GridUnitType.Absolute);
+
+                break;
+            case GestureStatus.Completed:
+                break;
+            case GestureStatus.Canceled:
+                break;
+        }
+        _gvSchema.Invalidate();
+
+    }
 }

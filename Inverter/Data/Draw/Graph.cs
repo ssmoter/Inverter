@@ -23,14 +23,15 @@ namespace Inverter.Data.Draw
         public int StartScopeIndex { get; set; } = 0;
         public int EndScopeIndex { get; set; } = 0;
         private bool fft = false;
-        public Graph()
+        private FileManager _fm;
+        public Graph(FileManager fileManager)
         {
             AxisX = new List<float>();
             AxisY = new List<float>();
             Color = new Color();
             point = new PathF();
+            _fm = fileManager;
         }
-
         public override void Draw(ICanvas canvas, RectF dirtyRect)
         {
             try
@@ -53,7 +54,6 @@ namespace Inverter.Data.Draw
                 float scaleX = 1;
                 scaleX = (dirtyRect.Width - 100) / (EndScopeIndex - StartScopeIndex);
 
-
                 //skalowanie w osi Y
                 float scaleY = 1;
                 if (AutoScaleY)
@@ -66,6 +66,10 @@ namespace Inverter.Data.Draw
 
                     scaleY = (dirtyRect.Height - farFromUp - 80) / denominator;
                     canvas.Scale(1, scaleY);
+                }
+                else if (fft)
+                {
+                    canvas.Translate(dirtyRect.Left + 70, dirtyRect.Bottom - 50);
                 }
                 else
                 {
@@ -172,11 +176,11 @@ namespace Inverter.Data.Draw
 
                         if (AutoScaleX)
                         {
-                            canvas.DrawString(AxisY[i].ToString(), (i + 0.5f) * scaleX + 75, dirtyRect.Top + farFromUp + secondLineI, HorizontalAlignment.Center);
+                            canvas.DrawString(AxisY[i].ToString(), (i + 0f) * scaleX + 75, dirtyRect.Top + farFromUp + secondLineI, HorizontalAlignment.Center);
                         }
                         else
                         {
-                            canvas.DrawString(AxisY[i].ToString(), (i + 0.5f) + 75, dirtyRect.Top + farFromUp + secondLineI, HorizontalAlignment.Center);
+                            canvas.DrawString(AxisY[i].ToString(), (i + 0f) + 75, dirtyRect.Top + farFromUp + secondLineI, HorizontalAlignment.Center);
                         }
                         if (secondLineB)
                         {
@@ -261,16 +265,16 @@ namespace Inverter.Data.Draw
 
                             if (AutoScaleX)
                             {
-                                canvas.DrawString("|", (i + 0.5f) * scaleX, dirtyRect.Bottom - 48, HorizontalAlignment.Right);
-                                canvas.DrawString(AxisX[i].ToString(), (i + 0.5f) * scaleX, dirtyRect.Bottom - 25, HorizontalAlignment.Right);
-                                canvas.DrawString(i.ToString(), (i + 0.5f) * scaleX, dirtyRect.Bottom - 5, HorizontalAlignment.Right);
+                                canvas.DrawString("|", (i + 0f) * scaleX, dirtyRect.Bottom - 48, HorizontalAlignment.Center);
+                                canvas.DrawString(AxisX[i].ToString(), (i + 0f) * scaleX, dirtyRect.Bottom - 25, HorizontalAlignment.Center);
+                                canvas.DrawString(i.ToString(), (i + 0f) * scaleX, dirtyRect.Bottom - 5, HorizontalAlignment.Center);
 
                             }
                             else
                             {
-                                canvas.DrawString("|", (i + 0.5f), dirtyRect.Bottom - 48, HorizontalAlignment.Center);
+                                canvas.DrawString("|", (i + 0f), dirtyRect.Bottom - 48, HorizontalAlignment.Center);
                                 canvas.DrawString(AxisX[i].ToString(), i, dirtyRect.Bottom - 25, HorizontalAlignment.Center);
-                                canvas.DrawString(i.ToString(), (i + 0.5f), dirtyRect.Bottom - 5, HorizontalAlignment.Right);
+                                canvas.DrawString(i.ToString(), (i + 0f), dirtyRect.Bottom - 5, HorizontalAlignment.Center);
                             }
 
                         }
@@ -373,6 +377,7 @@ namespace Inverter.Data.Draw
             }
             catch (Exception ex)
             {
+                _fm.SaveLog(ex.ToString());
                 throw new Exception($"Błąd przy rysowaniu Wykresów {Environment.NewLine}{ex.Message}");
             }
         }

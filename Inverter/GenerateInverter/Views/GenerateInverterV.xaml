@@ -72,7 +72,8 @@
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="Opacity" Value="{AppThemeBinding Light=0.5,Dark=2}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}}"/>
+                                <Setter Property="Opacity" Value="{AppThemeBinding Light=2,Dark=2}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
@@ -119,7 +120,7 @@
                 RowSpacing="2" RowDefinitions="auto,*,*,*,*,*,*,*,*,*,*,*,*">
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Konfiguracja parametrów:"/>
 
-                    <Frame Grid.Row="1" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Napięcie zasilania falownika [V]">
+                    <Frame Grid.Row="1" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Napięcie zasilające falownik [V]">
                         <Grid ColumnDefinitions=".5*,*"  RowDefinitions="*,1">
                             <Label Grid.Column="0" Text="Uz: "/>
                             <Entry Grid.Column="1"  Text="{Binding InverterM.UzNotify}" Placeholder="{Binding InverterM.UzNotify}"/>
@@ -140,14 +141,14 @@
                             <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
-                    <Frame Grid.Row="4" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Rezystancja stycznika w stanie załączenia [&#8486;]">
+                    <Frame Grid.Row="4" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Rezystancja klucza rezystancyjnego w stanie załączenia [&#8486;]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
                             <Label  Grid.Column="0" Text="R_on: " />
                             <Entry  Grid.Column="1"  Text="{Binding InverterM.R_onNotify}" Placeholder="{Binding InverterM.R_onNotify}" />
                             <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
-                    <Frame Grid.Row="5" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Rezystancja stycznika w stanie Wyłączenia [&#8486;]">
+                    <Frame Grid.Row="5" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Rezystancja klucza rezystancyjnego w stanie wyłączenia [&#8486;]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
                             <Label  Grid.Column="0" Text="R_off: "  />
                             <Entry  Grid.Column="1"  Text="{Binding InverterM.R_offNotify}" Placeholder="{Binding InverterM.R_offNotify}" />
@@ -183,21 +184,21 @@
                             <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
-                    <Frame Grid.Row="10" Grid.Column="0"  CornerRadius="0" ToolTipProperties.Text="Częstotliwość przełączeń styczników [Hz]">
+                    <Frame Grid.Row="10" Grid.Column="0"  CornerRadius="0" ToolTipProperties.Text="Częstotliwość załączeń tranzystorów [Hz]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
                             <Label Grid.Column="0" Text="Fi: "  />
                             <Entry Grid.Column="1"  Text="{Binding InverterM.FiNotify}" Placeholder="{Binding InverterM.FiNotify}" />
                             <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
-                    <Frame Grid.Row="11" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Kąt przesunięcia załączenia tranzystorów [deg]">
+                    <Frame Grid.Row="11" Grid.Column="0"   CornerRadius="0" ToolTipProperties.Text="Kąt przesunięcia załączeń tranzystorów [deg]">
                         <Grid ColumnDefinitions=".5*,*"   RowDefinitions="*,1">
                             <Label Grid.Column="0" Text="Alfa: "  />
                             <Entry Grid.Column="1"  Text="{Binding InverterM.AlfaNotify}" Placeholder="{Binding InverterM.AlfaNotify}"/>
                             <Line  Grid.Row="1" Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
-                    <Frame Grid.Row="12" Grid.Column="0"  CornerRadius="0" ToolTipProperties.Text="Typ pracy falownika &#10;0-Fala prostokatna&#10;1-PWM">
+                    <Frame Grid.Row="12" Grid.Column="0"  CornerRadius="0" ToolTipProperties.Text="Sposoby sterowania falownika &#10;0-Fala prostokatna&#10;1-PWM">
                         <Grid ColumnDefinitions="auto,auto"   RowDefinitions="*,1">
                             <Label Grid.Column="0" Text="K: "  />
                             <ListView  Grid.Column="1" MaximumHeightRequest="50"

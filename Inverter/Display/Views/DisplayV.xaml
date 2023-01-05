@@ -73,7 +73,8 @@
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="Opacity" Value="{AppThemeBinding Light=0.5,Dark=2}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}}"/>
+                                <Setter Property="Opacity" Value="{AppThemeBinding Light=2,Dark=2}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
@@ -127,17 +128,15 @@
 
     <ScrollView Margin="5,0,10,5" x:Name="svMain" SizeChanged="svMain_SizeChanged">
         <Grid  
-                ColumnDefinitions="*,auto" ColumnSpacing="5" x:Name="gMain"
+                ColumnDefinitions="*,.8*" ColumnSpacing="5" x:Name="gMain"
                 RowDefinitions="auto,auto,auto,auto,*" RowSpacing="5">
 
-            <!--Konfiguracja-->
             <HorizontalStackLayout>
                 <Button HorizontalOptions="Start" Text="Zapisz" x:Name="bSave" Clicked="bSave_Clicked"/>
                 <Button HorizontalOptions="Start" Text="Wczytaj" x:Name="bLoad" Clicked="bLoad_Clicked"/>
                 <SearchBar HorizontalOptions="Start" x:Name="sbFind" Placeholder="Szukaj" ToolTipProperties.Text="Wartości są wyszukiwane po polach  &#10;ID,Nazwa" TextChanged="sbFind_TextChanged"/>
                 <Label FontSize="Title" HorizontalOptions="Center" Text="Konfiguracja" Grid.Row="0" Grid.Column="0"/>
             </HorizontalStackLayout>
-
             <Label FontSize="Title" HorizontalOptions="Center" Text="Schemat" Grid.Row="0" Grid.Column="1"/>
             <Label FontSize="Title" HorizontalOptions="Center" Text="Wykresy" Grid.Row="2" Grid.ColumnSpan="1"/>
 
@@ -170,7 +169,9 @@
                 </ListView>
             </Grid>
 
-            <Grid Grid.Row="1" Grid.Column="0"     
+            <!--Konfiguracja-->
+
+            <Grid      Grid.Row="1" Grid.Column="0" 
                       ColumnDefinitions="auto,auto,*,*,*,*" ColumnSpacing="5"
                       RowDefinitions="auto,*,auto,auto,auto,auto,auto">
                 <!--Edycja-->
@@ -199,18 +200,17 @@
                 <Button Grid.Row="3" Grid.Column="4" ZIndex="10" ToolTipProperties.Text="Anuluj wyświetlanie wykresów" x:Name="bClearVisible" Clicked="bClearVisible_Clicked" Command="{Binding RefreshListCommand}" HorizontalOptions="End" Text="Wyczyść" Margin="0,5,0,0"/>
                 <Button Grid.Row="3" Grid.Column="5" Grid.ColumnSpan="3" ZIndex="10" ToolTipProperties.Text="Przycisk uruchamia symulacje przepływu prądów w obowdzie" Command="{Binding StartSymulation}" Text="{Binding NameSimulationbutton}" Clicked="Symulation_Clicked" HorizontalOptions="Start" Margin="0,5,0,0"/>
                 <!--Tabela z danymi-->
-                <CollectionView 
-                            Grid.Row="1" Grid.ColumnSpan="6" SelectionMode="Single" x:Name="cvDataGraphs"  SizeChanged="svGraph_SizeChanged" VerticalScrollBarVisibility="Always"
-                            ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem }" HeightRequest="200" Margin="10,0,10,0">
+                <CollectionView Grid.Row="1" Grid.ColumnSpan="6" SelectionMode="Single" x:Name="cvDataGraphs"  SizeChanged="svGraph_SizeChanged" VerticalScrollBarVisibility="Always"
+                                ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem }" MaximumHeightRequest="250" Margin="10,0,10,0">
                     <CollectionView.Header>
                         <Grid ColumnDefinitions="*,2*,*,*,*,*,*" ColumnSpacing="5" Margin="10,0,10,0">
-                            <Label Grid.Column="0" FontAttributes="Bold" Text="ID" />
-                            <Label Grid.Column="1" FontAttributes="Bold" Text="Nazwa"/>
-                            <Label Grid.Column="2" FontAttributes="Bold" Text="Kolor"/>
-                            <Label Grid.Column="3" FontAttributes="Bold" Text="Skala"/>
-                            <Label Grid.Column="4" FontAttributes="Bold" Text="Wiersz"/>
-                            <Label Grid.Column="5" FontAttributes="Bold" Text="Rozpiętość&#10;Wierszy" />
-                            <Label Grid.Column="6" FontAttributes="Bold" Text="Widoczny"/>
+                            <Label Grid.Column="0" HorizontalOptions="Start" FontAttributes="Bold" Text="ID" />
+                            <Label Grid.Column="1" HorizontalOptions="Start" FontAttributes="Bold" Text="Nazwa"/>
+                            <Label Grid.Column="2" HorizontalOptions="Start" FontAttributes="Bold" Text="Kolor"/>
+                            <Label Grid.Column="3" HorizontalOptions="Start" FontAttributes="Bold" Text="Skala"/>
+                            <Label Grid.Column="4" HorizontalOptions="Start" FontAttributes="Bold" Text="Wiersz"/>
+                            <Label Grid.Column="5" HorizontalOptions="Start" FontAttributes="Bold" Text="Rozpiętość&#10;Wierszy" />
+                            <Label Grid.Column="6" HorizontalOptions="Start" FontAttributes="Bold" Text="Widoczny"/>
                         </Grid>
                     </CollectionView.Header>
                     <CollectionView.Footer>
@@ -227,18 +227,19 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Margin="0" Padding="0,10,0,10">
-                                <Grid ColumnDefinitions="*,*,*,.5*,.5*,.5*,auto" ColumnSpacing="5">
-                                    <Label Grid.Column="0" Text="{Binding DataName}"/>
-                                    <Entry Grid.Column="1" Text="{Binding UserDataName}" ToolTipProperties.Text="Nazwa"/>
-                                    <HorizontalStackLayout Grid.Column="2" >
+                                <Grid ColumnDefinitions="*,2*,*,*,*,*,*" ColumnSpacing="5">
+                                    <Label Grid.Column="0" HorizontalOptions="Start" Text="{Binding DataName}"/>
+                                    <Entry Grid.Column="1" HorizontalOptions="Start" Text="{Binding UserDataName}" ToolTipProperties.Text="Nazwa"/>
+                                    <HorizontalStackLayout Grid.Column="2" HorizontalOptions="Start" >
                                         <BoxView WidthRequest="5" Color="{Binding UserColor.Color}"/>
                                         <Label Text="{Binding UserColor.FriendlyName}" />
                                     </HorizontalStackLayout>
-                                    <Entry Grid.Column="3" Text="{Binding Multiplier}" ToolTipProperties.Text="Nowa skala&#10;0-auto" Keyboard="Numeric"/>
-                                    <Entry Grid.Column="4" Text="{Binding LocationRow}" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 0" Keyboard="Numeric"/>
-                                    <Entry Grid.Column="5" Text="{Binding locationRowSpan}" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 1" Keyboard="Numeric"/>
-                                    <CheckBox Grid.Column="6" ZIndex="10" IsChecked="{Binding Visible}" ToolTipProperties.Text="Czy wykres jest widoczny"/>
-                                    <BoxView Grid.Column="6" Color="LightBlue"/>
+                                    <Entry Grid.Column="3" HorizontalOptions="Start" Text="{Binding Multiplier}" ToolTipProperties.Text="Nowa skala&#10;0-auto" Keyboard="Numeric"/>
+                                    <Entry Grid.Column="4" HorizontalOptions="Start" Text="{Binding LocationRow}" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 0" Keyboard="Numeric"/>
+                                    <Entry Grid.Column="5" HorizontalOptions="Start" Text="{Binding locationRowSpan}" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 1" Keyboard="Numeric"/>
+                                    <Border Grid.Column="6" StrokeThickness="0">
+                                        <CheckBox  HorizontalOptions="Center" ZIndex="10" IsChecked="{Binding Visible}" ToolTipProperties.Text="Czy wykres jest widoczny"/>
+                                    </Border>
                                 </Grid>
                             </Frame>
                         </DataTemplate>
@@ -246,11 +247,26 @@
                 </CollectionView>
             </Grid>
 
-            <ScrollView Grid.Row="1" Grid.Column="1" VerticalOptions="Fill" HorizontalOptions="Fill">
+            <!--Schemat-->
+            <ScrollView Grid.Row="1" Grid.Column="1"
+                    VerticalOptions="Fill" HorizontalOptions="Fill">
                 <Grid x:Name="gSchema">
                     <BoxView BackgroundColor="Transparent"/>
                 </Grid>
             </ScrollView>
+
+            <Rectangle Grid.Row="1" Grid.Column="0" HorizontalOptions="End" VerticalOptions="End"
+                Stroke="Red" 
+                Fill="DarkBlue"
+                StrokeThickness="4"
+                HeightRequest="10"
+                WidthRequest="10">
+                <Rectangle.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+                </Rectangle.GestureRecognizers>
+            </Rectangle>
+
+            <!--Wykres-->
             <Slider Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Value="{Binding SActualCurrentIndex}" Maximum="{Binding SCurrentMaxIndex}" x:Name="sSymulationTimer" ValueChanged="sSymulationTimer_ValueChanged"/>
             <ScrollView Grid.Row="4" Grid.ColumnSpan="2">
                 <Grid 
@@ -267,6 +283,7 @@
                     </ScrollView>
                 </Grid>
             </ScrollView>
+
         </Grid>
     </ScrollView>
 

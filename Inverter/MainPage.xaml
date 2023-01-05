@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Inverter.MainPage" BackgroundColor="Transparent">
+             x:Class="Inverter.MainPage"
+             xmlns:local="clr-namespace:Inverter.Data" BackgroundColor="Transparent">
 
     <ContentPage.Resources>
         <Style TargetType="Label">
@@ -42,6 +43,7 @@
             <Label Text="Politechnika Krakowska" HorizontalOptions="Center" FontSize="Title"/>
             <Label Text="Wydział Inżynierii Elektrycznej i Komputerowej" HorizontalOptions="Center" FontSize="Title"/>
             <Label Text="Program do Wizualizacji Pracy Trójfazowego Trójpoziomowego Falownika Napięcia" HorizontalOptions="Center" FontSize="Title"/>
+
             <VerticalStackLayout 
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand"
@@ -83,9 +85,11 @@
                 </VisualStateManager.VisualStateGroups>
                 <VerticalStackLayout >
                     <Label Text="Praca Dyplomowa: &#10;Sławomir Smoter" FontSize="5"/>
-                    <!--<Image Source="easteregg.gif" IsAnimationPlaying="True" HeightRequest="50"/>-->
                 </VerticalStackLayout>
             </Frame>
+            <HorizontalStackLayout BindingContext="{x:Reference fEasterEgg}" Opacity="{Binding Opacity}">
+                <Image Source="kot2.jpg" x:Name="iEasterEgg" HeightRequest="50" HorizontalOptions="Start"/>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

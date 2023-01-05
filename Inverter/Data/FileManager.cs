@@ -289,10 +289,10 @@ namespace Inverter.Data
         {
             try
             {
-                log = $"{DateTime.Now} :Error:{Environment.NewLine}{log}";
+                log = $"{Environment.NewLine}{DateTime.Now} :Error:{Environment.NewLine}{log}";
 
                 string filePath = $"{path}\\{logger}.txt";
-                if (ExistFile(log))
+                if (!ExistFile(log))
                 {
                     using (System.IO.FileStream fs = System.IO.File.Create(filePath))
                     {

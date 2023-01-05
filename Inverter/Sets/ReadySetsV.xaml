@@ -75,7 +75,8 @@
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="Opacity" Value="{AppThemeBinding Light=0.5,Dark=2}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}}"/>
+                                <Setter Property="Opacity" Value="{AppThemeBinding Light=2,Dark=2}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">

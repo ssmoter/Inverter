@@ -19,60 +19,50 @@ namespace Inverter.Data.Draw.Schema
         {
             Graphs = graphs;
             stillOpen = 0;
-            for (int i = 0; i < Graphs.Count; i++)
-            {
-                if (Graphs[i].UserDataName == "Tyrystor")
-                {
-                    stillOpen += Math.Abs(Graphs[i].Min);
-                }
-            }
-            if (stillOpen < 0.1)
-            {
-                stillOpen = 0.1f;
-            }
+            stillOpen = Graphs.Where(x => x.UserDataName == "Tranzystor").Min(x => x.Max) / 10;
         }
 
         public override void Draw(ICanvas canvas, RectF dirtyRect)
         {
             try
             {
-            canvas.SaveState();
-            if (BlackWhite)
-            {
-                canvas.StrokeColor = Colors.White;
-                canvas.FillColor = Colors.White;
-                canvas.FontColor = Colors.White;
-            }
-            else
-            {
-                canvas.StrokeColor = Colors.Black;
-                canvas.FillColor = Colors.Black;
-                canvas.FontColor = Colors.Black;
-            }
+                canvas.SaveState();
+                if (BlackWhite)
+                {
+                    canvas.StrokeColor = Colors.White;
+                    canvas.FillColor = Colors.White;
+                    canvas.FontColor = Colors.White;
+                }
+                else
+                {
+                    canvas.StrokeColor = Colors.Black;
+                    canvas.FillColor = Colors.Black;
+                    canvas.FontColor = Colors.Black;
+                }
 
-            float scaleX = 1, scaleY = 1;
+                float scaleX = 1, scaleY = 1;
 
-            scaleX = dirtyRect.Width / 650;
-            scaleY = dirtyRect.Height / 350;
+                scaleX = dirtyRect.Width / 650;
+                scaleY = dirtyRect.Height / 350;
 
-            canvas.Scale(scaleX, scaleY);
-            canvas.Translate(dirtyRect.Left + 50, dirtyRect.Top + 50);
+                canvas.Scale(scaleX, scaleY);
+                canvas.Translate(dirtyRect.Left + 50, dirtyRect.Top + 50);
 
-            canvas.StrokeSize = StrokeSize;
+                canvas.StrokeSize = StrokeSize;
 
-            SourceLine(canvas, dirtyRect);
+                SourceLine(canvas, dirtyRect);
 
-            canvas.Translate(10, 0);
-            FirstLine(canvas, dirtyRect);
+                canvas.Translate(10, 0);
+                FirstLine(canvas, dirtyRect);
 
-            canvas.Translate(180, 0);
-            SecondtLine(canvas, dirtyRect);
-            canvas.Translate(190, 0);
-            ThirdLine(canvas, dirtyRect);
+                canvas.Translate(180, 0);
+                SecondtLine(canvas, dirtyRect);
+                canvas.Translate(190, 0);
+                ThirdLine(canvas, dirtyRect);
 
-            canvas.Translate(-195, 260);
-            OdbLine(canvas, dirtyRect);
-            canvas.RestoreState();
+                canvas.Translate(-195, 260);
+                OdbLine(canvas, dirtyRect);
+                canvas.RestoreState();
             }
             catch (Exception ex)
             {
@@ -84,7 +74,7 @@ namespace Inverter.Data.Draw.Schema
         {
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VzP)").FirstOrDefault().Y[Index]);
-            Source(canvas, dirtyRect, -10, 0, "UD 1/2"); //A
+            Source(canvas, dirtyRect, -10, 0, "UVzP"); //A
             canvas.DrawLine(dirtyRect.Left, 30, dirtyRect.Left, 110);//190
 
 
@@ -115,7 +105,7 @@ namespace Inverter.Data.Draw.Schema
                          Graphs.Where(x => x.DataName == "I(DNC)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
 
-          
+
             DrawDot(canvas, dirtyRect, 20, 100);
             canvas.DrawLine(dirtyRect.Left, 110, 30, 110);
 
@@ -154,7 +144,7 @@ namespace Inverter.Data.Draw.Schema
 
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VzN)").FirstOrDefault().Y[Index]);
-            Source(canvas, dirtyRect, -10, 200, "UD 1/2"); //B
+            Source(canvas, dirtyRect, -10, 200, "UVzN"); //B
             canvas.DrawLine(dirtyRect.Left, 110, dirtyRect.Left, 190);//190
 
             sum = Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index] +
@@ -188,7 +178,7 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(DPA)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(40, 40, 40, 110);
             canvas.DrawLine(40, 40, 60, 40);
-            DiodeRight(canvas, dirtyRect, 60, 30, "Dmpa");
+            DiodeRight(canvas, dirtyRect, 60, 30, "DPA");
             canvas.DrawLine(70, 40, 110, 40);
             float sum = Graphs.Where(x => x.DataName == "I(DPA)").FirstOrDefault().Y[Index] +
               Graphs.Where(x => x.DataName == "I(S_PA)").FirstOrDefault().Y[Index] +
@@ -205,7 +195,7 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_PAz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, -10, dirtyRect.Left + 130, -10);  //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, -10, dirtyRect.Left + 130, 10);
-            DiodeTop(canvas, dirtyRect, 120, 0, "Dpa");
+            DiodeTop(canvas, dirtyRect, 120, 0, "D_PAz");
             canvas.DrawLine(dirtyRect.Left + 130, 20, dirtyRect.Left + 130, 40);
             canvas.DrawLine(dirtyRect.Left + 110, 40, dirtyRect.Left + 130, 40);
 
@@ -216,7 +206,7 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 100, -20);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PA)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PA)").FirstOrDefault().Y[Index], -40, 0, "Spa");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PA)").FirstOrDefault().Y[Index], -40, 0, "S_PA");
 
             sum = Graphs.Where(x => x.DataName == "I(D_PMAz)").FirstOrDefault().Y[Index] +
                 Graphs.Where(x => x.DataName == "I(S_PMA)").FirstOrDefault().Y[Index];
@@ -226,7 +216,7 @@ namespace Inverter.Data.Draw.Schema
 
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_PMAz)").FirstOrDefault().Y[Index]); //odnoga dla diody 
-            DiodeTop(canvas, dirtyRect, 120, 60, "Dpma");
+            DiodeTop(canvas, dirtyRect, 120, 60, "D_PMAz");
             canvas.DrawLine(dirtyRect.Left + 110, 50, dirtyRect.Left + 130, 50);
             canvas.DrawLine(dirtyRect.Left + 130, 50, dirtyRect.Left + 130, 80);
             canvas.DrawLine(dirtyRect.Left + 130, 80, dirtyRect.Left + 130, 100);
@@ -234,7 +224,7 @@ namespace Inverter.Data.Draw.Schema
 
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PMA)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMA)").FirstOrDefault().Y[Index], -40, 60, "Spma");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMA)").FirstOrDefault().Y[Index], -40, 60, "S_PMA");
             canvas.DrawLine(dirtyRect.Left + 110, 100, dirtyRect.Left + 110, 120);
             sum = Graphs.Where(x => x.DataName == "I(S_PMA)").FirstOrDefault().Y[Index] +
                   Graphs.Where(x => x.DataName == "I(D_PMAz)").FirstOrDefault().Y[Index];
@@ -246,14 +236,14 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(DNA)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(40, 110, 40, 180);
             canvas.DrawLine(40, 180, 60, 180);
-            DiodeLeft(canvas, dirtyRect, 50, 170, "Dmna");
+            DiodeLeft(canvas, dirtyRect, 50, 170, "DNA");
             canvas.DrawLine(60, 180, 110, 180);
 
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NMAz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 120, dirtyRect.Left + 130, 120);  //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, 120, dirtyRect.Left + 130, 140);
-            DiodeTop(canvas, dirtyRect, 120, 130, "Dnma");
+            DiodeTop(canvas, dirtyRect, 120, 130, "D_NMAz");
             canvas.DrawLine(dirtyRect.Left + 130, 150, dirtyRect.Left + 130, 170);
             canvas.DrawLine(dirtyRect.Left + 110, 170, dirtyRect.Left + 130, 170);
 
@@ -267,7 +257,7 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 100, 110);
             DrawDot(canvas, dirtyRect, 100, 160);
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index], -40, 130, "Snma");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index], -40, 130, "S_NMA");
             sum = Graphs.Where(x => x.DataName == "I(S_NMA)").FirstOrDefault().Y[Index] + Graphs.Where(x => x.DataName == "I(D_NAz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
             DrawDot(canvas, dirtyRect, 100, 170);
@@ -276,13 +266,13 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NAz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 130, 180);   //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, 180, dirtyRect.Left + 130, 210);
-            DiodeTop(canvas, dirtyRect, 120, 190, "Dna");
+            DiodeTop(canvas, dirtyRect, 120, 190, "D_NAz");
             canvas.DrawLine(dirtyRect.Left + 130, 210, dirtyRect.Left + 130, 230);
             canvas.DrawLine(dirtyRect.Left + 110, 230, dirtyRect.Left + 130, 230);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 110, 190);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index], -40, 190, "Sna");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index], -40, 190, "S_NA");
             sum = Graphs.Where(x => x.DataName == "I(S_NA)").FirstOrDefault().Y[Index] +
                   Graphs.Where(x => x.DataName == "I(D_NAz)").FirstOrDefault().Y[Index];
             ReturnColor(canvas, sum);
@@ -290,8 +280,8 @@ namespace Inverter.Data.Draw.Schema
             canvas.DrawLine(dirtyRect.Left + 110, 230, dirtyRect.Left + 110, 240);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VoA)").FirstOrDefault().Y[Index]);
-            canvas.DrawLine(110, 110, 190, 110);
-            canvas.DrawLine(190, 110, 190, 250);
+            canvas.DrawLine(110, 110, 200, 110);
+            canvas.DrawLine(200, 110, 200, 250);
 
             DrawDot(canvas, dirtyRect, 100, 100);
         }
@@ -315,7 +305,7 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(DPB)").FirstOrDefault().Y[Index]);
 
             canvas.DrawLine(40, 40, 60, 40);
-            DiodeRight(canvas, dirtyRect, 60, 30, "Dmpb");
+            DiodeRight(canvas, dirtyRect, 60, 30, "DPB");
             canvas.DrawLine(70, 40, 110, 40);
 
             sum = Graphs.Where(x => x.DataName == "I(DPB)").FirstOrDefault().Y[Index] +
@@ -327,7 +317,7 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_PBz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, -10, dirtyRect.Left + 130, -10);  //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, -10, dirtyRect.Left + 130, 10);
-            DiodeTop(canvas, dirtyRect, 120, 0, "Dpb");
+            DiodeTop(canvas, dirtyRect, 120, 0, "D_PBz");
             canvas.DrawLine(dirtyRect.Left + 130, 20, dirtyRect.Left + 130, 40);
             canvas.DrawLine(dirtyRect.Left + 110, 40, dirtyRect.Left + 130, 40);
 
@@ -339,7 +329,7 @@ namespace Inverter.Data.Draw.Schema
 
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PB)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PB)").FirstOrDefault().Y[Index], -40, 0, "Spb");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PB)").FirstOrDefault().Y[Index], -40, 0, "S_PB");
 
             sum = Graphs.Where(x => x.DataName == "I(D_PMBz)").FirstOrDefault().Y[Index] +
                 Graphs.Where(x => x.DataName == "I(S_PMB)").FirstOrDefault().Y[Index];
@@ -348,14 +338,14 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 100, 40);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_PMBz)").FirstOrDefault().Y[Index]); //odnoga dla diody 
-            DiodeTop(canvas, dirtyRect, 120, 60, "Dpmb");
+            DiodeTop(canvas, dirtyRect, 120, 60, "D_PMBz");
             canvas.DrawLine(dirtyRect.Left + 110, 50, dirtyRect.Left + 130, 50);
             canvas.DrawLine(dirtyRect.Left + 130, 50, dirtyRect.Left + 130, 80);
             canvas.DrawLine(dirtyRect.Left + 130, 80, dirtyRect.Left + 130, 100);
             canvas.DrawLine(dirtyRect.Left + 110, 100, dirtyRect.Left + 130, 100);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PMB)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMB)").FirstOrDefault().Y[Index], -40, 60, "Spmb");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMB)").FirstOrDefault().Y[Index], -40, 60, "S_PMB");
             canvas.DrawLine(dirtyRect.Left + 110, 100, dirtyRect.Left + 110, 120);
             sum = Graphs.Where(x => x.DataName == "I(S_PMB)").FirstOrDefault().Y[Index] +
                   Graphs.Where(x => x.DataName == "I(D_PMBz)").FirstOrDefault().Y[Index];
@@ -368,13 +358,13 @@ namespace Inverter.Data.Draw.Schema
 
             canvas.DrawLine(40, 110, 40, 180);
             canvas.DrawLine(40, 180, 60, 180);
-            DiodeLeft(canvas, dirtyRect, 50, 170, "DmnB");
+            DiodeLeft(canvas, dirtyRect, 50, 170, "DNB");
             canvas.DrawLine(60, 180, 110, 180);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NMBz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 120, dirtyRect.Left + 130, 120);  //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, 120, dirtyRect.Left + 130, 140);
-            DiodeTop(canvas, dirtyRect, 120, 130, "Dnmb");
+            DiodeTop(canvas, dirtyRect, 120, 130, "D_NMBz");
             canvas.DrawLine(dirtyRect.Left + 130, 150, dirtyRect.Left + 130, 170);
             canvas.DrawLine(dirtyRect.Left + 110, 170, dirtyRect.Left + 130, 170);
 
@@ -388,7 +378,7 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 100, 110);
             DrawDot(canvas, dirtyRect, 100, 160);
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NMB)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMB)").FirstOrDefault().Y[Index], -40, 130, "Snmb");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMB)").FirstOrDefault().Y[Index], -40, 130, "S_NMB");
             canvas.DrawLine(dirtyRect.Left + 110, 170, dirtyRect.Left + 110, 180);
 
             sum = Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index] + Graphs.Where(x => x.DataName == "I(D_NBz)").FirstOrDefault().Y[Index];
@@ -399,12 +389,12 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NBz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 130, 180);   //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, 180, dirtyRect.Left + 130, 210);
-            DiodeTop(canvas, dirtyRect, 120, 190, "Dnb");
+            DiodeTop(canvas, dirtyRect, 120, 190, "D_NBz");
             canvas.DrawLine(dirtyRect.Left + 130, 210, dirtyRect.Left + 130, 230);
             canvas.DrawLine(dirtyRect.Left + 110, 230, dirtyRect.Left + 130, 230);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index], -40, 190, "Snb");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index], -40, 190, "S_NB");
 
             sum = Graphs.Where(x => x.DataName == "I(S_NB)").FirstOrDefault().Y[Index] +
                   Graphs.Where(x => x.DataName == "I(D_NBz)").FirstOrDefault().Y[Index];
@@ -413,8 +403,8 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 100, 220);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VoB)").FirstOrDefault().Y[Index]);
-            canvas.DrawLine(110, 110, 190, 110);
-            canvas.DrawLine(190, 110, 190, 250);
+            canvas.DrawLine(110, 110, 200, 110);
+            canvas.DrawLine(200, 110, 200, 250);
 
             DrawDot(canvas, dirtyRect, 100, 100);
 
@@ -434,7 +424,7 @@ namespace Inverter.Data.Draw.Schema
             //gora
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(DPC)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(40, 40, 60, 40);
-            DiodeRight(canvas, dirtyRect, 60, 30, "Dmpc");
+            DiodeRight(canvas, dirtyRect, 60, 30, "DPC");
             canvas.DrawLine(70, 40, 110, 40);
 
             sum = Graphs.Where(x => x.DataName == "I(DPC)").FirstOrDefault().Y[Index] +
@@ -446,7 +436,7 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_PCz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, -10, dirtyRect.Left + 130, -10);  //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, -10, dirtyRect.Left + 130, 10);
-            DiodeTop(canvas, dirtyRect, 120, 0, "Dpc");
+            DiodeTop(canvas, dirtyRect, 120, 0, "D_PCz");
             canvas.DrawLine(dirtyRect.Left + 130, 20, dirtyRect.Left + 130, 40);
             canvas.DrawLine(dirtyRect.Left + 110, 40, dirtyRect.Left + 130, 40);
 
@@ -458,7 +448,7 @@ namespace Inverter.Data.Draw.Schema
 
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PC)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PC)").FirstOrDefault().Y[Index], -40, 0, "Spc");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PC)").FirstOrDefault().Y[Index], -40, 0, "S_PC");
 
             sum = Graphs.Where(x => x.DataName == "I(D_PMCz)").FirstOrDefault().Y[Index] +
                 Graphs.Where(x => x.DataName == "I(S_PMC)").FirstOrDefault().Y[Index];
@@ -467,14 +457,14 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 100, 40);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_PMCz)").FirstOrDefault().Y[Index]); //odnoga dla diody 
-            DiodeTop(canvas, dirtyRect, 120, 60, "Dpmc");
+            DiodeTop(canvas, dirtyRect, 120, 60, "D_PMCz");
             canvas.DrawLine(dirtyRect.Left + 110, 50, dirtyRect.Left + 130, 50);
             canvas.DrawLine(dirtyRect.Left + 130, 50, dirtyRect.Left + 130, 80);
             canvas.DrawLine(dirtyRect.Left + 130, 80, dirtyRect.Left + 130, 100);
             canvas.DrawLine(dirtyRect.Left + 110, 100, dirtyRect.Left + 130, 100);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_PMC)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMC)").FirstOrDefault().Y[Index], -40, 60, "Spmc");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_PMC)").FirstOrDefault().Y[Index], -40, 60, "S_PMC");
             canvas.DrawLine(dirtyRect.Left + 110, 100, dirtyRect.Left + 110, 120);
             sum = Graphs.Where(x => x.DataName == "I(S_PMC)").FirstOrDefault().Y[Index] +
                   Graphs.Where(x => x.DataName == "I(D_PMCz)").FirstOrDefault().Y[Index];
@@ -487,13 +477,13 @@ namespace Inverter.Data.Draw.Schema
 
             canvas.DrawLine(40, 110, 40, 180);
             canvas.DrawLine(40, 180, 60, 180);
-            DiodeLeft(canvas, dirtyRect, 50, 170, "Dmnc");
+            DiodeLeft(canvas, dirtyRect, 50, 170, "DNC");
             canvas.DrawLine(60, 180, 110, 180);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NMCz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 120, dirtyRect.Left + 130, 120);  //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, 120, dirtyRect.Left + 130, 140);
-            DiodeTop(canvas, dirtyRect, 120, 130, "Dnmc");
+            DiodeTop(canvas, dirtyRect, 120, 130, "D_NMCz");
             canvas.DrawLine(dirtyRect.Left + 130, 150, dirtyRect.Left + 130, 170);
             canvas.DrawLine(dirtyRect.Left + 110, 170, dirtyRect.Left + 130, 170);
 
@@ -508,7 +498,7 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 100, 160);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NMC)").FirstOrDefault().Y[Index]);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMC)").FirstOrDefault().Y[Index], -40, 130, "Snmc");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NMC)").FirstOrDefault().Y[Index], -40, 130, "S_NMC");
             canvas.DrawLine(dirtyRect.Left + 110, 170, dirtyRect.Left + 110, 180);
 
             sum = Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index] + Graphs.Where(x => x.DataName == "I(D_NCz)").FirstOrDefault().Y[Index];
@@ -518,13 +508,13 @@ namespace Inverter.Data.Draw.Schema
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(D_NCz)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 130, 180);   //odnoga dla diody 
             canvas.DrawLine(dirtyRect.Left + 130, 180, dirtyRect.Left + 130, 210);
-            DiodeTop(canvas, dirtyRect, 120, 190, "Dnc");
+            DiodeTop(canvas, dirtyRect, 120, 190, "D_NCz");
             canvas.DrawLine(dirtyRect.Left + 130, 210, dirtyRect.Left + 130, 230);
             canvas.DrawLine(dirtyRect.Left + 110, 230, dirtyRect.Left + 130, 230);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index]);
             canvas.DrawLine(dirtyRect.Left + 110, 180, dirtyRect.Left + 110, 190);
-            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index], -40, 190, "Snc");
+            Transistor(canvas, dirtyRect, Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index], -40, 190, "S_NC");
 
             sum = Graphs.Where(x => x.DataName == "I(S_NC)").FirstOrDefault().Y[Index] +
                   Graphs.Where(x => x.DataName == "I(D_NCz)").FirstOrDefault().Y[Index];
@@ -533,8 +523,8 @@ namespace Inverter.Data.Draw.Schema
             DrawDot(canvas, dirtyRect, 100, 220);
 
             ReturnColor(canvas, Graphs.Where(x => x.DataName == "I(VoC)").FirstOrDefault().Y[Index]);
-            canvas.DrawLine(110, 110, 190, 110);
-            canvas.DrawLine(190, 110, 190, 250);
+            canvas.DrawLine(110, 110, 200, 110);
+            canvas.DrawLine(200, 110, 200, 250);
 
             DrawDot(canvas, dirtyRect, 100, 100);
 
@@ -673,7 +663,6 @@ namespace Inverter.Data.Draw.Schema
             DrawName(canvas, dirtyRect, name, 160, 85);
             canvas.RestoreState();
         }
-
         private void Source(ICanvas canvas, RectF dirtyRect, int moveX = 0, int moveY = 0, string name = null)
         {
             canvas.SaveState();
@@ -710,7 +699,6 @@ namespace Inverter.Data.Draw.Schema
                 canvas.DrawString(down.ToUpper(), -48, -70, HorizontalAlignment.Left);
             }
         }
-
         private void DrawDot(ICanvas canvas, RectF dirtyRect, int moveX = 0, int moveY = 0)
         {
             canvas.Translate(moveX, moveY);

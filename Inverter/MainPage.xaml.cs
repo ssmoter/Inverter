@@ -2,12 +2,15 @@
 using Inverter.GenerateInverter.Views;
 using Inverter.Helpers;
 using Inverter.Sets;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Inverter;
 
 public partial class MainPage : ContentPage
 {
     FileManager _fm;
+    Animation _easterEggAnim;
     public MainPage()
     {
         InitializeComponent();
@@ -24,6 +27,7 @@ public partial class MainPage : ContentPage
             _fm.SaveLog(ex.ToString());
         }
     }
+
 
     private async void CreateNewInverter(object sender, EventArgs e)
     {
@@ -117,18 +121,62 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        // Application.Current.OpenWindow(new Window
-        // {
-        //     Page = new MainPage()
-        // });
+#if ANDROID
+        var status = PermissionStatus.Unknown;
+
+        status = await Permissions.CheckStatusAsync<Permissions.NetworkState>();
+
+        if (status == PermissionStatus.Granted)
+        {
+            return;
+        }
+        if (Permissions.ShouldShowRationale<Permissions.NetworkState>())
+        {
+            await Shell.Current.DisplayAlert("Pozwolenie", "NetworkState", "Tak");
+        }
+#endif
     }
 
     private void svMain_SizeChanged(object sender, EventArgs e)
     {
         svMain.MaximumHeightRequest = this.Height;
         svMain.MaximumWidthRequest = this.Width;
-    }
-}
 
+
+        if (iEasterEgg.AnimationIsRunning("Move"))
+        {
+            iEasterEgg.AbortAnimation("Move");
+        }
+
+        double opacity = 0;
+        bool directionOpacity = true;
+        _easterEggAnim = new Animation((e) =>
+        {
+            if (directionOpacity)
+            {
+                opacity += 0.01;
+            }
+            else
+            {
+                opacity -= 0.01;
+            }
+            if (opacity >= 1)
+            {
+                directionOpacity = false;
+            }
+            if (opacity <= 0)
+            {
+                directionOpacity = true;
+            }
+
+            iEasterEgg.TranslationX = e;
+            iEasterEgg.Opacity = opacity;
+
+        }, this.Width, 0);
+        iEasterEgg.Animate("Move", _easterEggAnim, 16, 10000, Easing.Linear, null, () => true);
+
+    }
+
+}

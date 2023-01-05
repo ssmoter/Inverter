@@ -144,6 +144,11 @@ namespace Inverter.GenerateInverter.ViewsModel
                             Config.PspicePath = await Shell.Current.DisplayPromptAsync("Error", $"Nie podano lokalizaci programu PSpice{Environment.NewLine}Czy chesz teraz podać lokalizacje?", "Zapisz", "Anuluj");
                             await _fm.CreateConfig(Config.PspicePath, MyEnums.configName.PspicePath);
                         }
+                        if (string.IsNullOrWhiteSpace(Config.PspicePath))
+                        {
+                            AddMessage("Nie podana lokalizacji PSpice");
+                            return;
+                        }
                         myprocess.StartInfo.FileName = Config.PspicePath;
                         myprocess.StartInfo.Arguments = _fm.FilePathData;
                         if (myprocess.Start())
