@@ -171,7 +171,7 @@
 
             <!--Konfiguracja-->
 
-            <Grid      Grid.Row="1" Grid.Column="0" 
+            <Grid     Grid.Row="1" Grid.Column="0" 
                       ColumnDefinitions="auto,auto,*,*,*,*" ColumnSpacing="5"
                       RowDefinitions="auto,*,auto,auto,auto,auto,auto">
                 <!--Edycja-->
@@ -254,17 +254,6 @@
                     <BoxView BackgroundColor="Transparent"/>
                 </Grid>
             </ScrollView>
-
-            <Rectangle Grid.Row="1" Grid.Column="0" HorizontalOptions="End" VerticalOptions="End"
-                Stroke="Red" 
-                Fill="DarkBlue"
-                StrokeThickness="4"
-                HeightRequest="10"
-                WidthRequest="10">
-                <Rectangle.GestureRecognizers>
-                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
-                </Rectangle.GestureRecognizers>
-            </Rectangle>
 
             <!--Wykres-->
             <Slider Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Value="{Binding SActualCurrentIndex}" Maximum="{Binding SCurrentMaxIndex}" x:Name="sSymulationTimer" ValueChanged="sSymulationTimer_ValueChanged"/>

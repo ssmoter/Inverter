@@ -31,7 +31,10 @@ public partial class DisplayV : ContentPage
     private LineTimeSchema _lineTimeSchema;
     public DisplayV(DisplayVM vm)
     {
+        BindingContext = new object();
+        Resources.Clear();
         InitializeComponent();
+
         BindingContext = vm;
         symulationRunning = false;
         eStrokeSize.Text = strokeSize.ToString();
@@ -112,7 +115,7 @@ public partial class DisplayV : ContentPage
 
                 #region schemat
                 //schemat
-                _inverterSchema = new(DataGraphs.ToList());
+                _inverterSchema = new(DataGraphs.ToList(),_fm);
                 _inverterSchema.MaxYValue = DataGraphs.Where(x => x.DataName == "I(VoA)").FirstOrDefault().Max;
                 _inverterSchema.MinYValue = DataGraphs.Where(x => x.DataName == "I(VoA)").FirstOrDefault().Min;
 
@@ -135,7 +138,7 @@ public partial class DisplayV : ContentPage
                 else
                     _inverterSchema.BlackWhite = false;
                 //linia
-                _lineTimeSchema = new();
+                _lineTimeSchema = new(_fm);
                 gvLineTimeSchematV.Drawable = _lineTimeSchema;
                 _lineTimeIsHidden = true;
                 #endregion
@@ -657,9 +660,6 @@ public partial class DisplayV : ContentPage
                     _gvSchema.Invalidate();
                 }
             };
-
-            x = gMain.RowDefinitions[1].Height.Value * this.Width;
-            y = gMain.ColumnDefinitions[1].Width.Value * this.Height;
         }
         catch (Exception ex)
         {
@@ -757,39 +757,4 @@ public partial class DisplayV : ContentPage
 
     #endregion
 
-    double x = 0, y = 0;
-    private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
-    {
-        //switch (e.StatusType)
-        //{
-        //    case GestureStatus.Running:
-        //        // Translate and ensure we don't pan beyond the wrapped user interface element bounds.
-        //        Content.TranslationX = Math.Max(Math.Min(0, x + e.TotalX), -Math.Abs(Content.Width - DeviceDisplay.MainDisplayInfo.Width));
-        //        Content.TranslationY = Math.Max(Math.Min(0, y + e.TotalY), -Math.Abs(Content.Height - DeviceDisplay.MainDisplayInfo.Height));
-        //        break;
-
-        //    case GestureStatus.Completed:
-        //        // Store the translation applied during the pan
-        //        x = Content.TranslationX;
-        //        y = Content.TranslationY;
-        //        break;
-        //}
-
-        switch (e.StatusType)
-        {
-            case GestureStatus.Started:
-                break;
-            case GestureStatus.Running:
-                gMain.RowDefinitions[1].Height = new GridLength(y - e.TotalY, GridUnitType.Absolute);
-                gMain.ColumnDefinitions[1].Width = new GridLength(x - e.TotalX, GridUnitType.Absolute);
-
-                break;
-            case GestureStatus.Completed:
-                break;
-            case GestureStatus.Canceled:
-                break;
-        }
-        _gvSchema.Invalidate();
-
-    }
 }

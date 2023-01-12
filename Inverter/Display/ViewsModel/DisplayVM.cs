@@ -15,7 +15,14 @@ namespace Inverter.Display.ViewsModel
         private int _fontSize = 20;
         public int FontSize
         {
-            get => _fontSize;
+            get
+            {
+                if (_fontSize<=0)
+                {
+                    _fontSize = 20;
+                }
+                return _fontSize;
+            }
             set
             {
                 _fontSize = value;

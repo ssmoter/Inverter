@@ -22,7 +22,7 @@ public partial class InverterV : ContentPage
             dataGraphs[i].Y.Add(0);
         }
 
-        _inverterSchema = new InverterSchema(dataGraphs);
+        _inverterSchema = new InverterSchema(dataGraphs,new Data.FileManager());
 
         if (Application.Current.RequestedTheme == AppTheme.Dark)
             _inverterSchema.BlackWhite = true;

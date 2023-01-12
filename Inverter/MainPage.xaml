@@ -68,7 +68,7 @@
                         Clicked="FontSize_Clicked"/>
 
             </VerticalStackLayout>
-            <Frame HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand" x:Name="fEasterEgg">
+            <Frame HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand" x:Name="fEasterEgg" ZIndex="10" Margin="0" Padding="0">
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup >
                         <VisualState x:Name="Normal">
@@ -84,11 +84,11 @@
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
                 <VerticalStackLayout >
-                    <Label Text="Praca Dyplomowa: &#10;Sławomir Smoter" FontSize="5"/>
+                    <Label Text="Praca Dyplomowa:&#10;Sławomir Smoter" FontSize="7"/>
                 </VerticalStackLayout>
             </Frame>
-            <HorizontalStackLayout BindingContext="{x:Reference fEasterEgg}" Opacity="{Binding Opacity}">
-                <Image Source="kot2.jpg" x:Name="iEasterEgg" HeightRequest="50" HorizontalOptions="Start"/>
+            <HorizontalStackLayout BindingContext="{x:Reference fEasterEgg}" Opacity="{Binding Opacity}" x:Name="iEasterEgg">
+                <Image Source="kot2.jpg" HeightRequest="100" HorizontalOptions="Start"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

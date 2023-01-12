@@ -378,7 +378,6 @@ namespace Inverter.Data.Draw
             catch (Exception ex)
             {
                 _fm.SaveLog(ex.ToString());
-                throw new Exception($"Błąd przy rysowaniu Wykresów {Environment.NewLine}{ex.Message}");
             }
         }
     }

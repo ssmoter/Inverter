@@ -14,12 +14,14 @@ namespace Inverter.Data.Draw.Schema
         private int StrokeSize = 5;
         public int Index { get; set; }
         private float stillOpen = 0.1f;
+        private FileManager _fm;
 
-        public InverterSchema(List<DataGraph> graphs)
+        public InverterSchema(List<DataGraph> graphs, FileManager fm)
         {
             Graphs = graphs;
             stillOpen = 0;
             stillOpen = Graphs.Where(x => x.UserDataName == "Tranzystor").Min(x => x.Max) / 10;
+            _fm = fm;
         }
 
         public override void Draw(ICanvas canvas, RectF dirtyRect)
@@ -66,7 +68,7 @@ namespace Inverter.Data.Draw.Schema
             }
             catch (Exception ex)
             {
-                throw ex;
+                _fm.SaveLog(ex.ToString());
             }
         }
 

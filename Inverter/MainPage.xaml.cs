@@ -2,8 +2,6 @@
 using Inverter.GenerateInverter.Views;
 using Inverter.Helpers;
 using Inverter.Sets;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
-using Microsoft.Maui.Controls.Shapes;
 
 namespace Inverter;
 
@@ -31,11 +29,12 @@ public partial class MainPage : ContentPage
 
     private async void CreateNewInverter(object sender, EventArgs e)
     {
-
+        Abort();
         await Shell.Current.GoToAsync($"{nameof(InverterV)}");
     }
     private async void Configuration(object sender, EventArgs e)
     {
+        Abort();
         await Shell.Current.GoToAsync($"{nameof(ReadySetsV)}");
     }
 
@@ -143,40 +142,30 @@ public partial class MainPage : ContentPage
     {
         svMain.MaximumHeightRequest = this.Height;
         svMain.MaximumWidthRequest = this.Width;
-
-
-        if (iEasterEgg.AnimationIsRunning("Move"))
-        {
-            iEasterEgg.AbortAnimation("Move");
-        }
-
-        double opacity = 0;
-        bool directionOpacity = true;
+        Abort();
         _easterEggAnim = new Animation((e) =>
         {
-            if (directionOpacity)
-            {
-                opacity += 0.01;
-            }
-            else
-            {
-                opacity -= 0.01;
-            }
-            if (opacity >= 1)
-            {
-                directionOpacity = false;
-            }
-            if (opacity <= 0)
-            {
-                directionOpacity = true;
-            }
-
             iEasterEgg.TranslationX = e;
-            iEasterEgg.Opacity = opacity;
-
         }, this.Width, 0);
-        iEasterEgg.Animate("Move", _easterEggAnim, 16, 10000, Easing.Linear, null, () => true);
+        iEasterEgg.Animate("MoveX", _easterEggAnim, 16, 10000, Easing.Linear, null, () => true);
+
+        _easterEggAnim = new Animation((e) =>
+        {
+            iEasterEgg.TranslationY = e;
+        }, 0, -this.Height);
+        iEasterEgg.Animate("MoveY", _easterEggAnim, 16, 10000, Easing.Linear, null, () => true);
 
     }
 
+    private void Abort()
+    {
+        if (iEasterEgg.AnimationIsRunning("MoveX"))
+        {
+            iEasterEgg.AbortAnimation("MoveX");
+        }
+        if (iEasterEgg.AnimationIsRunning("MoveY"))
+        {
+            iEasterEgg.AbortAnimation("MoveY");
+        }
+    }
 }
