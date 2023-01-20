@@ -115,7 +115,7 @@ public partial class DisplayV : ContentPage
 
                 #region schemat
                 //schemat
-                _inverterSchema = new(DataGraphs.ToList(),_fm);
+                _inverterSchema = new(DataGraphs.ToList(), _fm);
                 _inverterSchema.MaxYValue = DataGraphs.Where(x => x.DataName == "I(VoA)").FirstOrDefault().Max;
                 _inverterSchema.MinYValue = DataGraphs.Where(x => x.DataName == "I(VoA)").FirstOrDefault().Min;
 
@@ -141,6 +141,16 @@ public partial class DisplayV : ContentPage
                 _lineTimeSchema = new(_fm);
                 gvLineTimeSchematV.Drawable = _lineTimeSchema;
                 _lineTimeIsHidden = true;
+
+                eStillOpen.Placeholder = _inverterSchema.StillOpen.ToString();
+
+                cbStillOpen.IsChecked = bc.ResponseModel.OpenUser;
+                if (bc.ResponseModel.StillOpenUser != 0)
+                    eStillOpen.Text = bc.ResponseModel.StillOpenUser.ToString();
+                else
+                    eStillOpen.Text = _inverterSchema.StillOpen.ToString();
+
+
                 #endregion
 
             }
@@ -238,9 +248,9 @@ public partial class DisplayV : ContentPage
                         gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
                     }
                     //sprawdzenie czy tylko raz zostanie opisana oś X
-                    bool fft = DataGraphs[i].DataName.Contains("fft");
+                    bool fourier = DataGraphs[i].DataName.Contains(AppConst.Fourier);
                     _graphs[i].AxisXWrite = !axisX.Any(x => x == DataGraphs[i].LocationRow);
-                    if (!fft)
+                    if (!fourier)
                     {
                         axisX.Add(DataGraphs[i].LocationRow);
                     }
@@ -257,7 +267,7 @@ public partial class DisplayV : ContentPage
                     startIndex = 0;
                     endIndex = DataGraphs[i].Y.Count;
                     #region OsX =user
-                    if (scopeGraph && !fft)
+                    if (scopeGraph && !fourier)
                     {
                         float valueStart = 0;
                         float valueEnd = DataGraphs[i].X.LastOrDefault();
@@ -370,7 +380,7 @@ public partial class DisplayV : ContentPage
                         {
                             _graphs[i].AutoScaleY = false;
                             _graphs[i].point.LineTo(n, -(data.Y[j] * data.Multiplier));
-                            if (fft)
+                            if (fourier)
                             {
                                 _graphs[i].point.LineTo(n, -(data.Y[j] * data.Multiplier));
                                 _graphs[i].point.MoveTo(n + 1, 0);
@@ -382,7 +392,7 @@ public partial class DisplayV : ContentPage
                             _graphs[i].AutoScaleY = true;
                             _graphs[i].point.LineTo(n, -data.Y[j]);
 
-                            if (fft)
+                            if (fourier)
                             {
                                 _graphs[i].point.LineTo(n, -(data.Y[j]));
                                 _graphs[i].point.MoveTo(n + 1, 0);
@@ -634,6 +644,42 @@ public partial class DisplayV : ContentPage
         }
 
     }
+
+    private void cbStillOpen_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        try
+        {
+            if (_inverterSchema != null)
+            {
+                _inverterSchema.OpenUser = cbStillOpen.IsChecked;
+                _gvSchema.Invalidate();
+                bc.ResponseModel.OpenUser = cbStillOpen.IsChecked;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
+    }
+
+    private void eStillOpen_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            if (_inverterSchema != null)
+            {
+                _inverterSchema.StillOpenUser = float.Parse(eStillOpen.Text.Replace('.', ','));
+                _gvSchema.Invalidate();
+                bc.ResponseModel.StillOpenUser = _inverterSchema.StillOpenUser;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
+    }
     #endregion
 
     private void svGraph_SizeChanged(object sender, EventArgs e)
@@ -674,7 +720,8 @@ public partial class DisplayV : ContentPage
     {
         try
         {
-            var json = JsonConvert.SerializeObject(DataGraphs);
+            bc.ResponseModel.DataGraphs = DataGraphs.ToList();
+            var json = JsonConvert.SerializeObject(bc.ResponseModel);
             bool complite = false;
             string result = await DisplayPromptAsync("Zapisywanie", "Podaj nazwę pliku", "Zapisz", "Anuluj", _name, -1, null, _name);
             if (!string.IsNullOrWhiteSpace(result))

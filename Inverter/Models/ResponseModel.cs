@@ -10,6 +10,9 @@ namespace Inverter.Models
         public List<DataGraph> DataGraphs { get; set; }
         public bool IsReady { get; set; }
         public int NumberOfHarmonic { get; set; } = 10;
+        public float StillOpen { get; set; }
+        public float StillOpenUser { get; set; }
+        public bool OpenUser { get; set; }
 
         public ResponseModel()
         {
@@ -49,11 +52,8 @@ namespace Inverter.Models
 
         public void SetMaxMin()
         {
-          //  if (!DataName.Contains("fft"))
-            {
-                Max = Y.Max();
-                Min = Y.Min();
-            }
+            Max = Y.Max();
+            Min = Y.Min();
         }
     }
 

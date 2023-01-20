@@ -6,25 +6,36 @@
 
     <ContentPage.Resources>
         <Style TargetType="Label">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="FontSize" 
+                    Value="{Binding FontSize}"/>
+            <Setter Property="Margin" 
+                    Value="5"/>
+            <Setter Property="TextColor" 
+                    Value="{AppThemeBinding Light={StaticResource Black}, 
+                    Dark={StaticResource White}}"/>
         </Style>
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
+            <Setter Property="BackgroundColor" 
+                    Value="{AppThemeBinding Light={StaticResource Black}, 
+                    Dark={StaticResource White}}"/>
+            <Setter Property="TextColor" 
+                    Value="{AppThemeBinding Light={StaticResource White}, 
+                    Dark={StaticResource Black}}"/>
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="BackgroundColor" 
+                                        Value="LightGreen"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                                <Setter Property="BackgroundColor" 
+                                        Value="{AppThemeBinding Light={StaticResource Black}, 
+                                        Dark={StaticResource White}}"/>
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -40,7 +51,9 @@
                 <Image Source="{AppThemeBinding Light=pk.png,Dark=pkblack.png}" HeightRequest="75"/>
                 <Image Source="{AppThemeBinding Light=wieik.png,Dark=wieikblack.png}" HeightRequest="75"/> 
             </HorizontalStackLayout>
-            <Label Text="Politechnika Krakowska" HorizontalOptions="Center" FontSize="Title"/>
+            <Label Text="Politechnika Krakowska"
+                   HorizontalOptions="Center" 
+                   FontSize="Title"/>
             <Label Text="Wydział Inżynierii Elektrycznej i Komputerowej" HorizontalOptions="Center" FontSize="Title"/>
             <Label Text="Program do Wizualizacji Pracy Trójfazowego Trójpoziomowego Falownika Napięcia" HorizontalOptions="Center" FontSize="Title"/>
 

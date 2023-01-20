@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Inverter.Display.Views.DisplayV"
-             xmlns:local="clr-namespace:Inverter.Display.Views"
-             xmlns:drawable="clr-namespace:Inverter.Data.Draw"
-             xmlns:vm="clr-namespace:Inverter.Display.ViewsModel"
-             xmlns:vm2="clr-namespace:Inverter.Models"
-             Title="Wizualizacja" BackgroundColor="Transparent">
+<ContentPage
+    x:Class="Inverter.Display.Views.DisplayV"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:drawable="clr-namespace:Inverter.Data.Draw"
+    xmlns:local="clr-namespace:Inverter.Display.Views"
+    xmlns:vm="clr-namespace:Inverter.Display.ViewsModel"
+    xmlns:vm2="clr-namespace:Inverter.Models"
+    Title="Wizualizacja"
+    BackgroundColor="Transparent">
 
 
     <ContentPage.Resources>
         <Style TargetType="Label">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         </Style>
         <Style TargetType="Button">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
+                                <Setter Property="Opacity" Value="0.9" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -38,28 +40,28 @@
             </Setter>
         </Style>
         <Style TargetType="Entry">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource White}}"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource White}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
             <!--<Setter Property="Margin" Value="0,2,0,2"/>-->
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
+                                <Setter Property="Opacity" Value="0.9" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource White}}"/>
-                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource White}}" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Focused">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -67,19 +69,19 @@
             </Setter>
         </Style>
         <Style TargetType="Frame">
-            <Setter Property="BorderColor" Value="Black"/>
+            <Setter Property="BorderColor" Value="Black" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}}"/>
-                                <Setter Property="Opacity" Value="{AppThemeBinding Light=2,Dark=2}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}}" />
+                                <Setter Property="Opacity" Value="{AppThemeBinding Light=2, Dark=2}" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="Transparent"/>
+                                <Setter Property="BackgroundColor" Value="Transparent" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -87,37 +89,37 @@
             </Setter>
         </Style>
         <Style TargetType="Line">
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         </Style>
         <Style TargetType="SearchBar">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         </Style>
         <Style TargetType="Editor">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
-            <Setter Property="AutoSize" Value="TextChanges"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
+            <Setter Property="AutoSize" Value="TextChanges" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
+                                <Setter Property="Opacity" Value="0.9" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
-                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Focused">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -126,41 +128,149 @@
         </Style>
     </ContentPage.Resources>
 
-    <ScrollView Margin="5,0,10,5" x:Name="svMain" SizeChanged="svMain_SizeChanged">
-        <Grid  
-                ColumnDefinitions="*,.8*" ColumnSpacing="5" x:Name="gMain"
-                RowDefinitions="auto,auto,auto,auto,*" RowSpacing="5">
+    <ScrollView
+        x:Name="svMain"
+        Margin="5,0,10,5"
+        SizeChanged="svMain_SizeChanged">
+        <Grid
+            x:Name="gMain"
+            ColumnDefinitions="*,.8*"
+            ColumnSpacing="5"
+            RowDefinitions="auto,auto,auto,auto,*"
+            RowSpacing="5">
 
             <HorizontalStackLayout>
-                <Button HorizontalOptions="Start" Text="Zapisz" x:Name="bSave" Clicked="bSave_Clicked"/>
-                <Button HorizontalOptions="Start" Text="Wczytaj" x:Name="bLoad" Clicked="bLoad_Clicked"/>
-                <SearchBar HorizontalOptions="Start" x:Name="sbFind" Placeholder="Szukaj" ToolTipProperties.Text="Wartości są wyszukiwane po polach  &#10;ID,Nazwa" TextChanged="sbFind_TextChanged"/>
-                <Label FontSize="Title" HorizontalOptions="Center" Text="Konfiguracja" Grid.Row="0" Grid.Column="0"/>
+                <Button
+                    x:Name="bSave"
+                    Clicked="bSave_Clicked"
+                    HorizontalOptions="Start"
+                    Text="Zapisz" />
+                <Button
+                    x:Name="bLoad"
+                    Clicked="bLoad_Clicked"
+                    HorizontalOptions="Start"
+                    Text="Wczytaj" />
+                <SearchBar
+                    x:Name="sbFind"
+                    HorizontalOptions="Start"
+                    Placeholder="Szukaj"
+                    TextChanged="sbFind_TextChanged"
+                    ToolTipProperties.Text="Wartości są wyszukiwane po polach  &#10;ID,Nazwa" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    FontSize="Title"
+                    HorizontalOptions="Center"
+                    Text="Konfiguracja" />
             </HorizontalStackLayout>
-            <Label FontSize="Title" HorizontalOptions="Center" Text="Schemat" Grid.Row="0" Grid.Column="1"/>
-            <Label FontSize="Title" HorizontalOptions="Center" Text="Wykresy" Grid.Row="2" Grid.ColumnSpan="1"/>
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                FontSize="Title"
+                HorizontalOptions="Center"
+                Text="Schemat" />
+            <Frame
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0"
+                Padding="0"
+                HorizontalOptions="End"
+                ToolTipProperties.Text="Pole wyboru potwierdza zmianę minimalne wartości prądu która załącza styk">
+                <HorizontalStackLayout>
+                    <CheckBox x:Name="cbStillOpen" CheckedChanged="cbStillOpen_CheckedChanged" />
+                    <Entry x:Name="eStillOpen" TextChanged="eStillOpen_TextChanged" />
+                </HorizontalStackLayout>
+            </Frame>
 
-            <Grid Grid.Row="2" Grid.Column="2" HorizontalOptions="End" VerticalOptions="End" 
-                  ColumnDefinitions="*,*,*,*,*,*,*,*,*">
+            <Label
+                Grid.Row="2"
+                Grid.ColumnSpan="1"
+                FontSize="Title"
+                HorizontalOptions="Center"
+                Text="Wykresy" />
 
-                <Entry Grid.Column="0" ToolTipProperties.Text="Grubość lini&#10;0-auto" x:Name="eStrokeSize" TextChanged="eStrokeSize_TextChanged"/>
-                <CheckBox Grid.Column="1" ToolTipProperties.Text="Przybliżać w danym zakresie&#10;Tak/Nie" CheckedChanged="ckGridScope_CheckedChanged" IsChecked="False"/>
-                <Entry Grid.Column="2" ToolTipProperties.Text="Początek zakresu" TextChanged="eScope_TextChanged"  x:Name="eStartScope" Placeholder="0" WidthRequest="150"/>
-                <Entry Grid.Column="3" ToolTipProperties.Text="Koniec zakresu" TextChanged="eScope_TextChanged" x:Name="eEndScope" Placeholder="1" WidthRequest="150"/>
-                <CheckBox Grid.Column="4" ToolTipProperties.Text="Widoczność lini czasu" CheckedChanged="ckLineTime_CheckedChanged" x:Name="ckLineTime" IsChecked="True"/>
-                <CheckBox Grid.Column="5"  ToolTipProperties.Text="auto skala osi X" CheckedChanged="ckExtendAxisX_CheckedChanged" x:Name="ckExtendAxisX" IsChecked="True"/>
-                <CheckBox Grid.Column="6" ToolTipProperties.Text="Powielanie wykresu" CheckedChanged="ckMultipledGraph_CheckedChanged" x:Name="ckMultipledGraph" IsChecked="False"/>
-                <CheckBox Grid.Column="7" ToolTipProperties.Text="Widoczność siatki" CheckedChanged="ckGridVisible_CheckedChanged" x:Name="ckGridVisible" IsChecked="True"/>
-                <ListView Grid.Column="8" ToolTipProperties.Text="Wyświetlany kolor tła"
-                              ItemsSource="{x:Static vm2:NamedColor.All}" x:Name="lvBackgroundColor" MaximumWidthRequest="150"
-                              MaximumHeightRequest="50" >
+            <Grid
+                Grid.Row="2"
+                Grid.Column="2"
+                ColumnDefinitions="*,*,*,*,*,*,*,*,*"
+                HorizontalOptions="End"
+                VerticalOptions="End">
+
+                <Entry
+                    x:Name="eStrokeSize"
+                    Grid.Column="0"
+                    TextChanged="eStrokeSize_TextChanged"
+                    ToolTipProperties.Text="Grubość lini&#10;0-auto" />
+                <CheckBox
+                    Grid.Column="1"
+                    CheckedChanged="ckGridScope_CheckedChanged"
+                    IsChecked="False"
+                    ToolTipProperties.Text="Przybliżać w danym zakresie&#10;Tak/Nie" />
+                <Entry
+                    x:Name="eStartScope"
+                    Grid.Column="2"
+                    Placeholder="0"
+                    TextChanged="eScope_TextChanged"
+                    ToolTipProperties.Text="Początek zakresu"
+                    WidthRequest="150" />
+                <Entry
+                    x:Name="eEndScope"
+                    Grid.Column="3"
+                    Placeholder="1"
+                    TextChanged="eScope_TextChanged"
+                    ToolTipProperties.Text="Koniec zakresu"
+                    WidthRequest="150" />
+                <CheckBox
+                    x:Name="ckLineTime"
+                    Grid.Column="4"
+                    CheckedChanged="ckLineTime_CheckedChanged"
+                    IsChecked="True"
+                    ToolTipProperties.Text="Widoczność lini czasu" />
+                <CheckBox
+                    x:Name="ckExtendAxisX"
+                    Grid.Column="5"
+                    CheckedChanged="ckExtendAxisX_CheckedChanged"
+                    IsChecked="True"
+                    ToolTipProperties.Text="auto skala osi X" />
+                <CheckBox
+                    x:Name="ckMultipledGraph"
+                    Grid.Column="6"
+                    CheckedChanged="ckMultipledGraph_CheckedChanged"
+                    IsChecked="False"
+                    ToolTipProperties.Text="Powielanie wykresu" />
+                <CheckBox
+                    x:Name="ckGridVisible"
+                    Grid.Column="7"
+                    CheckedChanged="ckGridVisible_CheckedChanged"
+                    IsChecked="True"
+                    ToolTipProperties.Text="Widoczność siatki" />
+                <ListView
+                    x:Name="lvBackgroundColor"
+                    Grid.Column="8"
+                    ItemsSource="{x:Static vm2:NamedColor.All}"
+                    MaximumHeightRequest="50"
+                    MaximumWidthRequest="150"
+                    ToolTipProperties.Text="Wyświetlany kolor tła">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame  Margin="0" Padding="0" CornerRadius="0" >
-                                    <Grid RowDefinitions="auto" ColumnDefinitions="5,auto" ColumnSpacing="5" >
-                                        <BoxView Grid.Row="0" Grid.Column="0" Color="{Binding Color}"/>
-                                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding FriendlyName}" VerticalOptions="CenterAndExpand"/>
+                                <Frame
+                                    Margin="0"
+                                    Padding="0"
+                                    CornerRadius="0">
+                                    <Grid
+                                        ColumnDefinitions="5,auto"
+                                        ColumnSpacing="5"
+                                        RowDefinitions="auto">
+                                        <BoxView
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Color="{Binding Color}" />
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Text="{Binding FriendlyName}"
+                                            VerticalOptions="CenterAndExpand" />
                                     </Grid>
                                 </Frame>
                             </ViewCell>
@@ -169,25 +279,59 @@
                 </ListView>
             </Grid>
 
-            <!--Konfiguracja-->
+            <!--  Konfiguracja  -->
 
-            <Grid     Grid.Row="1" Grid.Column="0" 
-                      ColumnDefinitions="auto,auto,*,*,*,*" ColumnSpacing="5"
-                      RowDefinitions="auto,*,auto,auto,auto,auto,auto">
-                <!--Edycja-->
-                <Label Grid.Row="2" Grid.ColumnSpan="2"  HorizontalOptions="Center" Text="Edycja" Margin="0,5,0,5"/>
+            <Grid
+                Grid.Row="1"
+                Grid.Column="0"
+                ColumnDefinitions="auto,auto,*,*,*,*"
+                ColumnSpacing="5"
+                RowDefinitions="auto,*,auto,auto,auto,auto,auto">
+                <!--  Edycja  -->
+                <Label
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,5,0,5"
+                    HorizontalOptions="Center"
+                    Text="Edycja" />
 
-                <Entry Grid.Row="3" Grid.Column="0" ToolTipProperties.Text="Identyfikator" Text="{Binding DataGraphUpdateItem.DataName}" Placeholder="ID" IsEnabled="False" TextColor="Red"/>
-                <ListView Grid.Row="3" Grid.Column="1" ToolTipProperties.Text="Wyświetlany kolor" x:Name="lvDataColor"
-                              ItemsSource="{x:Static vm2:NamedColor.All}" SelectedItem="{Binding DataGraphSelectedItem.UserColor}" 
-                              MaximumHeightRequest="40" MaximumWidthRequest="150">
+                <Entry
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    IsEnabled="False"
+                    Placeholder="ID"
+                    Text="{Binding DataGraphUpdateItem.DataName}"
+                    TextColor="Red"
+                    ToolTipProperties.Text="Identyfikator" />
+                <ListView
+                    x:Name="lvDataColor"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    ItemsSource="{x:Static vm2:NamedColor.All}"
+                    MaximumHeightRequest="40"
+                    MaximumWidthRequest="150"
+                    SelectedItem="{Binding DataGraphSelectedItem.UserColor}"
+                    ToolTipProperties.Text="Wyświetlany kolor">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame  Margin="0" Padding="0" CornerRadius="0">
-                                    <Grid RowDefinitions="auto" ColumnDefinitions="5,auto" ColumnSpacing="5" >
-                                        <BoxView Grid.Row="0" Grid.Column="0" Color="{Binding Color}"/>
-                                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding FriendlyName}" VerticalOptions="CenterAndExpand" />
+                                <Frame
+                                    Margin="0"
+                                    Padding="0"
+                                    CornerRadius="0">
+                                    <Grid
+                                        ColumnDefinitions="5,auto"
+                                        ColumnSpacing="5"
+                                        RowDefinitions="auto">
+                                        <BoxView
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Color="{Binding Color}" />
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Text="{Binding FriendlyName}"
+                                            VerticalOptions="CenterAndExpand" />
                                     </Grid>
                                 </Frame>
                             </ViewCell>
@@ -195,50 +339,170 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Label  Grid.Row="4" Grid.ColumnSpan="6" ZIndex="10" Text="{Binding MaxMinValue}"/>
-                <Button Grid.Row="3" Grid.Column="3" ZIndex="10" ToolTipProperties.Text="Zapisz ustawienia i odśwież osie"  Clicked="UpdateRow_Clicked" Command="{Binding UpdateRowCommand}" HorizontalOptions="Center" Text="Aktualizuj" Margin="0,5,0,0"/>
-                <Button Grid.Row="3" Grid.Column="4" ZIndex="10" ToolTipProperties.Text="Anuluj wyświetlanie wykresów" x:Name="bClearVisible" Clicked="bClearVisible_Clicked" Command="{Binding RefreshListCommand}" HorizontalOptions="End" Text="Wyczyść" Margin="0,5,0,0"/>
-                <Button Grid.Row="3" Grid.Column="5" Grid.ColumnSpan="3" ZIndex="10" ToolTipProperties.Text="Przycisk uruchamia symulacje przepływu prądów w obowdzie" Command="{Binding StartSymulation}" Text="{Binding NameSimulationbutton}" Clicked="Symulation_Clicked" HorizontalOptions="Start" Margin="0,5,0,0"/>
-                <!--Tabela z danymi-->
-                <CollectionView Grid.Row="1" Grid.ColumnSpan="6" SelectionMode="Single" x:Name="cvDataGraphs"  SizeChanged="svGraph_SizeChanged" VerticalScrollBarVisibility="Always"
-                                ItemsSource="{Binding DataGraphs}" SelectedItem="{Binding DataGraphSelectedItem }" MaximumHeightRequest="250" Margin="10,0,10,0">
+                <Label
+                    Grid.Row="4"
+                    Grid.ColumnSpan="6"
+                    Text="{Binding MaxMinValue}"
+                    ZIndex="10" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="3"
+                    Margin="0,5,0,0"
+                    Clicked="UpdateRow_Clicked"
+                    Command="{Binding UpdateRowCommand}"
+                    HorizontalOptions="Center"
+                    Text="Aktualizuj"
+                    ToolTipProperties.Text="Zapisz ustawienia i odśwież osie"
+                    ZIndex="10" />
+                <Button
+                    x:Name="bClearVisible"
+                    Grid.Row="3"
+                    Grid.Column="4"
+                    Margin="0,5,0,0"
+                    Clicked="bClearVisible_Clicked"
+                    Command="{Binding RefreshListCommand}"
+                    HorizontalOptions="End"
+                    Text="Wyczyść"
+                    ToolTipProperties.Text="Anuluj wyświetlanie wykresów"
+                    ZIndex="10" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="5"
+                    Grid.ColumnSpan="3"
+                    Margin="0,5,0,0"
+                    Clicked="Symulation_Clicked"
+                    Command="{Binding StartSymulation}"
+                    HorizontalOptions="Start"
+                    Text="{Binding NameSimulationbutton}"
+                    ToolTipProperties.Text="Przycisk uruchamia symulacje przepływu prądów w obowdzie"
+                    ZIndex="10" />
+                <!--  Tabela z danymi  -->
+                <CollectionView
+                    x:Name="cvDataGraphs"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="6"
+                    Margin="10,0,10,0"
+                    HeightRequest="250"
+                    ItemsSource="{Binding DataGraphs}"
+                    SelectedItem="{Binding DataGraphSelectedItem}"
+                    SelectionMode="Single"
+                    SizeChanged="svGraph_SizeChanged"
+                    VerticalScrollBarVisibility="Always">
                     <CollectionView.Header>
-                        <Grid ColumnDefinitions="*,2*,*,*,*,*,*" ColumnSpacing="5" Margin="10,0,10,0">
-                            <Label Grid.Column="0" HorizontalOptions="Start" FontAttributes="Bold" Text="ID" />
-                            <Label Grid.Column="1" HorizontalOptions="Start" FontAttributes="Bold" Text="Nazwa"/>
-                            <Label Grid.Column="2" HorizontalOptions="Start" FontAttributes="Bold" Text="Kolor"/>
-                            <Label Grid.Column="3" HorizontalOptions="Start" FontAttributes="Bold" Text="Skala"/>
-                            <Label Grid.Column="4" HorizontalOptions="Start" FontAttributes="Bold" Text="Wiersz"/>
-                            <Label Grid.Column="5" HorizontalOptions="Start" FontAttributes="Bold" Text="Rozpiętość&#10;Wierszy" />
-                            <Label Grid.Column="6" HorizontalOptions="Start" FontAttributes="Bold" Text="Widoczny"/>
+                        <Grid
+                            Margin="10,0,10,0"
+                            ColumnDefinitions="*,2*,*,*,*,*,*"
+                            ColumnSpacing="5">
+                            <Label
+                                Grid.Column="0"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Start"
+                                Text="ID" />
+                            <Label
+                                Grid.Column="1"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Start"
+                                Text="Nazwa" />
+                            <Label
+                                Grid.Column="2"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Start"
+                                Text="Kolor" />
+                            <Label
+                                Grid.Column="3"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Start"
+                                Text="Skala" />
+                            <Label
+                                Grid.Column="4"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Start"
+                                Text="Wiersz" />
+                            <Label
+                                Grid.Column="5"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Start"
+                                Text="Rozpiętość&#10;Wierszy" />
+                            <Label
+                                Grid.Column="6"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Start"
+                                Text="Widoczny" />
                         </Grid>
                     </CollectionView.Header>
                     <CollectionView.Footer>
                         <Grid ColumnDefinitions="*,2*,*,*,*,*,*" ColumnSpacing="5">
-                            <Label Grid.Column="0" FontAttributes="Bold" Text="ID" />
-                            <Label Grid.Column="1" FontAttributes="Bold" Text="Nazwa"/>
-                            <Label Grid.Column="2" FontAttributes="Bold" Text="Kolor"/>
-                            <Label Grid.Column="3" FontAttributes="Bold" Text="Skala"/>
-                            <Label Grid.Column="4" FontAttributes="Bold" Text="Wiersz"/>
-                            <Label Grid.Column="5" FontAttributes="Bold" Text="Rozpiętość&#10;Wierszy" />
-                            <Label Grid.Column="6" FontAttributes="Bold" Text="Widoczny"/>
+                            <Label
+                                Grid.Column="0"
+                                FontAttributes="Bold"
+                                Text="ID" />
+                            <Label
+                                Grid.Column="1"
+                                FontAttributes="Bold"
+                                Text="Nazwa" />
+                            <Label
+                                Grid.Column="2"
+                                FontAttributes="Bold"
+                                Text="Kolor" />
+                            <Label
+                                Grid.Column="3"
+                                FontAttributes="Bold"
+                                Text="Skala" />
+                            <Label
+                                Grid.Column="4"
+                                FontAttributes="Bold"
+                                Text="Wiersz" />
+                            <Label
+                                Grid.Column="5"
+                                FontAttributes="Bold"
+                                Text="Rozpiętość&#10;Wierszy" />
+                            <Label
+                                Grid.Column="6"
+                                FontAttributes="Bold"
+                                Text="Widoczny" />
                         </Grid>
                     </CollectionView.Footer>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Margin="0" Padding="0,10,0,10">
                                 <Grid ColumnDefinitions="*,2*,*,*,*,*,*" ColumnSpacing="5">
-                                    <Label Grid.Column="0" HorizontalOptions="Start" Text="{Binding DataName}"/>
-                                    <Entry Grid.Column="1" HorizontalOptions="Start" Text="{Binding UserDataName}" ToolTipProperties.Text="Nazwa"/>
-                                    <HorizontalStackLayout Grid.Column="2" HorizontalOptions="Start" >
-                                        <BoxView WidthRequest="5" Color="{Binding UserColor.Color}"/>
+                                    <Label
+                                        Grid.Column="0"
+                                        HorizontalOptions="Start"
+                                        Text="{Binding DataName}" />
+                                    <Entry
+                                        Grid.Column="1"
+                                        HorizontalOptions="Start"
+                                        Text="{Binding UserDataName}"
+                                        ToolTipProperties.Text="Nazwa" />
+                                    <HorizontalStackLayout Grid.Column="2" HorizontalOptions="Start">
+                                        <BoxView WidthRequest="5" Color="{Binding UserColor.Color}" />
                                         <Label Text="{Binding UserColor.FriendlyName}" />
                                     </HorizontalStackLayout>
-                                    <Entry Grid.Column="3" HorizontalOptions="Start" Text="{Binding Multiplier}" ToolTipProperties.Text="Nowa skala&#10;0-auto" Keyboard="Numeric"/>
-                                    <Entry Grid.Column="4" HorizontalOptions="Start" Text="{Binding LocationRow}" ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 0" Keyboard="Numeric"/>
-                                    <Entry Grid.Column="5" HorizontalOptions="Start" Text="{Binding locationRowSpan}" ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 1" Keyboard="Numeric"/>
+                                    <Entry
+                                        Grid.Column="3"
+                                        HorizontalOptions="Start"
+                                        Keyboard="Numeric"
+                                        Text="{Binding Multiplier}"
+                                        ToolTipProperties.Text="Nowa skala&#10;0-auto" />
+                                    <Entry
+                                        Grid.Column="4"
+                                        HorizontalOptions="Start"
+                                        Keyboard="Numeric"
+                                        Text="{Binding LocationRow}"
+                                        ToolTipProperties.Text="Numer wiersza gdzie wyświetli się wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 0" />
+                                    <Entry
+                                        Grid.Column="5"
+                                        HorizontalOptions="Start"
+                                        Keyboard="Numeric"
+                                        Text="{Binding locationRowSpan}"
+                                        ToolTipProperties.Text="Ilość wierszy które będzie zajmować wykres&#10;(wiersze są liczone od góry) &#10;Minimalna wartość 1" />
                                     <Border Grid.Column="6" StrokeThickness="0">
-                                        <CheckBox  HorizontalOptions="Center" ZIndex="10" IsChecked="{Binding Visible}" ToolTipProperties.Text="Czy wykres jest widoczny"/>
+                                        <CheckBox
+                                            HorizontalOptions="Center"
+                                            IsChecked="{Binding Visible}"
+                                            ToolTipProperties.Text="Czy wykres jest widoczny"
+                                            ZIndex="10" />
                                     </Border>
                                 </Grid>
                             </Frame>
@@ -247,28 +511,43 @@
                 </CollectionView>
             </Grid>
 
-            <!--Schemat-->
-            <ScrollView Grid.Row="1" Grid.Column="1"
-                    VerticalOptions="Fill" HorizontalOptions="Fill">
+            <!--  Schemat  -->
+            <ScrollView
+                Grid.Row="1"
+                Grid.Column="1"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill">
                 <Grid x:Name="gSchema">
-                    <BoxView BackgroundColor="Transparent"/>
+                    <BoxView BackgroundColor="Transparent" />
                 </Grid>
             </ScrollView>
 
-            <!--Wykres-->
-            <Slider Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Value="{Binding SActualCurrentIndex}" Maximum="{Binding SCurrentMaxIndex}" x:Name="sSymulationTimer" ValueChanged="sSymulationTimer_ValueChanged"/>
+            <!--  Wykres  -->
+            <Slider
+                x:Name="sSymulationTimer"
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Maximum="{Binding SCurrentMaxIndex}"
+                ValueChanged="sSymulationTimer_ValueChanged"
+                Value="{Binding SActualCurrentIndex}" />
             <ScrollView Grid.Row="4" Grid.ColumnSpan="2">
-                <Grid 
-                    ColumnDefinitions="*"
-                    RowDefinitions="1,*,1">
+                <Grid ColumnDefinitions="*" RowDefinitions="1,*,1">
                     <GraphicsView
-                        Grid.Row="1" Grid.Column="0" x:Name="gvLineTimeSchematV" ZIndex="10"/>
-                    <ScrollView Orientation="Both" x:Name="svGraph" SizeChanged="svGraph_SizeChanged"
-                        Grid.Row="1" Grid.Column="0" BindingContext="{x:Reference lvBackgroundColor}"
-                        ZIndex="9" BackgroundColor="{Binding Path=SelectedItem.Color}" >
-                        <Grid
-                        x:Name="gGraph">
-                        </Grid>
+                        x:Name="gvLineTimeSchematV"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        ZIndex="10" />
+                    <ScrollView
+                        x:Name="svGraph"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        BackgroundColor="{Binding Path=SelectedItem.Color}"
+                        BindingContext="{x:Reference lvBackgroundColor}"
+                        Orientation="Both"
+                        SizeChanged="svGraph_SizeChanged"
+                        ZIndex="9">
+                        <Grid x:Name="gGraph" />
                     </ScrollView>
                 </Grid>
             </ScrollView>

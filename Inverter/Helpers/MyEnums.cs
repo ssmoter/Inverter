@@ -8,7 +8,10 @@
             FontSize,
         }
     }
-
+    public class AppConst
+    {
+        public static string Fourier { get => "fft"; }
+    }
     public class Config
     {
         public static int FontSize { get; set; }

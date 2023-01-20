@@ -14,13 +14,16 @@ namespace Inverter.Data.Draw.Schema
         private int StrokeSize = 5;
         public int Index { get; set; }
         private float stillOpen = 0.1f;
+        public float StillOpen = 0.1f;
+        public float StillOpenUser { get; set; }
+        public bool OpenUser { get; set; }
         private FileManager _fm;
 
         public InverterSchema(List<DataGraph> graphs, FileManager fm)
         {
             Graphs = graphs;
-            stillOpen = 0;
-            stillOpen = Graphs.Where(x => x.UserDataName == "Tranzystor").Min(x => x.Max) / 10;
+            StillOpen = 0.1f;
+            StillOpen = Graphs.Where(x => x.UserDataName == "Tranzystor").Min(x => x.Max) / 10;
             _fm = fm;
         }
 
@@ -28,6 +31,12 @@ namespace Inverter.Data.Draw.Schema
         {
             try
             {
+                if (OpenUser)
+                    stillOpen = StillOpenUser;
+                else
+                    stillOpen = StillOpen;
+
+
                 canvas.SaveState();
                 if (BlackWhite)
                 {

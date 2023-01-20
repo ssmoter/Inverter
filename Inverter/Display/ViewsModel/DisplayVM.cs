@@ -69,7 +69,7 @@ namespace Inverter.Display.ViewsModel
                     {
                         _maxMinValue = "Max = " + _dataGraphSelectedItem.Max.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
                            " Min = " + _dataGraphSelectedItem.Min.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
-                        if (_dataGraphSelectedItem.DataName.Contains("fft"))
+                        if (_dataGraphSelectedItem.DataName.Contains(AppConst.Fourier))
                         {
                             _maxMinValue = $"THD={GetTHD(_dataGraphSelectedItem)}" +
                                 $" THD%={GetTHD(_dataGraphSelectedItem) * 100}%";

@@ -18,6 +18,13 @@ public partial class MainPage : ContentPage
         {
             FontSize = int.Parse(_fm.GetConfig(MyEnums.configName.FontSize));
             Config.FontSize = FontSize;
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
+        try
+        {
             Config.PspicePath = _fm.GetConfig(MyEnums.configName.PspicePath);
         }
         catch (Exception ex)
@@ -57,10 +64,10 @@ public partial class MainPage : ContentPage
                 if (isComplited)
                 {
                     Config.PspicePath = result;
-                    await DisplayAlert("Configuracja", "Zapisano ścieżkę" + Environment.NewLine + result, "OK");
+                    await DisplayAlert("Konfiguracja", "Zapisano ścieżkę" + Environment.NewLine + result, "OK");
                 }
                 else
-                    await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
+                    await DisplayAlert("Konfiguracja", "Nie udało się zapisać konfiguracji", "OK");
             }
         }
         catch (Exception ex)
@@ -99,7 +106,7 @@ public partial class MainPage : ContentPage
                 bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.FontSize);
                 if (isComplited)
                 {
-                    await DisplayAlert("Configuracja", "Zapisano Rozmiar czcionki" + Environment.NewLine + result, "OK");
+                    await DisplayAlert("Konfiguracja", "Zapisano Rozmiar czcionki" + Environment.NewLine + result, "OK");
                     try
                     {
                         FontSize = int.Parse(result);
@@ -110,7 +117,7 @@ public partial class MainPage : ContentPage
                 }
                 else
 
-                    await DisplayAlert("Configuracja", "Nie udało się zapisać konfiguracji", "OK");
+                    await DisplayAlert("Konfiguracja", "Nie udało się zapisać konfiguracji", "OK");
             }
 
         }

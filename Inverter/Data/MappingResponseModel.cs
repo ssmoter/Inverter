@@ -1,4 +1,5 @@
-﻿using Inverter.Models;
+﻿using Inverter.Helpers;
+using Inverter.Models;
 using System.Globalization;
 
 namespace Inverter.Data
@@ -20,7 +21,7 @@ namespace Inverter.Data
                         break;
                     }
                     TA(responseModel, cultureInfo, lines, ref currentData, ref i);
-                    i = FFT(responseModel, cultureInfo, lines, i);
+                    i = Fourier(responseModel, cultureInfo, lines, i);
 
                 }
             }
@@ -69,12 +70,12 @@ namespace Inverter.Data
             }
         }
 
-        private static int FFT(ResponseModel responseModel, CultureInfo cultureInfo, string[] lines, int i)
+        private static int Fourier(ResponseModel responseModel, CultureInfo cultureInfo, string[] lines, int i)
         {
-            if (lines[i].Contains("FOURIER COMPONENTS") && responseModel.DataGraphs.Any(x => x.DataName.Contains("fft")))
+            if (lines[i].Contains("FOURIER COMPONENTS") && responseModel.DataGraphs.Any(x => x.DataName.Contains(AppConst.Fourier)))
             {
                 var name = TrimWhiteSpace(lines[i].Trim().Split(' ').ToList());
-                int index = responseModel.DataGraphs.FindIndex(x => x.DataName.Replace("fft", "") == name.LastOrDefault() && x.DataName.Contains("fft"));
+                int index = responseModel.DataGraphs.FindIndex(x => x.DataName.Replace(AppConst.Fourier, "") == name.LastOrDefault() && x.DataName.Contains(AppConst.Fourier));
                 responseModel.DataGraphs[index].Y.Add(0);
                 responseModel.DataGraphs[index].X.Add(0);
                 i += 9;

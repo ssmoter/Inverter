@@ -1,4 +1,6 @@
 ﻿
+using Inverter.Helpers;
+
 namespace Inverter.Data.Draw
 {
     internal class Graph : BaseDrawable
@@ -22,7 +24,7 @@ namespace Inverter.Data.Draw
         public float StrokeSize { get; set; } = 1f;
         public int StartScopeIndex { get; set; } = 0;
         public int EndScopeIndex { get; set; } = 0;
-        private bool fft = false;
+        private bool fourier = false;
         private FileManager _fm;
         public Graph(FileManager fileManager)
         {
@@ -36,9 +38,9 @@ namespace Inverter.Data.Draw
         {
             try
             {
-                if (Name.Contains("fft"))
+                if (Name.Contains(AppConst.Fourier))
                 {
-                    fft = true;
+                    fourier = true;
                 }
 
                 int farFromUp = 20;
@@ -56,7 +58,7 @@ namespace Inverter.Data.Draw
 
                 //skalowanie w osi Y
                 float scaleY = 1;
-                if (AutoScaleY)
+                if (AutoScaleY && !fourier)
                 {
                     float denominator = 1;
                     canvas.Translate(dirtyRect.Left, dirtyRect.Top);
@@ -67,7 +69,7 @@ namespace Inverter.Data.Draw
                     scaleY = (dirtyRect.Height - farFromUp - 80) / denominator;
                     canvas.Scale(1, scaleY);
                 }
-                else if (fft)
+                else if (fourier)
                 {
                     canvas.Translate(dirtyRect.Left + 70, dirtyRect.Bottom - 50);
                 }
@@ -110,7 +112,7 @@ namespace Inverter.Data.Draw
                 var yValue = MaxYValue.ToString().Split(',');
                 string visibleYValue = string.Empty;
 
-                if (AutoScaleY && !fft)
+                if (AutoScaleY && !fourier)
                 {
                     if (yValue.Length > 1)
                         visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
@@ -138,7 +140,7 @@ namespace Inverter.Data.Draw
                         canvas.FontColor = Colors.Black;
                     }
                 }
-                else if (!fft)
+                else if (!fourier)
                 {
                     if (yValue.Length > 1)
                         visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
@@ -163,7 +165,7 @@ namespace Inverter.Data.Draw
                         canvas.FontColor = Colors.Black;
                     }
                 }
-                else if (fft)
+                else if (fourier)
                 {
                     int secondLineI = 0;
                     bool secondLineB = true;
@@ -254,7 +256,7 @@ namespace Inverter.Data.Draw
 
                     int secondLineI = 0;
                     bool secondLineB = false;
-                    if (fft)
+                    if (fourier)
                     {
                         for (int i = 0; i < AxisX.Count; i++)
                         {
@@ -338,13 +340,11 @@ namespace Inverter.Data.Draw
                 {
                     if (AxisXWrite)
                     {
-
-
                         IPattern pattern;
                         //Tworzenie paternu 10x10
                         using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
                         {
-                            pc.StrokeColor = Colors.White;
+                            pc.StrokeColor = Colors.Silver;
                             pc.StrokeSize = 0.5f;
                             pc.DrawLine(0, 0, 0, 10);
                             pc.DrawLine(10, 0, 0, 0);
@@ -356,18 +356,6 @@ namespace Inverter.Data.Draw
                         {
                             Pattern = pattern
                         };
-                        canvas.SetFillPaint(pp, RectF.Zero);
-                        canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
-                        //siatka w czarnym kolorze wyzej bialy
-                        using (PictureCanvas pc = new PictureCanvas(0, 0, 10, 10))
-                        {
-                            pc.StrokeColor = Colors.Black;
-                            pc.StrokeSize = 0.5f;
-                            pc.DrawLine(0, 0, 0, 10);
-                            pc.DrawLine(10, 0, 0, 0);
-                            pattern = new PicturePattern(pc.Picture, 10, 10);
-                        }
-                        pp.Pattern = pattern; ;
                         canvas.SetFillPaint(pp, RectF.Zero);
                         canvas.FillRectangle(70, 0, dirtyRect.Width, dirtyRect.Height - 50);
                     }

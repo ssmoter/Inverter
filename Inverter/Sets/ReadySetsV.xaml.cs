@@ -137,7 +137,7 @@ public partial class ReadySetsV : ContentPage
 
                     ResponseModel response = new ResponseModel(SelectedData.Name);
                     response.IsReady = true;
-                    response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
+                    response = JsonConvert.DeserializeObject<ResponseModel>(json);
 
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
                         new Dictionary<string, object>

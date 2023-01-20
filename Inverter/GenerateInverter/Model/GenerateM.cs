@@ -1,4 +1,5 @@
-﻿using Inverter.Models;
+﻿using Inverter.Helpers;
+using Inverter.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -375,9 +376,9 @@ namespace Inverter.GenerateInverter.Model
             {
                 for (int i = 0; i < DataNotify.Count; i++)
                 {
-                    if (DataNotify[i].DataName.Contains("fft"))
+                    if (DataNotify[i].DataName.Contains(AppConst.Fourier))
                     {
-                        _InverterParameters.Four.Add(DataNotify[i].DataName.Replace("fft", ""));
+                        _InverterParameters.Four.Add(DataNotify[i].DataName.Replace(AppConst.Fourier, ""));
                     }
                     else
                     {
