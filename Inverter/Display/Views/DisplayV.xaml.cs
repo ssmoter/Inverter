@@ -721,6 +721,7 @@ public partial class DisplayV : ContentPage
         try
         {
             bc.ResponseModel.DataGraphs = DataGraphs.ToList();
+            bc.ResponseModel.OutPutString = null;
             var json = JsonConvert.SerializeObject(bc.ResponseModel);
             bool complite = false;
             string result = await DisplayPromptAsync("Zapisywanie", "Podaj nazwę pliku", "Zapisz", "Anuluj", _name, -1, null, _name);
@@ -774,7 +775,6 @@ public partial class DisplayV : ContentPage
             if (result != null && result != "Anuluj")
             {
                 ResponseModel response = new ResponseModel(result);
-                response.IsReady = true;
 
                 for (int i = 0; i < nameList.Length; i++)
                 {
@@ -786,7 +786,8 @@ public partial class DisplayV : ContentPage
                 }
 
                 var json = await _fm.LoadDataPath(result);
-                response.DataGraphs = JsonConvert.DeserializeObject<List<DataGraph>>(json);
+                response = JsonConvert.DeserializeObject<ResponseModel>(json);
+                response.IsReady=true;
 
                 await Navigation.PushAsync(new DisplayV(response));
                 Navigation.RemovePage(this);

@@ -14,7 +14,7 @@
     }
     public class Config
     {
-        public static int FontSize { get; set; }
+        public static int FontSize { get; set; } = 20;
         public static string PspicePath { get; set; }
     }
 }

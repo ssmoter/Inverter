@@ -1,41 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Inverter.MainPage"
-             xmlns:local="clr-namespace:Inverter.Data" BackgroundColor="Transparent">
+<ContentPage
+    x:Class="Inverter.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Inverter.Data"
+    BackgroundColor="Transparent">
 
     <ContentPage.Resources>
         <Style TargetType="Label">
-            <Setter Property="FontSize" 
-                    Value="{Binding FontSize}"/>
-            <Setter Property="Margin" 
-                    Value="5"/>
-            <Setter Property="TextColor" 
-                    Value="{AppThemeBinding Light={StaticResource Black}, 
-                    Dark={StaticResource White}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         </Style>
         <Style TargetType="Button">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="BackgroundColor" 
-                    Value="{AppThemeBinding Light={StaticResource Black}, 
-                    Dark={StaticResource White}}"/>
-            <Setter Property="TextColor" 
-                    Value="{AppThemeBinding Light={StaticResource White}, 
-                    Dark={StaticResource Black}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" 
-                                        Value="LightGreen"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" 
-                                        Value="{AppThemeBinding Light={StaticResource Black}, 
-                                        Dark={StaticResource White}}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -48,42 +39,56 @@
         <VerticalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="Center">
-                <Image Source="{AppThemeBinding Light=pk.png,Dark=pkblack.png}" HeightRequest="75"/>
-                <Image Source="{AppThemeBinding Light=wieik.png,Dark=wieikblack.png}" HeightRequest="75"/> 
+                <Image HeightRequest="75" Source="{AppThemeBinding Light=pk.png, Dark=pkblack.png}" />
+                <Image HeightRequest="75" Source="{AppThemeBinding Light=wieik.png, Dark=wieikblack.png}" />
             </HorizontalStackLayout>
-            <Label Text="Politechnika Krakowska"
-                   HorizontalOptions="Center" 
-                   FontSize="Title"/>
-            <Label Text="Wydział Inżynierii Elektrycznej i Komputerowej" HorizontalOptions="Center" FontSize="Title"/>
-            <Label Text="Program do Wizualizacji Pracy Trójfazowego Trójpoziomowego Falownika Napięcia" HorizontalOptions="Center" FontSize="Title"/>
+            <Label
+                FontSize="Title"
+                HorizontalOptions="Center"
+                Text="Politechnika Krakowska" />
+            <Label
+                FontSize="Title"
+                HorizontalOptions="Center"
+                Text="Wydział Inżynierii Elektrycznej i Komputerowej" />
+            <Label
+                FontSize="Title"
+                HorizontalOptions="Center"
+                Text="Program do Wizualizacji Pracy Trójfazowego Trójpoziomowego Falownika Napięcia" />
 
-            <VerticalStackLayout 
-                HorizontalOptions="CenterAndExpand"
-                VerticalOptions="CenterAndExpand"
+            <VerticalStackLayout
                 Padding="30"
-                Spacing="25">
+                HorizontalOptions="CenterAndExpand"
+                Spacing="25"
+                VerticalOptions="CenterAndExpand">
 
-                <Button Text="Wygeneruj Nowy Falownik" VerticalOptions="Fill"
-                        Clicked="CreateNewInverter">
+                <Button
+                    Clicked="CreateNewInverter"
+                    Text="Wygeneruj Nowy Falownik"
+                    VerticalOptions="Fill">
                     <Button.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"
-                                              Buttons="Secondary"/>
+                        <TapGestureRecognizer Buttons="Secondary" Tapped="TapGestureRecognizer_Tapped" />
                     </Button.GestureRecognizers>
                 </Button>
 
-                <Button Text="Wczytaj Gotowy Zestaw" 
-                        Clicked="Configuration"/>
+                <Button Clicked="Configuration" Text="Wczytaj Gotowy Zestaw" />
 
-                <Button Text="Lokalizacja Pspice" 
-                        Clicked="PspiceLocation_Clicked"/>
+                <Button Clicked="PspiceLocation_Clicked" Text="Lokalizacja Pspice" />
 
-                <Button Text="Rozmiar Czcionki" 
-                        Clicked="FontSize_Clicked"/>
+                <Button Clicked="FontSize_Clicked" Text="Rozmiar Czcionki" />
 
             </VerticalStackLayout>
-            <Frame HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand" x:Name="fEasterEgg" ZIndex="10" Margin="0" Padding="0">
+            <Frame
+                x:Name="fEasterEgg"
+                Margin="0"
+                Padding="0"
+                HorizontalOptions="EndAndExpand"
+                VerticalOptions="EndAndExpand"
+                ZIndex="10">
+                <VerticalStackLayout>
+                    <Label FontSize="7" Text="Praca Dyplomowa:&#10;Sławomir Smoter" />
+                </VerticalStackLayout>
                 <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup >
+                    <VisualStateGroup>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
                                 <Setter Property="Opacity" Value="0" />
@@ -96,12 +101,15 @@
                         </VisualState>
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
-                <VerticalStackLayout >
-                    <Label Text="Praca Dyplomowa:&#10;Sławomir Smoter" FontSize="7"/>
-                </VerticalStackLayout>
             </Frame>
-            <HorizontalStackLayout BindingContext="{x:Reference fEasterEgg}" Opacity="{Binding Opacity}" x:Name="iEasterEgg">
-                <Image Source="kot2.jpg" HeightRequest="100" HorizontalOptions="Start"/>
+            <HorizontalStackLayout
+                x:Name="iEasterEgg"
+                BindingContext="{x:Reference fEasterEgg}"
+                Opacity="{Binding Opacity}">
+                <Image
+                    HeightRequest="100"
+                    HorizontalOptions="Start"
+                    Source="kot2.jpg" />
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

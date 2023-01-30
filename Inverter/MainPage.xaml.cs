@@ -13,6 +13,7 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
         _fm = new FileManager();
+        FontSize = Config.FontSize;
         BindingContext = this;
         try
         {

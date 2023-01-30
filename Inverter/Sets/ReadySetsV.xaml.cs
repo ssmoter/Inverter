@@ -136,8 +136,8 @@ public partial class ReadySetsV : ContentPage
                     var json = await _fm.LoadDataPath(SelectedData.Path);
 
                     ResponseModel response = new ResponseModel(SelectedData.Name);
-                    response.IsReady = true;
                     response = JsonConvert.DeserializeObject<ResponseModel>(json);
+                    response.IsReady = true;
 
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
                         new Dictionary<string, object>
