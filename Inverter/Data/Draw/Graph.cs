@@ -107,8 +107,7 @@ namespace Inverter.Data.Draw
                 canvas.FontSize = FontSize;
                 canvas.DrawString(Name, (PositionName * (Name.Length * (FontSize / 2))), dirtyRect.Bottom - 3, HorizontalAlignment.Left);
 
-                //wartości na osi Y
-
+                //wartości na osi Y}
                 var yValue = MaxYValue.ToString().Split(',');
                 string visibleYValue = string.Empty;
 
@@ -142,10 +141,14 @@ namespace Inverter.Data.Draw
                 }
                 else if (!fourier)
                 {
-                    if (yValue.Length > 1)
+                    if (yValue.Length > 1 && yValue.LastOrDefault().Length > 2)
                         visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
                     else
                         visibleYValue = yValue.FirstOrDefault();
+
+                    if (yValue.LastOrDefault().Length < 2)
+                        visibleYValue += "," + yValue.LastOrDefault();
+
                     //  canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
                     // canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + farFromUp, HorizontalAlignment.Right);
 
@@ -153,7 +156,13 @@ namespace Inverter.Data.Draw
                     if (Math.Abs(MinYValue) > 0.001)
                     {
                         yValue = MinYValue.ToString().Split(',');
-                        visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
+                        if (yValue.Length > 1 && yValue.LastOrDefault().Length > 2)
+                            visibleYValue = yValue.FirstOrDefault() + "," + yValue.LastOrDefault().Substring(0, 2);
+                        else
+                            visibleYValue = yValue.FirstOrDefault();
+
+                        if (yValue.LastOrDefault().Length < 2)
+                            visibleYValue += "," + yValue.LastOrDefault();
                         canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Center.Y - farFromUp - MinYPositions, HorizontalAlignment.Right);
                         // canvas.DrawString(visibleYValue + "-", 70, dirtyRect.Top + MaxYPosition + Math.Abs(MinYPositions) + farFromUp, HorizontalAlignment.Right);
                     }
