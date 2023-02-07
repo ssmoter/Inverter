@@ -105,7 +105,11 @@ namespace Inverter.Data.Draw
                 //podpis wykresu
                 canvas.FontColor = Color;
                 canvas.FontSize = FontSize;
-                canvas.DrawString(Name, (PositionName * (Name.Length * (FontSize / 2))), dirtyRect.Bottom - 3, HorizontalAlignment.Left);
+                if (PositionName == 1)
+                    canvas.DrawString(Name, 0, dirtyRect.Bottom - 3, HorizontalAlignment.Left);
+                else
+                    canvas.DrawString(Name, PositionName, dirtyRect.Bottom - 3, HorizontalAlignment.Left);
+
 
                 //wartości na osi Y}
                 var yValue = MaxYValue.ToString().Split(',');
@@ -247,7 +251,7 @@ namespace Inverter.Data.Draw
                         if (lenghtN >= 50)
                             break;
 
-                        if (j > 100)
+                        if (j > 20)
                         {
                             break;
                         }
@@ -264,7 +268,7 @@ namespace Inverter.Data.Draw
                     canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 35, HorizontalAlignment.Center);
 
                     int secondLineI = 0;
-                    bool secondLineB = false;
+                    bool secondLineB = true;
                     if (fourier)
                     {
                         for (int i = 0; i < AxisX.Count; i++)
@@ -323,7 +327,7 @@ namespace Inverter.Data.Draw
                                 canvas.DrawString("|", nPosition, dirtyRect.Bottom - 48 + secondLineI, HorizontalAlignment.Center);
                                 canvas.DrawString(AxisX[nIndicator].ToString(), nPosition, dirtyRect.Bottom - 25 + secondLineI, HorizontalAlignment.Center);
                             }
-                            if (secondLineB)
+                            if (secondLineB && nIndicator > 2 * lenghtN)
                             {
                                 secondLineB = !secondLineB;
                                 secondLineI = 20;

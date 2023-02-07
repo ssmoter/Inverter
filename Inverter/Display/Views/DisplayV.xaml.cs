@@ -260,9 +260,16 @@ public partial class DisplayV : ContentPage
                     //Nazwa wykresy
                     _graphs[i].Name = DataGraphs[i].DataName;
                     //pozycja wykresów
-                    int PositionName = 1;
-                    PositionName = axisX.FindAll(x => x == DataGraphs[i].LocationRow).Count;
-                    _graphs[i].PositionName = PositionName;
+                    int positionName = 1;
+                    int positionlenght = axisX.FindAll(x => x == DataGraphs[i].LocationRow).Count;
+
+                    var a = DataGraphs.Where(x => x.LocationRow == DataGraphs[i].LocationRow && x.Visible).ToArray();
+                    for (int k = 1; k < positionlenght; k++)
+                    {
+                        positionName += a[k].DataName.Length * bc.FontSize;
+                    }
+
+                    _graphs[i].PositionName = positionName;
                     //tylko wybrana wartosc
                     startIndex = 0;
                     endIndex = DataGraphs[i].Y.Count;
@@ -787,7 +794,7 @@ public partial class DisplayV : ContentPage
 
                 var json = await _fm.LoadDataPath(result);
                 response = JsonConvert.DeserializeObject<ResponseModel>(json);
-                response.IsReady=true;
+                response.IsReady = true;
 
                 await Navigation.PushAsync(new DisplayV(response));
                 Navigation.RemovePage(this);
