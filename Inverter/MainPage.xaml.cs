@@ -2,6 +2,7 @@
 using Inverter.GenerateInverter.Views;
 using Inverter.Helpers;
 using Inverter.Sets;
+using System.Diagnostics;
 
 namespace Inverter;
 
@@ -15,6 +16,7 @@ public partial class MainPage : ContentPage
         _fm = new FileManager();
         FontSize = Config.FontSize;
         BindingContext = this;
+
         try
         {
             FontSize = int.Parse(_fm.GetConfig(MyEnums.configName.FontSize));
@@ -150,6 +152,15 @@ public partial class MainPage : ContentPage
     {
         svMain.MaximumHeightRequest = this.Height;
         svMain.MaximumWidthRequest = this.Width;
+        StartAnimation();
+    }
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        StartAnimation();
+    }
+    private void StartAnimation()
+    {
         Abort();
         _easterEggAnim = new Animation((e) =>
         {
@@ -162,9 +173,7 @@ public partial class MainPage : ContentPage
             iEasterEgg.TranslationY = e;
         }, 0, -this.Height);
         iEasterEgg.Animate("MoveY", _easterEggAnim, 16, 10000, Easing.Linear, null, () => true);
-
     }
-
     private void Abort()
     {
         if (iEasterEgg.AnimationIsRunning("MoveX"))
@@ -174,6 +183,65 @@ public partial class MainPage : ContentPage
         if (iEasterEgg.AnimationIsRunning("MoveY"))
         {
             iEasterEgg.AbortAnimation("MoveY");
+        }
+    }
+
+    private void Documents_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            using (var procces = new Process())
+            {
+                procces.StartInfo.UseShellExecute = true;
+                procces.StartInfo.FileName = "https://docs.google.com/document/d/1d8R1OJ626Q3paDIDXYS-lMutd68nYdz1LkT9ipsI6EM/edit?usp=sharing";
+                procces.Start();
+            }
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
+    }
+    private void GitHub_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            using (var procces = new Process())
+            {
+                procces.StartInfo.UseShellExecute = true;
+                procces.StartInfo.FileName = "https://github.com/ssmoter/Inverter";
+                procces.Start();
+            }
+        }
+        catch (Exception ex)
+        {
+            _fm.SaveLog(ex.ToString());
+        }
+    }
+
+    private void PointerGestureRecognizer_PointerEntered(object sender, PointerEventArgs e)
+    {
+        vslInfo.IsVisible = true;
+    }
+
+    private async void PointerGestureRecognizer_PointerExited(object sender, PointerEventArgs e)
+    {
+        int n = 1;
+
+        var t = Task.Run(() =>
+         {
+             for (int i = 0; i < 1; i++)
+             {
+                 Thread.Sleep(1000);
+                 n++;
+             }
+         });
+
+        await t;
+
+        if (n >= 1)
+        {
+            vslInfo.IsVisible = false;
         }
     }
 }

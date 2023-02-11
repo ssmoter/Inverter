@@ -174,7 +174,7 @@ namespace Inverter.Display.ViewsModel
             if (!symulationRunning)
             {
                 symulationRunning = !symulationRunning;
-              //  _timer.Start();
+               // _timer.Start();
                 NameSimulationbutton = "Zatrzymaj";
             }
             else if (symulationRunning)

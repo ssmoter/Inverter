@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Inverter.Sets.ReadySetsV" BackgroundColor="Transparent"
-             Title="Gotowe Projekty">
+<ContentPage
+    x:Class="Inverter.Sets.ReadySetsV"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Gotowe Projekty"
+    BackgroundColor="Transparent">
 
     <ContentPage.Resources>
         <Style TargetType="Editor">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="AutoSize" Value="TextChanges"/>
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="AutoSize" Value="TextChanges" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
+                                <Setter Property="Opacity" Value="0.9" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Focused">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -35,21 +37,21 @@
             </Setter>
         </Style>
         <Style TargetType="Button">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="LightGreen"/>
-                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
+                                <Setter Property="Opacity" Value="0.9" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -57,31 +59,31 @@
             </Setter>
         </Style>
         <Style TargetType="Label">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         </Style>
         <Style TargetType="SearchBar">
-            <Setter Property="FontSize" Value="{Binding FontSize}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         </Style>
         <Style TargetType="Frame">
-            <Setter Property="BorderColor" Value="Black"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="0"/>
+            <Setter Property="BorderColor" Value="Black" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="5" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup>
                         <VisualState x:Name="PointerOver">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}}"/>
-                                <Setter Property="Opacity" Value="{AppThemeBinding Light=2,Dark=2}"/>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}}" />
+                                <Setter Property="Opacity" Value="{AppThemeBinding Light=2, Dark=2}" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="Normal">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="Transparent"/>
+                                <Setter Property="BackgroundColor" Value="Transparent" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -92,29 +94,41 @@
 
 
     <VerticalStackLayout x:Name="vslMain" SizeChanged="vslMain_SizeChanged">
-        <Label 
+        <Label
+            HorizontalOptions="Center"
             Text="Nazwy zapisanych plików"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            VerticalOptions="Center" />
 
         <HorizontalStackLayout x:Name="hslButtons">
-            <Button Text="Usuń" x:Name="bDelete" Clicked="bDelete_Clicked"/>
-            <Button Text="Wczytaj" x:Name="bLoad" Clicked="bLoad_Clicked"/>
-            <SearchBar Placeholder="Szukaj" x:Name="sbFind" PropertyChanged="sbFind_PropertyChanged"/>
+            <Button
+                x:Name="bDelete"
+                Clicked="bDelete_Clicked"
+                Text="Usuń" />
+            <Button
+                x:Name="bLoad"
+                Clicked="bLoad_Clicked"
+                Text="Wczytaj" />
+            <SearchBar
+                x:Name="sbFind"
+                Placeholder="Szukaj"
+                PropertyChanged="sbFind_PropertyChanged" />
         </HorizontalStackLayout>
 
-        <CollectionView x:Name="cvInverterDatas" ItemsSource="{Binding InverterDatas}" SelectionMode="Single" SelectedItem="{Binding SelectedData}" >
+        <CollectionView
+            x:Name="cvInverterDatas"
+            ItemsSource="{Binding InverterDatas}"
+            SelectedItem="{Binding SelectedData}"
+            SelectionMode="Single">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical"/>
+                <GridItemsLayout Orientation="Vertical" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame>
-                        <Label Text="{Binding Name}"/>
+                        <Label Text="{Binding Name}" />
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
     </VerticalStackLayout>
 </ContentPage>
-    

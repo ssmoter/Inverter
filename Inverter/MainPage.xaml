@@ -36,56 +36,125 @@
     </ContentPage.Resources>
 
     <ScrollView x:Name="svMain" SizeChanged="svMain_SizeChanged">
-        <VerticalStackLayout>
-
-            <HorizontalStackLayout HorizontalOptions="Center">
-                <Image HeightRequest="75" Source="{AppThemeBinding Light=pk.png, Dark=pkblack.png}" />
-                <Image HeightRequest="75" Source="{AppThemeBinding Light=wieik.png, Dark=wieikblack.png}" />
-            </HorizontalStackLayout>
-            <Label
-                FontSize="Title"
-                HorizontalOptions="Center"
-                Text="Politechnika Krakowska" />
-            <Label
-                FontSize="Title"
-                HorizontalOptions="Center"
-                Text="Wydział Inżynierii Elektrycznej i Komputerowej" />
-            <Label
-                FontSize="Title"
-                HorizontalOptions="Center"
-                Text="Program do Wizualizacji Pracy Trójfazowego Trójpoziomowego Falownika Napięcia" />
+        <Grid ColumnDefinitions="200,*,200">
 
             <VerticalStackLayout
-                Padding="30"
-                HorizontalOptions="CenterAndExpand"
-                Spacing="25"
-                VerticalOptions="CenterAndExpand">
+                x:Name="vslInfo"
+                Grid.Column="2"
+                Margin="20"
+                HorizontalOptions="EndAndExpand"
+                IsVisible="false"
+                VerticalOptions="StartAndExpand">
+
+                <Label FontSize="Micro" Text="Praca Dyplomowa:&#10;Sławomir Smoter" />
 
                 <Button
-                    Clicked="CreateNewInverter"
-                    Text="Wygeneruj Nowy Falownik"
-                    VerticalOptions="Fill">
-                    <Button.GestureRecognizers>
-                        <TapGestureRecognizer Buttons="Secondary" Tapped="TapGestureRecognizer_Tapped" />
-                    </Button.GestureRecognizers>
-                </Button>
+                    Margin="0"
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    Clicked="Documents_Clicked"
+                    FontSize="20"
+                    Text="Dokumentacja"
+                    TextColor="DarkBlue" />
+                <Button
+                    Margin="0"
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    Clicked="GitHub_Clicked"
+                    FontSize="20"
+                    Text="GitHub"
+                    TextColor="DarkBlue" />
+                <VerticalStackLayout.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" />
+                    <PointerGestureRecognizer PointerExited="PointerGestureRecognizer_PointerExited" />
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <Button
+                Grid.Column="2"
+                Margin="10,0,10,0"
+                Padding="10,0,10,0"
+                BackgroundColor="LightBlue"
+                FontAttributes="Bold"
+                HorizontalOptions="EndAndExpand"
+                Text="i"
+                VerticalOptions="StartAndExpand">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" />
+                    <PointerGestureRecognizer PointerExited="PointerGestureRecognizer_PointerExited" />
+                </Button.GestureRecognizers>
+            </Button>
 
-                <Button Clicked="Configuration" Text="Wczytaj Gotowy Zestaw" />
+            <VerticalStackLayout Grid.Column="1">
 
-                <Button Clicked="PspiceLocation_Clicked" Text="Lokalizacja Pspice" />
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Image HeightRequest="75" Source="{AppThemeBinding Light=pk.png, Dark=pkblack.png}" />
+                    <Image HeightRequest="75" Source="{AppThemeBinding Light=wieik.png, Dark=wieikblack.png}" />
+                </HorizontalStackLayout>
 
-                <Button Clicked="FontSize_Clicked" Text="Rozmiar Czcionki" />
 
+
+
+                <Label
+                    FontSize="Title"
+                    HorizontalOptions="Center"
+                    Text="Politechnika Krakowska" />
+                <Label
+                    FontSize="Title"
+                    HorizontalOptions="Center"
+                    Text="Wydział Inżynierii Elektrycznej i Komputerowej" />
+                <Label
+                    FontSize="Title"
+                    HorizontalOptions="Center"
+                    Text="Program do Wizualizacji Pracy Trójfazowego Trójpoziomowego Falownika Napięcia" />
+
+                <VerticalStackLayout
+                    Padding="30"
+                    HorizontalOptions="CenterAndExpand"
+                    Spacing="25"
+                    VerticalOptions="CenterAndExpand">
+
+                    <Button
+                        Clicked="CreateNewInverter"
+                        Text="Wygeneruj Nowy Falownik"
+                        VerticalOptions="Fill">
+                        <Button.GestureRecognizers>
+                            <TapGestureRecognizer Buttons="Secondary" Tapped="TapGestureRecognizer_Tapped" />
+                        </Button.GestureRecognizers>
+                    </Button>
+
+                    <Button Clicked="Configuration" Text="Wczytaj Gotowy Zestaw" />
+
+                    <Button Clicked="PspiceLocation_Clicked" Text="Lokalizacja Pspice" />
+
+                    <Button Clicked="FontSize_Clicked" Text="Rozmiar Czcionki" />
+
+                </VerticalStackLayout>
+                <HorizontalStackLayout
+                    x:Name="iEasterEgg"
+                    BindingContext="{x:Reference fEasterEgg}"
+                    Opacity="{Binding Opacity}">
+                    <Image
+                        HeightRequest="100"
+                        HorizontalOptions="Start"
+                        Source="kot2.jpg" />
+                </HorizontalStackLayout>
             </VerticalStackLayout>
             <Frame
                 x:Name="fEasterEgg"
+                Grid.Column="0"
                 Margin="0"
                 Padding="0"
-                HorizontalOptions="EndAndExpand"
+                BackgroundColor="Transparent"
+                BorderColor="Transparent"
+                HorizontalOptions="StartAndExpand"
                 VerticalOptions="EndAndExpand"
                 ZIndex="10">
                 <VerticalStackLayout>
-                    <Label FontSize="7" Text="Praca Dyplomowa:&#10;Sławomir Smoter" />
+                    <BoxView
+                        BackgroundColor="red"
+                        HeightRequest="50"
+                        WidthRequest="100"
+                        Color="Transparent" />
                 </VerticalStackLayout>
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup>
@@ -102,15 +171,6 @@
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
             </Frame>
-            <HorizontalStackLayout
-                x:Name="iEasterEgg"
-                BindingContext="{x:Reference fEasterEgg}"
-                Opacity="{Binding Opacity}">
-                <Image
-                    HeightRequest="100"
-                    HorizontalOptions="Start"
-                    Source="kot2.jpg" />
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 </ContentPage>

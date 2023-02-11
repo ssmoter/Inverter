@@ -1,4 +1,5 @@
-﻿using Inverter.Models;
+﻿using Inverter.Helpers;
+using Inverter.Models;
 using Font = Microsoft.Maui.Graphics.Font;
 
 namespace Inverter.Data.Draw.Schema
