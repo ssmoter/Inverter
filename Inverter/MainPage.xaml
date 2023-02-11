@@ -55,7 +55,7 @@
                     Clicked="Documents_Clicked"
                     FontSize="20"
                     Text="Dokumentacja"
-                    TextColor="DarkBlue" />
+                    TextColor="Blue" />
                 <Button
                     Margin="0"
                     Padding="0"
@@ -63,7 +63,7 @@
                     Clicked="GitHub_Clicked"
                     FontSize="20"
                     Text="GitHub"
-                    TextColor="DarkBlue" />
+                    TextColor="Blue" />
                 <VerticalStackLayout.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" />
                     <PointerGestureRecognizer PointerExited="PointerGestureRecognizer_PointerExited" />
@@ -151,7 +151,7 @@
                 ZIndex="10">
                 <VerticalStackLayout>
                     <BoxView
-                        BackgroundColor="red"
+                        BackgroundColor="Transparent"
                         HeightRequest="50"
                         WidthRequest="100"
                         Color="Transparent" />

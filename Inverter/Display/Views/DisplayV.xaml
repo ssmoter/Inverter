@@ -178,7 +178,10 @@
                 ToolTipProperties.Text="Pole wyboru potwierdza zmianę minimalne wartości prądu&#10;Od nie zależy zmiana koloru gałęzi">
                 <HorizontalStackLayout>
                     <CheckBox x:Name="cbStillOpen" CheckedChanged="cbStillOpen_CheckedChanged" />
-                    <Entry x:Name="eStillOpen" TextChanged="eStillOpen_TextChanged" />
+                    <Entry
+                        x:Name="eStillOpen"
+                        Keyboard="Numeric"
+                        TextChanged="eStillOpen_TextChanged" />
                 </HorizontalStackLayout>
             </Frame>
 
@@ -382,7 +385,7 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="6"
                     Margin="10,0,10,0"
-                    HeightRequest="250"
+                    HeightRequest="200"
                     ItemsSource="{Binding DataGraphs}"
                     SelectedItem="{Binding DataGraphSelectedItem}"
                     SelectionMode="Single"

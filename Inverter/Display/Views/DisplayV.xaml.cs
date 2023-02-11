@@ -204,6 +204,8 @@ public partial class DisplayV : ContentPage
             _fm.SaveLog(ex.ToString());
         }
     }
+
+
     private async Task ReDrawGraph()
     {
         try
@@ -353,16 +355,21 @@ public partial class DisplayV : ContentPage
                     //os Y
                     if (data.Multiplier == 0)
                     {
-                        _graphs[i].MaxYValue = DataGraphs.Max(x => x.Max);
-                        _graphs[i].MinYValue = -DataGraphs.Max(x => x.Max);
+                        _graphs[i].MaxYValue = DataGraphs.Where(x => x.LocationRow == data.LocationRow && x.Visible).Max(y => y.Max);
+                        _graphs[i].MinYValue = -DataGraphs.Where(x => x.LocationRow == data.LocationRow && x.Visible).Max(y => Math.Abs(y.Min));
+
+                        _graphs[i].MaxYPosition = DataGraphs.Where(x => x.LocationRow == data.LocationRow && x.Visible).Max(y => y.Max);
+                        _graphs[i].MinYPositions = -DataGraphs.Where(x => x.LocationRow == data.LocationRow && x.Visible).Max(y => Math.Abs(y.Min));
+                        //_graphs[i].MaxYValue = DataGraphs.Max(x => x.Max);
+                        // _graphs[i].MinYValue = -DataGraphs.Max(x => x.Max);
                     }
                     else
                     {
                         _graphs[i].MaxYValue = data.Max;
                         _graphs[i].MinYValue = data.Min;
+                        _graphs[i].MaxYPosition = data.Max * data.Multiplier;
+                        _graphs[i].MinYPositions = data.Min * data.Multiplier;
                     }
-                    _graphs[i].MaxYPosition = data.Max * data.Multiplier;
-                    _graphs[i].MinYPositions = data.Min * data.Multiplier;
                     //font size
                     _graphs[i].FontSize = bc.FontSize;
                     //Czy siatka jest widoczna
@@ -426,6 +433,8 @@ public partial class DisplayV : ContentPage
             await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
+
+
     DataGraph data = new DataGraph();
 
     int startIndex;
@@ -806,8 +815,6 @@ public partial class DisplayV : ContentPage
             await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
-
-
 
 
     #endregion
