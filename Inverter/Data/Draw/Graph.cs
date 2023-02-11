@@ -47,7 +47,10 @@ namespace Inverter.Data.Draw
 
                 #region Wykresy
                 canvas.SaveState();
-                canvas.StrokeSize = StrokeSize;
+                if (!fourier)
+                {
+                    canvas.StrokeSize = StrokeSize;
+                }
 
 
                 canvas.StrokeColor = Color;
@@ -64,7 +67,7 @@ namespace Inverter.Data.Draw
                     canvas.Translate(dirtyRect.Left, dirtyRect.Top);
                     canvas.Translate(dirtyRect.Left + 70, dirtyRect.Center.Y - farFromUp);
 
-                    denominator = Math.Abs(MinYValue) + MaxYValue;
+                    denominator = Math.Abs(MinYValue * 2f) + MaxYValue * 2f;
 
                     scaleY = (dirtyRect.Height - farFromUp - 80) / denominator;
                     canvas.Scale(1, scaleY);
@@ -83,12 +86,13 @@ namespace Inverter.Data.Draw
                     canvas.Scale(scaleX, 1);
                 }
 
-                if (StrokeSize == 0)
+                canvas.StrokeSize = 0.5f;
+                if (StrokeSize == 0 && !fourier)
                 {
-                    canvas.StrokeSize = 1 / (scaleX / scaleY);
+                    canvas.StrokeSize = (scaleX / scaleY);
                     if (1 / (scaleX / scaleY) <= 0.5f)
                     {
-                        canvas.StrokeSize = 0.5f;
+                        //canvas.StrokeSize = 0.5f;
                     }
                 }
 
