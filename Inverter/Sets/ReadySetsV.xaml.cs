@@ -138,6 +138,8 @@ public partial class ReadySetsV : ContentPage
                     ResponseModel response = new ResponseModel(SelectedData.Name);
                     response = JsonConvert.DeserializeObject<ResponseModel>(json);
                     response.IsReady = true;
+                    response.FileDataPath = SelectedData.Name;
+
 
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
                         new Dictionary<string, object>

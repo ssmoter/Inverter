@@ -740,7 +740,7 @@ public partial class DisplayV : ContentPage
             bc.ResponseModel.OutPutString = null;
             var json = JsonConvert.SerializeObject(bc.ResponseModel);
             bool complite = false;
-            string result = await DisplayPromptAsync("Zapisywanie", "Podaj nazwę pliku", "Zapisz", "Anuluj", _name, -1, null, _name);
+            string result = await DisplayPromptAsync("Zapisywanie", "Podaj nazwę pliku", "Zapisz", "Anuluj", _name, -1, Keyboard.Default, _name);
             if (!string.IsNullOrWhiteSpace(result))
             {
                 bool exist = _fm.ExistFile(result);

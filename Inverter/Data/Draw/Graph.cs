@@ -86,7 +86,6 @@ namespace Inverter.Data.Draw
                     canvas.Scale(scaleX, 1);
                 }
 
-                canvas.StrokeSize = 0.5f;
                 if (StrokeSize == 0 && !fourier)
                 {
                     canvas.StrokeSize = (scaleX / scaleY);
