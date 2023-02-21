@@ -791,8 +791,8 @@ public partial class DisplayV : ContentPage
             if (result != null && result != "Anuluj")
             {
                 ResponseModel response = new ResponseModel(result);
-
-                for (int i = 0; i < nameList.Length; i++)
+                int i = 0;
+                for (; i < nameList.Length; i++)
                 {
                     if (nameList[i] == result)
                     {
@@ -804,6 +804,7 @@ public partial class DisplayV : ContentPage
                 var json = await _fm.LoadDataPath(result);
                 response = JsonConvert.DeserializeObject<ResponseModel>(json);
                 response.IsReady = true;
+                response.FileDataPath = nameList[i];
 
                 await Navigation.PushAsync(new DisplayV(response));
                 Navigation.RemovePage(this);

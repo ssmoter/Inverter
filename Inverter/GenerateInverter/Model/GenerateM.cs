@@ -1,4 +1,5 @@
-﻿using Inverter.Helpers;
+﻿using Inverter.Data;
+using Inverter.Helpers;
 using Inverter.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -334,6 +335,7 @@ namespace Inverter.GenerateInverter.Model
 
         #endregion
 
+        private FileManager _fm;
         public GenerateM()
         {
             _KNotify = new Dictionary<string, int>()
@@ -345,6 +347,7 @@ namespace Inverter.GenerateInverter.Model
             DataNotify = new();
             SingleDataNotify = new();
             _IsSelectedDataNotify = false;
+            _fm = new FileManager();
         }
 
 
@@ -370,7 +373,7 @@ namespace Inverter.GenerateInverter.Model
                 T3 = T3Notify,
                 T4 = T4Notify,
                 T5 = T5Notify,
-                NumberOfFft= NumberOfFftNotify,
+                NumberOfFft = NumberOfFftNotify,
             };
             if (DataNotify != null)
             {
@@ -403,22 +406,42 @@ namespace Inverter.GenerateInverter.Model
 
         public ICommand AddNewTranPrint => new Command(() =>
         {
-            if (string.IsNullOrWhiteSpace(SingleDataNotify.DataName))
+            try
             {
-                return;
-            }
+                if (string.IsNullOrWhiteSpace(SingleDataNotify.DataName))
+                {
+                    return;
+                }
+                if (DataNotify == null)
+                {
+                    DataNotify = new ObservableCollection<DataGraph>();
+                }
 
-            DataNotify.Add(SingleDataNotify);
-            SingleDataNotify = null;
-            SingleDataNotify = new();
-            RefreshStringModel();
+                DataNotify.Add(SingleDataNotify);
+                OnPropertyChanged(nameof(DataNotify));
+                SingleDataNotify = null;
+                SingleDataNotify = new();
+                RefreshStringModel();
+            }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
         });
         public ICommand RemoveTranPrint => new Command(() =>
         {
-            DataNotify.Remove(SelectedDataNotify);
-            SelectedDataNotify = null;
-            SelectedDataNotify = new();
-            RefreshStringModel();
+            try
+            {
+                DataNotify.Remove(SelectedDataNotify);
+                OnPropertyChanged(nameof(DataNotify));
+                SelectedDataNotify = null;
+                SelectedDataNotify = new();
+                RefreshStringModel();
+            }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
         });
 
         private bool _IsSelectedDataNotify;

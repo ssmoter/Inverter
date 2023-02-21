@@ -24,7 +24,7 @@ namespace Inverter.Data.Draw.Schema
         {
             Graphs = graphs;
             StillOpen = 0.1f;
-            StillOpen = Graphs.Where(x => x.UserDataName == "Tranzystor").Min(x => x.Max) / 10;
+            StillOpen = Graphs.Where(x => x.UserDataName.Contains("Tranzystor")).Min(x => x.Max) / 10;
             _fm = fm;
         }
 

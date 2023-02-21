@@ -37,7 +37,6 @@
 
     <ScrollView x:Name="svMain" SizeChanged="svMain_SizeChanged">
         <Grid ColumnDefinitions="200,*,200">
-
             <VerticalStackLayout
                 x:Name="vslInfo"
                 Grid.Column="2"
@@ -173,4 +172,5 @@
             </Frame>
         </Grid>
     </ScrollView>
+
 </ContentPage>

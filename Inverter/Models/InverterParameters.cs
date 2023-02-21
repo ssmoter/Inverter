@@ -65,21 +65,21 @@ namespace Inverter.Models
             DefaultPrintTran = new List<DataGraph>();
 
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PA)", UserDataName = "Dioda pomocnicza" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PB)", UserDataName = "Dioda pomocnicza" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PC)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PA)", UserDataName = "Dioda pomocnicza A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PB)", UserDataName = "Dioda pomocnicza B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PC)", UserDataName = "Dioda pomocnicza C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMA)", UserDataName = "Dioda pomocnicza" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMB)", UserDataName = "Dioda pomocnicza" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMC)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMA)", UserDataName = "Dioda pomocnicza A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMB)", UserDataName = "Dioda pomocnicza B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMC)", UserDataName = "Dioda pomocnicza C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMA)", UserDataName = "Dioda pomocnicza" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMB)", UserDataName = "Dioda pomocnicza" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMC)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMA)", UserDataName = "Dioda pomocnicza A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMB)", UserDataName = "Dioda pomocnicza V" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMC)", UserDataName = "Dioda pomocnicza C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NA)", UserDataName = "Dioda pomocnicza" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NB)", UserDataName = "Dioda pomocnicza" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NC)", UserDataName = "Dioda pomocnicza" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NA)", UserDataName = "Dioda pomocnicza A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NB)", UserDataName = "Dioda pomocnicza B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NC)", UserDataName = "Dioda pomocnicza C" });
 
             DefaultPrintTran.Add(new DataGraph() { DataName = "V(ViP)", UserDataName = "Przebieg nośny P" });
             DefaultPrintTran.Add(new DataGraph() { DataName = "V(ViN)", UserDataName = "Przebieg nośny N" });
@@ -89,47 +89,47 @@ namespace Inverter.Models
             DefaultPrintTran.Add(new DataGraph() { DataName = "V(EmC)", UserDataName = "Przebieg modulujacy C" });
 
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PAz)", UserDataName = "Dioda zwrotna" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PBz)", UserDataName = "Dioda zwrotna" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PCz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PAz)", UserDataName = "Dioda zwrotna A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PBz)", UserDataName = "Dioda zwrotna B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PCz)", UserDataName = "Dioda zwrotna C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMAz)", UserDataName = "Dioda zwrotna" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMBz)", UserDataName = "Dioda zwrotna" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMCz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMAz)", UserDataName = "Dioda zwrotna A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMBz)", UserDataName = "Dioda zwrotna B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_PMCz)", UserDataName = "Dioda zwrotna C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMAz)", UserDataName = "Dioda zwrotna" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMBz)", UserDataName = "Dioda zwrotna" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMCz)", UserDataName = "Dioda zwrotna" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMAz)", UserDataName = "Dioda zwrotna A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMBz)", UserDataName = "Dioda zwrotna B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NMCz)", UserDataName = "Dioda zwrotna C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NAz)", UserDataName = "Dioda zwrotna" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NBz)", UserDataName = "Dioda zwrotna" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NCz)", UserDataName = "Dioda zwrotna" });
-
-
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPA)", UserDataName = "Dioda poziomująca" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPB)", UserDataName = "Dioda poziomująca" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPC)", UserDataName = "Dioda poziomująca" });
-
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNA)", UserDataName = "Dioda poziomująca" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNB)", UserDataName = "Dioda poziomująca" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNC)", UserDataName = "Dioda poziomująca" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NAz)", UserDataName = "Dioda zwrotna A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NBz)", UserDataName = "Dioda zwrotna B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(D_NCz)", UserDataName = "Dioda zwrotna C" });
 
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PA)", UserDataName = "Tranzystor" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PB)", UserDataName = "Tranzystor" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PC)", UserDataName = "Tranzystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPA)", UserDataName = "Dioda poziomująca A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPB)", UserDataName = "Dioda poziomująca B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DPC)", UserDataName = "Dioda poziomująca C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMA)", UserDataName = "Tranzystor" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMB)", UserDataName = "Tranzystor" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMC)", UserDataName = "Tranzystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNA)", UserDataName = "Dioda poziomująca A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNB)", UserDataName = "Dioda poziomująca B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(DNC)", UserDataName = "Dioda poziomująca C" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMA)", UserDataName = "Tranzystor" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMB)", UserDataName = "Tranzystor" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMC)", UserDataName = "Tranzystor" });
 
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NA)", UserDataName = "Tranzystor" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NB)", UserDataName = "Tranzystor" });
-            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NC)", UserDataName = "Tranzystor" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PA)", UserDataName = "Tranzystor A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PB)", UserDataName = "Tranzystor B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PC)", UserDataName = "Tranzystor C" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMA)", UserDataName = "Tranzystor A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMB)", UserDataName = "Tranzystor B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_PMC)", UserDataName = "Tranzystor C" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMA)", UserDataName = "Tranzystor A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMB)", UserDataName = "Tranzystor B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NMC)", UserDataName = "Tranzystor C" });
+
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NA)", UserDataName = "Tranzystor A" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NB)", UserDataName = "Tranzystor B" });
+            DefaultPrintTran.Add(new DataGraph() { DataName = "I(S_NC)", UserDataName = "Tranzystor C" });
 
 
             DefaultPrintTran.Add(new DataGraph() { DataName = "I(VoA)", UserDataName = "Odbiornik A" });

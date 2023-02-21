@@ -244,4 +244,5 @@ public partial class MainPage : ContentPage
             vslInfo.IsVisible = false;
         }
     }
+
 }
