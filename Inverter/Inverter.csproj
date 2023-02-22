@@ -109,6 +109,9 @@
 	  <MauiXaml Update="GenerateInverter\Views\GenerateInverterV.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Options\GetOptions.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Sets\ReadySetsV.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

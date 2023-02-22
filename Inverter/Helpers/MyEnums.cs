@@ -6,6 +6,7 @@
         {
             PspicePath,
             FontSize,
+            Scale,
         }
     }
     public class AppConst

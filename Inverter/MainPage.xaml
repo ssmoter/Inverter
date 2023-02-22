@@ -35,8 +35,11 @@
         </Style>
     </ContentPage.Resources>
 
-    <ScrollView x:Name="svMain" SizeChanged="svMain_SizeChanged">
-        <Grid ColumnDefinitions="200,*,200">
+    <ScrollView
+        x:Name="svMain"
+        HorizontalOptions="CenterAndExpand"
+        VerticalOptions="StartAndExpand">
+        <Grid x:Name="gMain" ColumnDefinitions="*,auto,*">
             <VerticalStackLayout
                 x:Name="vslInfo"
                 Grid.Column="2"
@@ -45,7 +48,7 @@
                 IsVisible="false"
                 VerticalOptions="StartAndExpand">
 
-                <Label FontSize="Micro" Text="Praca Dyplomowa:&#10;Sławomir Smoter" />
+                <Label FontSize="Micro" Text="Praca Dyplomowa:&#10;inż. Sławomir Smoter" />
 
                 <Button
                     Margin="0"
@@ -123,9 +126,8 @@
 
                     <Button Clicked="Configuration" Text="Wczytaj Gotowy Zestaw" />
 
-                    <Button Clicked="PspiceLocation_Clicked" Text="Lokalizacja Pspice" />
+                    <Button Clicked="Options" Text="Opcje" />
 
-                    <Button Clicked="FontSize_Clicked" Text="Rozmiar Czcionki" />
 
                 </VerticalStackLayout>
                 <HorizontalStackLayout
