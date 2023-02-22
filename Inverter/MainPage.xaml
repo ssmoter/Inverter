@@ -36,7 +36,7 @@
     </ContentPage.Resources>
 
     <ScrollView x:Name="svMain" SizeChanged="svMain_SizeChanged">
-        <Grid ColumnDefinitions="200,*,200">
+        <Grid ColumnDefinitions="*,auto,*">
             <VerticalStackLayout
                 x:Name="vslInfo"
                 Grid.Column="2"
@@ -45,7 +45,7 @@
                 IsVisible="false"
                 VerticalOptions="StartAndExpand">
 
-                <Label FontSize="Micro" Text="Praca Dyplomowa:&#10;Sławomir Smoter" />
+                <Label FontSize="Micro" Text="Praca Dyplomowa:&#10;inż. Sławomir Smoter" />
 
                 <Button
                     Margin="0"
