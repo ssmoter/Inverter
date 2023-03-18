@@ -1,4 +1,5 @@
-﻿using Inverter.Data;
+﻿using CommunityToolkit.Maui.Views;
+using Inverter.Data;
 using Inverter.Data.Draw;
 using Inverter.Data.Draw.Schema;
 using Inverter.Display.ViewsModel;
@@ -10,8 +11,7 @@ using System.Timers;
 
 namespace Inverter.Display.Views;
 
-public partial class DisplayV : ContentPage
-{
+public partial class DisplayV : ContentPage, IDisposable {
     FileManager _fm;
     private string _name;
 
@@ -29,8 +29,11 @@ public partial class DisplayV : ContentPage
     System.Timers.Timer _timer;
     //linia do schematu
     private LineTimeSchema _lineTimeSchema;
-    public DisplayV(DisplayVM vm)
-    {
+
+    //popUp
+
+    private PopUpListV popUpListV;
+    public DisplayV(DisplayVM vm) {
         BindingContext = new object();
         Resources.Clear();
         InitializeComponent();
@@ -41,12 +44,10 @@ public partial class DisplayV : ContentPage
         _fm = new FileManager();
     }
 
-    public DisplayV(ResponseModel responseModel)
-    {
+    public DisplayV(ResponseModel responseModel) {
         Resources.Clear();
         InitializeComponent();
-        DisplayVM vm = new DisplayVM()
-        {
+        DisplayVM vm = new DisplayVM() {
             ResponseModel = responseModel,
             FontSize = Config.FontSize,
         };
@@ -59,54 +60,46 @@ public partial class DisplayV : ContentPage
     }
 
 
-    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
-    {
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args) {
         base.OnNavigatedTo(args);
 
-        try
-        {
+        try {
             Initialization();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
             await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
 
-    private void Initialization()
-    {
-        try
-        {
+    private void Initialization() {
+        try {
             sbFind.MaximumWidthRequest = Config.FontSize * 15;
             sbFind.MinimumWidthRequest = Config.FontSize * 10;
+            _optionsVisibility = Config.OptionsVisibility;
+            OptionsVisibilityChange();
 
-            if (BindingContext is DisplayVM)
-            {
+            if (BindingContext is DisplayVM) {
                 bc = (DisplayVM)BindingContext;
                 bc.DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.DataGraphs);
                 DataGraphs = bc.DataGraphs;
                 _name = bc.ResponseModel.FileDataPath;
-                if (!bc.ResponseModel.IsReady)
-                {
+                if (!bc.ResponseModel.IsReady) {
                     DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.OutPutString.Mapping(bc.ResponseModel).DataGraphs);
                 }
                 sSymulationTimer.Value = SActualCurrentIndex;
                 #region Wykresy
 
                 _graphs = new();
-                if (DataGraphs == null)
-                {
+                if (DataGraphs == null) {
                     return;
                 }
-                for (int i = 0; i < DataGraphs.Count; i++)
-                {
+                for (int i = 0; i < DataGraphs.Count; i++) {
                     DataGraphs[i].SetMaxMin();
                     _graphs.Add(new Graph(_fm));
 
                     var find = Resources.Where(x => x.Key == i.ToString() && x.Value == _graphs[i]).FirstOrDefault();
-                    if (find.Key != null)
-                    {
+                    if (find.Key != null) {
                         Resources.Add(i.ToString(), _graphs[i]);
                     }
 
@@ -122,8 +115,7 @@ public partial class DisplayV : ContentPage
                 _gvSchema = new();
                 _gvSchema.Drawable = _inverterSchema;
                 var findSchemat = Resources.Where(x => x.Key == nameof(InverterSchema) && x.Value == _gvSchema).FirstOrDefault();
-                if (findSchemat.Key != null)
-                {
+                if (findSchemat.Key != null) {
                     Resources.Add(nameof(InverterSchema), _gvSchema);
                 }
                 gSchema.Clear();
@@ -153,10 +145,14 @@ public partial class DisplayV : ContentPage
 
                 #endregion
 
+                #region popUp
+
+                popUpListV = new PopUpListV(new PopUpListVM(DataGraphs));
+
+                #endregion
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
             throw ex;
         }
@@ -165,53 +161,41 @@ public partial class DisplayV : ContentPage
 
     #region Wykres
 
-    private GraphicsView SetGraphicsView(GraphicsView graphicsView)
-    {
+    private GraphicsView SetGraphicsView(GraphicsView graphicsView) {
         graphicsView = new();
         graphicsView.Margin = new Thickness(5, 5, 0, 0);
         graphicsView.ZIndex = 10;
         return graphicsView;
     }
-    private int SetNumberCurrentGraph()
-    {
+    private int SetNumberCurrentGraph() {
         int n = 1;
-        for (int i = 0; i < DataGraphs.Count; i++)
-        {
-            if (n <= DataGraphs[i].LocationRow)
-            {
+        for (int i = 0; i < DataGraphs.Count; i++) {
+            if (n <= DataGraphs[i].LocationRow) {
                 if (DataGraphs[i].Visible)
                     n = (int)DataGraphs[i].LocationRow + 1;
             }
         }
         return n;
     }
-    private void SetGraphRowDefinitions(Grid views, int NumberOfRows)
-    {
+    private void SetGraphRowDefinitions(Grid views, int NumberOfRows) {
         views.RowDefinitions.Clear();
-        for (int i = 0; i < NumberOfRows; i++)
-        {
+        for (int i = 0; i < NumberOfRows; i++) {
             views.AddRowDefinition(new RowDefinition(new GridLength(1, GridUnitType.Star)));
         }
     }
-    private async void UpdateRow_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
+    private async void UpdateRow_Clicked(object sender, EventArgs e) {
+        try {
             await ReDrawGraph();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
 
 
-    private async Task ReDrawGraph()
-    {
-        try
-        {
-            if (BindingContext is DisplayVM)
-            {
+    private async Task ReDrawGraph() {
+        try {
+            if (BindingContext is DisplayVM) {
                 bc = (DisplayVM)BindingContext;
                 DataGraphs = bc.DataGraphs;
             }
@@ -223,37 +207,30 @@ public partial class DisplayV : ContentPage
             //Ustawienie ilości wierszy
             SetGraphRowDefinitions(gGraph, numberCurrentGraph);
 
-            for (int i = 0; i < DataGraphs.Count; i++)
-            {
-                if (DataGraphs[i].Visible)
-                {
+            for (int i = 0; i < DataGraphs.Count; i++) {
+                if (DataGraphs[i].Visible) {
                     _gvGraphs = SetGraphicsView(_gvGraphs);
                     _gvGraphs.Drawable = _graphs[i];
                     //grubosc lini
-                    try
-                    {
+                    try {
                         strokeSize = float.Parse(eStrokeSize.Text);
                     }
-                    catch
-                    {
+                    catch {
                         strokeSize = 1.5f;
                     }
                     _graphs[i].StrokeSize = strokeSize;
-                    if (DataGraphs[i].LocationRow >= 0)
-                    {
+                    if (DataGraphs[i].LocationRow >= 0) {
                         //Ustawienie lokacji wykresu
                         gGraph.Add(_gvGraphs, 0, DataGraphs[i].LocationRow);
                     }
-                    if (DataGraphs[i].locationRowSpan > 0)
-                    {
+                    if (DataGraphs[i].locationRowSpan > 0) {
                         //Ustawienie wysokości wykresu
                         gGraph.SetRowSpan(_gvGraphs, DataGraphs[i].locationRowSpan);
                     }
                     //sprawdzenie czy tylko raz zostanie opisana oś X
                     bool fourier = DataGraphs[i].DataName.Contains(AppConst.Fourier);
                     _graphs[i].AxisXWrite = !axisX.Any(x => x == DataGraphs[i].LocationRow);
-                    if (!fourier)
-                    {
+                    if (!fourier) {
                         axisX.Add(DataGraphs[i].LocationRow);
                     }
                     //ustawienie koloru wykresu
@@ -266,8 +243,7 @@ public partial class DisplayV : ContentPage
                     int positionlenght = axisX.FindAll(x => x == DataGraphs[i].LocationRow).Count;
 
                     var a = DataGraphs.Where(x => x.LocationRow == DataGraphs[i].LocationRow && x.Visible).ToArray();
-                    for (int k = 1; k < positionlenght; k++)
-                    {
+                    for (int k = 1; k < positionlenght; k++) {
                         positionName += a[k].DataName.Length * bc.FontSize;
                     }
 
@@ -276,53 +252,40 @@ public partial class DisplayV : ContentPage
                     startIndex = 0;
                     endIndex = DataGraphs[i].Y.Count;
                     #region OsX =user
-                    if (scopeGraph && !fourier)
-                    {
+                    if (scopeGraph && !fourier) {
                         float valueStart = 0;
                         float valueEnd = DataGraphs[i].X.LastOrDefault();
-                        try
-                        {
-                            if (!string.IsNullOrWhiteSpace(eStartScope.Text))
-                            {
+                        try {
+                            if (!string.IsNullOrWhiteSpace(eStartScope.Text)) {
                                 valueStart = float.Parse(eStartScope.Text);
                             }
-                            if (!string.IsNullOrWhiteSpace(eEndScope.Text))
-                            {
+                            if (!string.IsNullOrWhiteSpace(eEndScope.Text)) {
                                 valueEnd = float.Parse(eEndScope.Text);
-                                if (valueEnd <= 0)
-                                {
+                                if (valueEnd <= 0) {
                                     valueEnd = DataGraphs[i].X.LastOrDefault();
                                 }
                             }
                         }
-                        catch
-                        {
+                        catch {
                         }
                         startIndex = DataGraphs[i].Y.Count;
                         endIndex = 0;
-                        for (int j = 1; j < DataGraphs[i].Y.Count - 1; j++)
-                        {
-                            if (valueStart >= DataGraphs[i].X[j])
-                            {
-                                if (valueStart <= DataGraphs[i].X[j + 1])
-                                {
+                        for (int j = 1; j < DataGraphs[i].Y.Count - 1; j++) {
+                            if (valueStart >= DataGraphs[i].X[j]) {
+                                if (valueStart <= DataGraphs[i].X[j + 1]) {
                                     startIndex = j;
                                 }
                             }
-                            if (valueEnd <= DataGraphs[i].X[j])
-                            {
-                                if (valueEnd >= DataGraphs[i].X[j - 1])
-                                {
+                            if (valueEnd <= DataGraphs[i].X[j]) {
+                                if (valueEnd >= DataGraphs[i].X[j - 1]) {
                                     endIndex = j;
                                 }
                             }
                         }
-                        if (valueStart <= DataGraphs[i].X.FirstOrDefault())
-                        {
+                        if (valueStart <= DataGraphs[i].X.FirstOrDefault()) {
                             startIndex = 0;
                         }
-                        if (valueEnd >= DataGraphs[i].X.LastOrDefault())
-                        {
+                        if (valueEnd >= DataGraphs[i].X.LastOrDefault()) {
                             endIndex = DataGraphs[i].X.Count;
                         }
                     }
@@ -338,23 +301,19 @@ public partial class DisplayV : ContentPage
                     data.Max = DataGraphs[i].Max;
                     data.Min = DataGraphs[i].Min;
 
-                    if (startIndex != DataGraphs.FirstOrDefault().Y.Count || endIndex != 0)
-                    {
-                        for (int k = startIndex; k < endIndex; k++)
-                        {
+                    if (startIndex != DataGraphs.FirstOrDefault().Y.Count || endIndex != 0) {
+                        for (int k = startIndex; k < endIndex; k++) {
                             data.X.Add(DataGraphs[i].X[k]);
                             data.Y.Add(DataGraphs[i].Y[k]);
                         }
                     }
-                    else
-                    {
+                    else {
                         data.X = DataGraphs[i].X;
                         data.Y = DataGraphs[i].Y;
                     }
                     #endregion
                     //os Y
-                    if (data.Multiplier == 0)
-                    {
+                    if (data.Multiplier == 0) {
                         _graphs[i].MaxYValue = DataGraphs.Where(x => x.LocationRow == data.LocationRow && x.Visible).Max(y => y.Max);
                         _graphs[i].MinYValue = -DataGraphs.Where(x => x.LocationRow == data.LocationRow && x.Visible).Max(y => Math.Abs(y.Min));
 
@@ -363,8 +322,7 @@ public partial class DisplayV : ContentPage
                         //_graphs[i].MaxYValue = DataGraphs.Max(x => x.Max);
                         // _graphs[i].MinYValue = -DataGraphs.Max(x => x.Max);
                     }
-                    else
-                    {
+                    else {
                         _graphs[i].MaxYValue = data.Max;
                         _graphs[i].MinYValue = data.Min;
                         _graphs[i].MaxYPosition = data.Max * data.Multiplier;
@@ -388,36 +346,29 @@ public partial class DisplayV : ContentPage
                     //skalowanie osi X
                     _graphs[i].AutoScaleX = autoScaleX;
 
-                    for (int j = 0; j < (endIndex - startIndex); j++)
-                    {
-                        if (data.Multiplier != 0)
-                        {
+                    for (int j = 0; j < (endIndex - startIndex); j++) {
+                        if (data.Multiplier != 0) {
                             _graphs[i].AutoScaleY = false;
                             _graphs[i].point.LineTo(n, -(data.Y[j] * data.Multiplier));
-                            if (fourier)
-                            {
+                            if (fourier) {
                                 _graphs[i].point.LineTo(n, -(data.Y[j] * data.Multiplier));
                                 _graphs[i].point.MoveTo(n + 1, 0);
                             }
 
                         }
-                        else
-                        {
+                        else {
                             _graphs[i].AutoScaleY = true;
                             _graphs[i].point.LineTo(n, -data.Y[j]);
 
-                            if (fourier)
-                            {
+                            if (fourier) {
                                 _graphs[i].point.LineTo(n, -(data.Y[j]));
                                 _graphs[i].point.MoveTo(n + 1, 0);
                             }
                         }
                         n++;
 
-                        if (!multipledGraph)
-                        {
-                            if (j + 1 >= data.Y.Count && secondLoop < 2)
-                            {
+                        if (!multipledGraph) {
+                            if (j + 1 >= data.Y.Count && secondLoop < 2) {
                                 j = 0;
                                 secondLoop++;
                             }
@@ -427,8 +378,7 @@ public partial class DisplayV : ContentPage
                 }
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
             await DisplayAlert("Błędy:", ex.Message, "OK");
         }
@@ -444,114 +394,87 @@ public partial class DisplayV : ContentPage
     bool multipledGraph = true;
     bool scopeGraph = false;
     bool autoScaleX = false;
-    private async void ckMultipledGraph_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        try
-        {
+    private async void ckMultipledGraph_CheckedChanged(object sender, CheckedChangedEventArgs e) {
+        try {
             multipledGraph = !multipledGraph;
             if (DataGraphs != null)
                 await ReDrawGraph();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
-    private async void ckGridVisible_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        try
-        {
+    private async void ckGridVisible_CheckedChanged(object sender, CheckedChangedEventArgs e) {
+        try {
             gridVisible = !gridVisible;
             if (DataGraphs != null)
                 await ReDrawGraph();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
-    private async void ckGridScope_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        try
-        {
+    private async void ckGridScope_CheckedChanged(object sender, CheckedChangedEventArgs e) {
+        try {
             scopeGraph = !scopeGraph;
             if (DataGraphs != null)
                 await ReDrawGraph();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
-    private async void ckExtendAxisX_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        try
-        {
+    private async void ckExtendAxisX_CheckedChanged(object sender, CheckedChangedEventArgs e) {
+        try {
             autoScaleX = !autoScaleX;
             if (DataGraphs != null)
                 await ReDrawGraph();
-            if (_lineTimeSchema != null)
-            {
+            if (_lineTimeSchema != null) {
                 _lineTimeSchema.StartScopeIndex = startIndex;
                 _lineTimeSchema.EndScopeIndex = endIndex;
                 _lineTimeSchema.AutoScaleX = autoScaleX;
                 gvLineTimeSchematV.Invalidate();
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
-    private async void eStrokeSize_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        try
-        {
+    private async void eStrokeSize_TextChanged(object sender, TextChangedEventArgs e) {
+        try {
             if (DataGraphs != null)
                 await ReDrawGraph();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
-    private async void eScope_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        try
-        {
+    private async void eScope_TextChanged(object sender, TextChangedEventArgs e) {
+        try {
             if (DataGraphs != null)
                 await ReDrawGraph();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
-    private async void bClearVisible_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
-            if (DataGraphs != null)
-            {
-                for (int i = 0; i < DataGraphs.Count; i++)
-                {
+    private async void bClearVisible_Clicked(object sender, EventArgs e) {
+        try {
+            if (DataGraphs != null) {
+                for (int i = 0; i < DataGraphs.Count; i++) {
                     DataGraphs[i].Visible = false;
                 }
                 bc.DataGraphs = DataGraphs;
                 await ReDrawGraph();
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
-    private void sbFind_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        try
-        {
-            if (sbFind != null)
-            {
+    private void sbFind_TextChanged(object sender, TextChangedEventArgs e) {
+        try {
+            if (sbFind != null) {
                 if (!string.IsNullOrEmpty(sbFind.Text))
                     cvDataGraphs.ItemsSource = DataGraphs.Where
                         (x => x.DataName.ToUpper().Contains(sbFind.Text.ToUpper())
@@ -560,8 +483,7 @@ public partial class DisplayV : ContentPage
                     cvDataGraphs.ItemsSource = DataGraphs;
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
@@ -569,50 +491,39 @@ public partial class DisplayV : ContentPage
     #endregion
 
     #region Symulacja
-    public void TimerEvent(object source, ElapsedEventArgs e)
-    {
-        try
-        {
-            if (SActualCurrentIndex >= SCurrentMaxIndex)
-            {
+    public void TimerEvent(object source, ElapsedEventArgs e) {
+        try {
+            if (SActualCurrentIndex >= SCurrentMaxIndex) {
                 SActualCurrentIndex = 0;
             }
             SActualCurrentIndex++;
             changeTime();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
     private bool symulationRunning;
-    private void Symulation_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
-            if (!symulationRunning)
-            {
+    private void Symulation_Clicked(object sender, EventArgs e) {
+        try {
+            if (!symulationRunning) {
                 symulationRunning = !symulationRunning;
                 _timer.Start();
             }
-            else if (symulationRunning)
-            {
+            else if (symulationRunning) {
                 symulationRunning = !symulationRunning;
                 _timer.Stop();
             }
             bc.SActualCurrentIndex = SActualCurrentIndex;
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
 
 
     }
-    private void sSymulationTimer_ValueChanged(object sender, ValueChangedEventArgs e)
-    {
-        try
-        {
+    private void sSymulationTimer_ValueChanged(object sender, ValueChangedEventArgs e) {
+        try {
             SActualCurrentIndex = bc.SActualCurrentIndex;
             _lineTimeSchema.StartScopeIndex = startIndex;
             _lineTimeSchema.EndScopeIndex = endIndex;
@@ -621,99 +532,78 @@ public partial class DisplayV : ContentPage
         }
         catch (Exception ex) { _fm.SaveLog(ex.ToString()); }
     }
-    private void changeTime()
-    {
-        try
-        {
+    private void changeTime() {
+        try {
             _inverterSchema.Index = SActualCurrentIndex;
             _gvSchema.Invalidate();
 
             _lineTimeSchema.Index = SActualCurrentIndex;
-            if (autoScaleX)
-            {
+            if (autoScaleX) {
                 _lineTimeSchema.StartScopeIndex = startIndex;
                 _lineTimeSchema.EndScopeIndex = endIndex;
                 _lineTimeSchema.AutoScaleX = autoScaleX;
             }
             gvLineTimeSchematV.Invalidate();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
     private bool _lineTimeIsHidden = true;
-    private void ckLineTime_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        try
-        {
-            if (_lineTimeSchema != null)
-            {
+    private void ckLineTime_CheckedChanged(object sender, CheckedChangedEventArgs e) {
+        try {
+            if (_lineTimeSchema != null) {
                 _lineTimeIsHidden = !_lineTimeIsHidden;
                 _lineTimeSchema.IsHidden = _lineTimeIsHidden;
                 gvLineTimeSchematV.Invalidate();
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
 
     }
 
-    private void cbStillOpen_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        try
-        {
-            if (_inverterSchema != null)
-            {
+    private void cbStillOpen_CheckedChanged(object sender, CheckedChangedEventArgs e) {
+        try {
+            if (_inverterSchema != null) {
                 _inverterSchema.OpenUser = cbStillOpen.IsChecked;
                 _gvSchema.Invalidate();
                 bc.ResponseModel.OpenUser = cbStillOpen.IsChecked;
             }
 
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
 
-    private void eStillOpen_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        try
-        {
-            if (_inverterSchema != null)
-            {
+    private void eStillOpen_TextChanged(object sender, TextChangedEventArgs e) {
+        try {
+            if (_inverterSchema != null) {
                 _inverterSchema.StillOpenUser = float.Parse(eStillOpen.Text.Replace('.', ','));
                 _gvSchema.Invalidate();
                 bc.ResponseModel.StillOpenUser = _inverterSchema.StillOpenUser;
             }
 
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
     #endregion
 
-    private void svGraph_SizeChanged(object sender, EventArgs e)
-    {
+    private void svGraph_SizeChanged(object sender, EventArgs e) {
         svGraph.MaximumWidthRequest = this.Width;
     }
 
-    private void svMain_SizeChanged(object sender, EventArgs e)
-    {
-        try
-        {
+    private void svMain_SizeChanged(object sender, EventArgs e) {
+        try {
             svMain.MaximumWidthRequest = this.Width;
             svMain.MaximumHeightRequest = this.Height;
 
-            Application.Current.RequestedThemeChanged += (s, a) =>
-            {
-                if (_inverterSchema != null)
-                {
+            Application.Current.RequestedThemeChanged += (s, a) => {
+                if (_inverterSchema != null) {
                     if (Application.Current.RequestedTheme == AppTheme.Dark)
                         _inverterSchema.BlackWhite = true;
                     else
@@ -723,8 +613,7 @@ public partial class DisplayV : ContentPage
                 }
             };
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
 
@@ -732,70 +621,55 @@ public partial class DisplayV : ContentPage
 
     #region ZapisywanieWczytywanie
 
-    private async void bSave_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
+    private async void bSave_Clicked(object sender, EventArgs e) {
+        try {
             bc.ResponseModel.DataGraphs = DataGraphs.ToList();
             bc.ResponseModel.OutPutString = null;
             var json = JsonConvert.SerializeObject(bc.ResponseModel);
             bool complite = false;
             string result = await DisplayPromptAsync("Zapisywanie", "Podaj nazwę pliku", "Zapisz", "Anuluj", _name, -1, Keyboard.Default, _name);
-            if (!string.IsNullOrWhiteSpace(result))
-            {
+            if (!string.IsNullOrWhiteSpace(result)) {
                 bool exist = _fm.ExistFile(result);
 
-                if (exist)
-                {
+                if (exist) {
                     complite = await _fm.SaveNewData(result, json);
                 }
-                else
-                {
+                else {
                     bool overwrite = await DisplayAlert("Zapisywanie", "Istnieje już plik o takiej nazwię. Czy chcesz go nadpisać?", "Tak", "Nie");
-                    if (overwrite)
-                    {
+                    if (overwrite) {
                         complite = await _fm.SaveNewData(result, json);
                     }
                 }
             }
-            if (complite)
-            {
+            if (complite) {
                 await DisplayAlert("Zapisywanie", "Zapisono nowy plik", "OK");
             }
-            else if (!complite && result != null)
-            {
+            else if (!complite && result != null) {
                 await DisplayAlert("Zapisywanie", "Nie udało się zapisać pliku", "OK");
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
             await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
 
-    private async void bLoad_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
+    private async void bLoad_Clicked(object sender, EventArgs e) {
+        try {
             var list = _fm.GetFilesName();
 
             string[] nameList = new string[list.Count];
-            for (int i = 0; i < list.Count; i++)
-            {
+            for (int i = 0; i < list.Count; i++) {
                 nameList[i] = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", "");
             }
 
             string result = await DisplayActionSheet("Wczytaj:", "Anuluj", null, nameList);
 
-            if (result != null && result != "Anuluj")
-            {
+            if (result != null && result != "Anuluj") {
                 ResponseModel response = new ResponseModel(result);
                 int i = 0;
-                for (; i < nameList.Length; i++)
-                {
-                    if (nameList[i] == result)
-                    {
+                for (; i < nameList.Length; i++) {
+                    if (nameList[i] == result) {
                         result = list[i];
                         break;
                     }
@@ -808,16 +682,63 @@ public partial class DisplayV : ContentPage
 
                 await Navigation.PushAsync(new DisplayV(response));
                 Navigation.RemovePage(this);
+                Dispose();
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
             await DisplayAlert("Błędy:", ex.Message, "OK");
         }
     }
 
+    public void Dispose() {
+        _fm = null;
+        bc = null;
+        DataGraphs.Clear();
+        DataGraphs = null;
+        _graphs.Clear();
+        _graphs = null;
+        _gvGraphs = null;
+        _gvSchema = null;
+        _inverterSchema = null;
+        _timer = null;
+        _lineTimeSchema = null;
+    }
+
 
     #endregion
 
+    #region OpcjeDodatkowe
+
+    private bool _optionsVisibility = true;
+    private async void OptionsVisibility_MenuFlyoutItem_Clicked(object sender, EventArgs e) {
+        _optionsVisibility = !_optionsVisibility;
+        Config.OptionsVisibility = _optionsVisibility;
+        OptionsVisibilityChange();
+        await _fm.CreateConfig(_optionsVisibility.ToString(), MyEnums.configName.OptionsVisibility);
+
+    }
+    private async void OptionsVisibilityChange() {
+
+        fStillOpen.IsVisible = _optionsVisibility;
+        eStrokeSize.IsVisible = _optionsVisibility;
+        cbGridScope.IsVisible = _optionsVisibility;
+        eStartScope.IsVisible = _optionsVisibility;
+        eEndScope.IsVisible = _optionsVisibility;
+        ckLineTime.IsVisible = _optionsVisibility;
+        ckExtendAxisX.IsVisible = _optionsVisibility;
+        ckMultipledGraph.IsVisible = _optionsVisibility;
+        ckGridVisible.IsVisible = _optionsVisibility;
+        lvBackgroundColor.IsVisible = _optionsVisibility;
+    }
+    #endregion
+
+    #region popUp
+
+    private void Edytuj_MenuFlyoutItem_Clicked(object sender, EventArgs e) {
+
+        popUpListV = new PopUpListV(new PopUpListVM(DataGraphs));
+        this.ShowPopup(popUpListV);
+    }
+    #endregion
 }

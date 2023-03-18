@@ -38,6 +38,7 @@
     <ScrollView
         x:Name="svMain"
         HorizontalOptions="CenterAndExpand"
+        SizeChanged="svMain_SizeChanged"
         VerticalOptions="StartAndExpand">
         <Grid x:Name="gMain" ColumnDefinitions="*,auto,*">
             <VerticalStackLayout
@@ -92,8 +93,6 @@
                     <Image HeightRequest="75" Source="{AppThemeBinding Light=pk.png, Dark=pkblack.png}" />
                     <Image HeightRequest="75" Source="{AppThemeBinding Light=wieik.png, Dark=wieikblack.png}" />
                 </HorizontalStackLayout>
-
-
 
 
                 <Label

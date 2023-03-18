@@ -36,11 +36,7 @@
     </ContentPage.Resources>
 
 
-    <ScrollView
-        x:Name="svMain"
-        HorizontalOptions="StartAndExpand"
-        SizeChanged="ScrollView_SizeChanged"
-        VerticalOptions="StartAndExpand">
+    <ScrollView x:Name="svMain" SizeChanged="ScrollView_SizeChanged">
         <HorizontalStackLayout x:Name="hslMain">
 
             <VerticalStackLayout
@@ -54,7 +50,21 @@
                 <Button Clicked="FontSize_Clicked" Text="Rozmiar Czcionki" />
 
             </VerticalStackLayout>
-
+            <VerticalStackLayout>
+                <Label Text="Błędy" />
+                <ScrollView x:Name="svLoggi" Orientation="Both">
+                    <CollectionView x:Name="cvLoggi">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout>
+                                    <Label Text="{Binding Date}" />
+                                    <Label Text="{Binding Error}" />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+            </VerticalStackLayout>
         </HorizontalStackLayout>
     </ScrollView>
 </ContentPage>

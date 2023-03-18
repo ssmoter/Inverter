@@ -6,117 +6,94 @@ using System.Runtime.CompilerServices;
 using System.Timers;
 using System.Windows.Input;
 
-namespace Inverter.Display.ViewsModel
-{
+namespace Inverter.Display.ViewsModel {
     [QueryProperty(nameof(ResponseModel), nameof(ResponseModel))]
-    public class DisplayVM : INotifyPropertyChanged
-    {
+    public class DisplayVM : INotifyPropertyChanged {
         public ResponseModel ResponseModel { get; set; }
         private int _fontSize = 20;
-        public int FontSize
-        {
-            get
-            {
-                if (_fontSize<=0)
-                {
+        public int FontSize {
+            get {
+                if (_fontSize <= 0) {
                     _fontSize = 20;
                 }
                 return _fontSize;
             }
-            set
-            {
+            set {
                 _fontSize = value;
                 OnPropertyChanged(nameof(FontSize));
             }
         }
+
         private ObservableCollection<DataGraph> _dataGraphs;
-        public ObservableCollection<DataGraph> DataGraphs
-        {
-            get
-            {
+        public ObservableCollection<DataGraph> DataGraphs {
+            get {
                 return _dataGraphs;
             }
-            set
-            {
+            set {
                 _dataGraphs = value;
                 OnPropertyChanged(nameof(DataGraphs));
             }
         }
 
         private string _maxMinValue;
-        public string MaxMinValue
-        {
+        public string MaxMinValue {
             get { return _maxMinValue; }
-            set
-            {
+            set {
                 _maxMinValue = value;
                 OnPropertyChanged(nameof(MaxMinValue));
             }
         }
 
         private DataGraph _dataGraphSelectedItem;
-        public DataGraph DataGraphSelectedItem
-        {
+        public DataGraph DataGraphSelectedItem {
             get => _dataGraphSelectedItem;
-            set
-            {
+            set {
                 _dataGraphSelectedItem = value;
                 DataGraphUpdateItem = DataGraphSelectedItem;
 
-                if (_dataGraphSelectedItem != null)
-                {
-                    try
-                    {
+                if (_dataGraphSelectedItem != null) {
+                    try {
                         _maxMinValue = "Max = " + _dataGraphSelectedItem.Max.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault() +
                            " Min = " + _dataGraphSelectedItem.Min.ToString() + " " + _dataGraphSelectedItem.DataName.ToLower().FirstOrDefault();
-                        if (_dataGraphSelectedItem.DataName.Contains(AppConst.Fourier))
-                        {
+                        if (_dataGraphSelectedItem.DataName.Contains(AppConst.Fourier)) {
                             _maxMinValue = $"THD={GetTHD(_dataGraphSelectedItem)}" +
                                 $" THD%={GetTHD(_dataGraphSelectedItem) * 100}%";
                         }
 
                     }
-                    catch
-                    { }
+                    catch { }
                     OnPropertyChanged(nameof(MaxMinValue));
                 }
                 OnPropertyChanged(nameof(DataGraphSelectedItem));
             }
         }
 
-        private float GetTHD(DataGraph DataGraphSelectedItem)
-        {
+        private float GetTHD(DataGraph DataGraphSelectedItem) {
             float counter = 0;
-            for (int i = 2; i < DataGraphSelectedItem.Y.Count; i++)
-            {
+            for (int i = 2; i < DataGraphSelectedItem.Y.Count; i++) {
                 counter += DataGraphSelectedItem.Y[i] * DataGraphSelectedItem.Y[i];
             }
 
             return (float)Math.Sqrt(counter) / DataGraphSelectedItem.Y[1];
         }
         private DataGraph _dataGraphUpdateItem;
-        public DataGraph DataGraphUpdateItem
-        {
+        public DataGraph DataGraphUpdateItem {
             get => _dataGraphUpdateItem;
-            set
-            {
+            set {
                 _dataGraphUpdateItem = value;
                 OnPropertyChanged(nameof(DataGraphUpdateItem));
             }
         }
 
-        public DisplayVM()
-        {
+        public DisplayVM() {
             Initialization();
         }
-        public DisplayVM(ResponseModel responseModel)
-        {
+        public DisplayVM(ResponseModel responseModel) {
             ResponseModel = responseModel;
             Initialization();
         }
 
-        private void Initialization()
-        {
+        private void Initialization() {
             SetUpdateItem();
 
             _timer = new System.Timers.Timer(100);
@@ -130,57 +107,46 @@ namespace Inverter.Display.ViewsModel
         #region Symulacja
 
         System.Timers.Timer _timer;
-        public void TimerEvent(object source, ElapsedEventArgs e)
-        {
-            if (SActualCurrentIndex >= SCurrentMaxIndex)
-            {
+        public void TimerEvent(object source, ElapsedEventArgs e) {
+            if (SActualCurrentIndex >= SCurrentMaxIndex) {
                 SActualCurrentIndex = 0;
             }
             SActualCurrentIndex++;
         }
         private int _sActualCurrentndex = 0;
-        public int SActualCurrentIndex
-        {
+        public int SActualCurrentIndex {
             get => _sActualCurrentndex;
-            set
-            {
+            set {
                 _sActualCurrentndex = value;
                 OnPropertyChanged(nameof(SActualCurrentIndex));
             }
         }
         private int _sActualMaxIndex = 1;
-        public int SCurrentMaxIndex
-        {
+        public int SCurrentMaxIndex {
             get => _sActualMaxIndex;
-            set
-            {
+            set {
                 _sActualMaxIndex = value;
                 OnPropertyChanged(nameof(SCurrentMaxIndex));
             }
         }
         private string _nameSimulationbutton;
-        public string NameSimulationbutton
-        {
+        public string NameSimulationbutton {
             get => _nameSimulationbutton;
-            set
-            {
+            set {
                 _nameSimulationbutton = value;
                 OnPropertyChanged(nameof(NameSimulationbutton));
             }
         }
         private bool symulationRunning;
-        public ICommand StartSymulation => new Command(() =>
-        {
-            if (!symulationRunning)
-            {
+        public ICommand StartSymulation => new Command(() => {
+            if (!symulationRunning) {
                 symulationRunning = !symulationRunning;
-               // _timer.Start();
+                // _timer.Start();
                 NameSimulationbutton = "Zatrzymaj";
             }
-            else if (symulationRunning)
-            {
+            else if (symulationRunning) {
                 symulationRunning = !symulationRunning;
-               // _timer.Stop();
+                // _timer.Stop();
                 NameSimulationbutton = "Uruchom";
             }
         });
@@ -188,15 +154,13 @@ namespace Inverter.Display.ViewsModel
 
         #endregion
 
-        private void SetUpdateItem()
-        {
+        private void SetUpdateItem() {
             DataGraphUpdateItem = new();
             DataGraphUpdateItem.UserColor = new();
             OnPropertyChanged(nameof(DataGraphUpdateItem));
         }
 
-        public ICommand UpdateRowCommand => new Command(() =>
-        {
+        public ICommand UpdateRowCommand => new Command(() => {
             //var n = -1;
             //n = DataGraphs.IndexOf(DataGraphSelectedItem);
             //if (n < 0)
@@ -224,15 +188,13 @@ namespace Inverter.Display.ViewsModel
             //catch
             //{ }
         });
-        public ICommand RefreshListCommand => new Command(() =>
-        {
+        public ICommand RefreshListCommand => new Command(() => {
             DataGraphs = new ObservableCollection<DataGraph>(DataGraphs);
             OnPropertyChanged(nameof(DataGraphs));
         });
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }

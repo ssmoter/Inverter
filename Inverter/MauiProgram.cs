@@ -1,4 +1,5 @@
-﻿using Inverter.Display.Views;
+﻿using CommunityToolkit.Maui;
+using Inverter.Display.Views;
 using Inverter.Display.ViewsModel;
 using Inverter.GenerateInverter.ViewsModel;
 using Inverter.Helpers;
@@ -13,6 +14,7 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

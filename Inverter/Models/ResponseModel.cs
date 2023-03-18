@@ -1,10 +1,8 @@
 ﻿using System.Reflection;
 using System.Text;
 
-namespace Inverter.Models
-{
-    public class ResponseModel
-    {
+namespace Inverter.Models {
+    public class ResponseModel {
         public string FileDataPath { get; set; }
         public string OutPutString { get; set; }
         public List<DataGraph> DataGraphs { get; set; }
@@ -14,21 +12,18 @@ namespace Inverter.Models
         public float StillOpenUser { get; set; }
         public bool OpenUser { get; set; }
 
-        public ResponseModel()
-        {
+        public ResponseModel() {
             DataGraphs = new();
             IsReady = false;
         }
-        public ResponseModel(string fileDataPath)
-        {
+        public ResponseModel(string fileDataPath) {
             DataGraphs = new();
             FileDataPath = fileDataPath;
             IsReady = false;
         }
     }
 
-    public class DataGraph
-    {
+    public class DataGraph {
         public string DataName { get; set; }
         public string UserDataName { get; set; }
         public NamedColor UserColor { get; set; }
@@ -40,9 +35,9 @@ namespace Inverter.Models
         public int locationRowSpan { get; set; } = 1;
         public float Max { get; set; }
         public float Min { get; set; }
-
-        public DataGraph()
-        {
+        public bool CanDelete { get; set; } = false;
+        public bool CanModify { get; set; } = false;
+        public DataGraph() {
             DataName = "";
             UserDataName = "";
             UserColor = new NamedColor();
@@ -50,16 +45,14 @@ namespace Inverter.Models
             Y = new();
         }
 
-        public void SetMaxMin()
-        {
+        public void SetMaxMin() {
             Max = Y.Max();
             Min = Y.Min();
         }
     }
 
 
-    public class NamedColor
-    {
+    public class NamedColor {
         public string Name { get; set; }
         public string FriendlyName { get; set; }
         public Color Color { get; set; }
@@ -67,34 +60,28 @@ namespace Inverter.Models
         public float Red => Color.Red;
         public float Green => Color.Green;
         public float Blue => Color.Blue;
-        public NamedColor()
-        {
+        public NamedColor() {
             Color = new Color();
         }
         public static IEnumerable<NamedColor> All { get; private set; }
 
 
-        static NamedColor()
-        {
+        static NamedColor() {
             List<NamedColor> all = new List<NamedColor>();
             StringBuilder stringBuilder = new StringBuilder();
 
             // Loop through the public static fields of the Color structure.
-            foreach (FieldInfo fieldInfo in typeof(Colors).GetRuntimeFields())
-            {
+            foreach (FieldInfo fieldInfo in typeof(Colors).GetRuntimeFields()) {
                 if (fieldInfo.IsPublic &&
                     fieldInfo.IsStatic &&
-                    fieldInfo.FieldType == typeof(Color))
-                {
+                    fieldInfo.FieldType == typeof(Color)) {
                     // Convert the name to a friendly name.
                     string name = fieldInfo.Name;
                     stringBuilder.Clear();
                     int index = 0;
 
-                    foreach (char ch in name)
-                    {
-                        if (index != 0 && Char.IsUpper(ch))
-                        {
+                    foreach (char ch in name) {
+                        if (index != 0 && Char.IsUpper(ch)) {
                             stringBuilder.Append(' ');
                         }
                         stringBuilder.Append(ch);
@@ -102,8 +89,7 @@ namespace Inverter.Models
                     }
 
                     // Instantiate a NamedColor object.
-                    NamedColor namedColor = new NamedColor
-                    {
+                    NamedColor namedColor = new NamedColor {
                         Name = name,
                         FriendlyName = stringBuilder.ToString(),
                         Color = (Color)fieldInfo.GetValue(null)

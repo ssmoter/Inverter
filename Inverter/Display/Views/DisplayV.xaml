@@ -128,28 +128,38 @@
         </Style>
     </ContentPage.Resources>
 
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="Opcje">
+            <MenuFlyoutItem Clicked="OptionsVisibility_MenuFlyoutItem_Clicked" Text="Ukryj dodatkowe" />
+        </MenuBarItem>
+        <MenuBarItem Text="Lista zmiennych">
+            <MenuFlyoutItem Clicked="Edytuj_MenuFlyoutItem_Clicked" Text="Edytuj" />
+            <MenuFlyoutItem
+                Clicked="bClearVisible_Clicked"
+                Command="{Binding RefreshListCommand}"
+                Text="Wyczyść" />
+        </MenuBarItem>
+        <MenuBarItem Text="Plik">
+            <MenuFlyoutItem Clicked="bSave_Clicked" Text="Zapisz" />
+            <MenuFlyoutItem Clicked="bLoad_Clicked" Text="Wczytaj" />
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+
+
     <ScrollView
         x:Name="svMain"
         Margin="5,0,10,5"
         SizeChanged="svMain_SizeChanged">
+
         <Grid
             x:Name="gMain"
             ColumnDefinitions="*,.8*"
             ColumnSpacing="5"
+            MinimumHeightRequest="900"
             RowDefinitions="auto,auto,auto,auto,*"
             RowSpacing="5">
 
             <HorizontalStackLayout>
-                <Button
-                    x:Name="bSave"
-                    Clicked="bSave_Clicked"
-                    HorizontalOptions="Start"
-                    Text="Zapisz" />
-                <Button
-                    x:Name="bLoad"
-                    Clicked="bLoad_Clicked"
-                    HorizontalOptions="Start"
-                    Text="Wczytaj" />
                 <SearchBar
                     x:Name="sbFind"
                     HorizontalOptions="Start"
@@ -170,6 +180,7 @@
                 HorizontalOptions="Center"
                 Text="Schemat" />
             <Frame
+                x:Name="fStillOpen"
                 Grid.Row="0"
                 Grid.Column="1"
                 Margin="0"
@@ -205,6 +216,7 @@
                     TextChanged="eStrokeSize_TextChanged"
                     ToolTipProperties.Text="Grubość lini&#10;0-auto" />
                 <CheckBox
+                    x:Name="cbGridScope"
                     Grid.Column="1"
                     CheckedChanged="ckGridScope_CheckedChanged"
                     IsChecked="False"
@@ -356,17 +368,6 @@
                     HorizontalOptions="Center"
                     Text="Aktualizuj"
                     ToolTipProperties.Text="Zapisz ustawienia i odśwież osie"
-                    ZIndex="10" />
-                <Button
-                    x:Name="bClearVisible"
-                    Grid.Row="3"
-                    Grid.Column="4"
-                    Margin="0,5,0,0"
-                    Clicked="bClearVisible_Clicked"
-                    Command="{Binding RefreshListCommand}"
-                    HorizontalOptions="End"
-                    Text="Wyczyść"
-                    ToolTipProperties.Text="Anuluj wyświetlanie wykresów"
                     ZIndex="10" />
                 <Button
                     Grid.Row="3"

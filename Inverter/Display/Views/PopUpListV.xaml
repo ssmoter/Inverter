@@ -1,0 +1,130 @@
+﻿<toolkit:Popup
+    x:Class="Inverter.Display.Views.PopUpListV"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Inverter.Display.ViewsModel"
+    x:Name="page"
+    Color="red">
+
+    <VerticalStackLayout BackgroundColor="{AppThemeBinding Light={x:StaticResource Gray100}, Dark={x:StaticResource Gray950}}">
+        <Grid ColumnDefinitions="*,auto">
+            <VerticalStackLayout Grid.Column="0" Padding="5">
+                <Label Text="Zmienne:" />
+                <ScrollView HeightRequest="200">
+                    <CollectionView
+                        x:Name="cvGraphList"
+                        Margin="0,0,5,0"
+                        ItemsSource="{Binding DataGraphs}"
+                        SelectedItem="{Binding DataGraphSelectedItem}"
+                        SelectionMode="Single">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="auto,*,auto,auto" RowSpacing="0">
+                                    <Label
+                                        Grid.Column="0"
+                                        Text="{Binding DataName}"
+                                        ToolTipProperties.Text="ID" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding UserDataName}"
+                                        ToolTipProperties.Text="Nazwa" />
+                                    <Button
+                                        Grid.Column="2"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PopUpListVM}}, Path=DeleteCommand}"
+                                        CommandParameter="{Binding .}"
+                                        IsVisible="{Binding CanDelete}"
+                                        Resources="{x:Reference page}"
+                                        Text="Usuń"
+                                        ToolTipProperties.Text="Usuń daną zmienną&#10;Można usunać tylko dodane zmienne a nie wczytane" />
+                                    <Grid.GestureRecognizers>
+                                        <DragGestureRecognizer DragStartingCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:PopUpListVM}}, Path=DragCommand}" DragStartingCommandParameter="{Binding .}" />
+                                        <TapGestureRecognizer
+                                            Buttons="Primary"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PopUpListVM}}, Path=DoubleTapCommand}"
+                                            CommandParameter="{Binding .}"
+                                            NumberOfTapsRequired="2" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+            </VerticalStackLayout>
+            <VerticalStackLayout />
+            <VerticalStackLayout Grid.Column="1" Padding="5">
+                <Label Text="Opcje:" VerticalTextAlignment="Center" />
+                <Button
+                    Command="{Binding ButtonCommand}"
+                    CommandParameter="+"
+                    Text="➕ Plus"
+                    ToolTipProperties.Text="Dodaje do siebie wszyskie punkty z tym samym indeksem&#10;A[0]+B[0]" />
+                <Button
+                    Command="{Binding ButtonCommand}"
+                    CommandParameter="-"
+                    Text="➖ Minus"
+                    ToolTipProperties.Text="Odejmuje od siebie wszyskie punkty z tym samym indeksem&#10;A[0]-B[0]" />
+                <Button
+                    Command="{Binding ButtonCommand}"
+                    CommandParameter="*"
+                    Text="✖ Iloczyn"
+                    ToolTipProperties.Text="Mnoży wszystkie punkty z tym samym indeksem&#10;A[0]*B[0]" />
+                <Button
+                    Command="{Binding ButtonCommand}"
+                    CommandParameter="/"
+                    Text="➗ Iloraz"
+                    ToolTipProperties.Text="Dzili wszyskie punkty z tym samym indeksem&#10;A[0]/B[0]" />
+            </VerticalStackLayout>
+        </Grid>
+
+
+        <HorizontalStackLayout>
+            <Frame MaximumWidthRequest="500" MinimumWidthRequest="400">
+                <Frame.GestureRecognizers>
+                    <DropGestureRecognizer DropCommand="{Binding DropCommand}" />
+                </Frame.GestureRecognizers>
+                <CollectionView ItemsSource="{Binding NewEntryGraph}" SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="1" Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label HorizontalOptions="Center" Text="{Binding .}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Buttons="Primary"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PopUpListVM}}, Path=RemoveNewCommand}"
+                                        CommandParameter="{Binding .}"
+                                        NumberOfTapsRequired="2" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="BackgroundColor" Value="Transparent" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Frame>
+            <Entry
+                HorizontalOptions="EndAndExpand"
+                MinimumWidthRequest="100"
+                ReturnCommand="{Binding EntryTextChangedCommand}"
+                ReturnCommandParameter="{Binding ENewParameter}"
+                Text="{Binding ENewParameter}" />
+            <Button
+                Command="{Binding AddCommand}"
+                HorizontalOptions="EndAndExpand"
+                Text="✔ Dodaj"
+                ToolTipProperties.Text="Dodaje nową zmienną" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+
+</toolkit:Popup>
