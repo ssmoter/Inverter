@@ -195,10 +195,10 @@ public partial class DisplayV : ContentPage, IDisposable {
 
     private async Task ReDrawGraph() {
         try {
-            if (BindingContext is DisplayVM) {
-                bc = (DisplayVM)BindingContext;
-                DataGraphs = bc.DataGraphs;
-            }
+            //if (BindingContext is DisplayVM) {
+            //    bc = (DisplayVM)BindingContext;
+            //    DataGraphs = bc.DataGraphs;
+            //}
 
             List<int> axisX = new List<int>();
             gGraph.Clear();

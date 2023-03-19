@@ -159,7 +159,7 @@ namespace Inverter.Display.ViewsModel {
 
                 float y2 = 0;
                 int n = -1;
-                for (int i = 1; i < NewEntryGraph.Count - 1; i++) {
+                for (int i = 1; i < NewEntryGraph.Count; i++) {
                     if (signList.Any(x => x == i)) {
                         n++;
                         continue;

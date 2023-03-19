@@ -4,12 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:Inverter.Display.ViewsModel"
-    x:Name="page"
-    Color="red">
+    x:Name="page">
 
     <VerticalStackLayout BackgroundColor="{AppThemeBinding Light={x:StaticResource Gray100}, Dark={x:StaticResource Gray950}}">
         <Grid ColumnDefinitions="*,auto">
-            <VerticalStackLayout Grid.Column="0" Padding="5">
+            <VerticalStackLayout
+                Grid.Column="0"
+                Padding="5"
+                ToolTipProperties.Text="Aby dodać zmienną należy:&#10;-dwukrotnie kliknać na zmienną&#10;-przeciągnąć zmienną i upuscić ją na dole">
                 <Label Text="Zmienne:" />
                 <ScrollView HeightRequest="200">
                     <CollectionView
@@ -52,7 +54,10 @@
                 </ScrollView>
             </VerticalStackLayout>
             <VerticalStackLayout />
-            <VerticalStackLayout Grid.Column="1" Padding="5">
+            <VerticalStackLayout
+                Grid.Column="1"
+                Padding="5"
+                ToolTipProperties.Text="Działania są wykonywane od lewej do prawej i nie jest brana pod uwagę kolejność wykonywania działań&#10;np A+B*C zostanie wykonane najpierw dodawanie a potem mnożenie">
                 <Label Text="Opcje:" VerticalTextAlignment="Center" />
                 <Button
                     Command="{Binding ButtonCommand}"
@@ -79,7 +84,10 @@
 
 
         <HorizontalStackLayout>
-            <Frame MaximumWidthRequest="500" MinimumWidthRequest="400">
+            <Frame
+                MaximumWidthRequest="500"
+                MinimumWidthRequest="400"
+                ToolTipProperties.Text="W celu usunięcia należy dwukrotnie kliknąć na zmienną lub znak">
                 <Frame.GestureRecognizers>
                     <DropGestureRecognizer DropCommand="{Binding DropCommand}" />
                 </Frame.GestureRecognizers>
@@ -89,7 +97,10 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label HorizontalOptions="Center" Text="{Binding .}">
+                            <Label
+                                Padding="5,0,0,5"
+                                HorizontalOptions="Center"
+                                Text="{Binding .}">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer
                                         Buttons="Primary"
@@ -118,7 +129,8 @@
                 MinimumWidthRequest="100"
                 ReturnCommand="{Binding EntryTextChangedCommand}"
                 ReturnCommandParameter="{Binding ENewParameter}"
-                Text="{Binding ENewParameter}" />
+                Text="{Binding ENewParameter}"
+                ToolTipProperties.Text="Należy zatwiedzić tekst Enterem" />
             <Button
                 Command="{Binding AddCommand}"
                 HorizontalOptions="EndAndExpand"
