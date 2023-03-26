@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inverter", "Inverter\Inverter.csproj", "{6681AD1D-86CB-4482-9F84-7664653EE490}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpanTest", "..\SpanTest\SpanTest\SpanTest.csproj", "{93556AB3-7671-4F63-8372-F10C8DA57B61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{6681AD1D-86CB-4482-9F84-7664653EE490}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6681AD1D-86CB-4482-9F84-7664653EE490}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6681AD1D-86CB-4482-9F84-7664653EE490}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{93556AB3-7671-4F63-8372-F10C8DA57B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93556AB3-7671-4F63-8372-F10C8DA57B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93556AB3-7671-4F63-8372-F10C8DA57B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93556AB3-7671-4F63-8372-F10C8DA57B61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

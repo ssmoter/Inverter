@@ -7,13 +7,11 @@ using System.Collections.ObjectModel;
 
 namespace Inverter.Sets;
 
-public partial class ReadySetsV : ContentPage
-{
+public partial class ReadySetsV : ContentPage {
     private FileManager _fm;
 
 
-    public ReadySetsV()
-    {
+    public ReadySetsV() {
         _fm = new FileManager();
         SetInverterData();
 
@@ -25,45 +23,38 @@ public partial class ReadySetsV : ContentPage
         sbFind.MaximumWidthRequest = FontSize * 10;
     }
 
-    private void SetInverterData()
-    {
-        try
-        {
+    private void SetInverterData() {
+        try {
             var list = _fm.GetFilesName();
             _InverterDatas = new ObservableCollection<SaveData>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                _InverterDatas.Add(new SaveData()
-                {
-                    Name = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", ""),
+            for (int i = 0; i < list.Count; i++) {
+                _InverterDatas.Add(new SaveData() {
+                    Name = RemoveLast4(list[i]).ToString(),
                     Path = list[i],
                 });
             }
             OnPropertyChanged(nameof(InverterDatas));
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
     }
-
+    private ReadOnlySpan<char> RemoveLast4(ReadOnlySpan<char> value) {
+        return value.Slice(_fm.path.Length + 1, value.Length - _fm.path.Length - 5);
+    }
     private ObservableCollection<SaveData> _InverterDatas;
-    public ObservableCollection<SaveData> InverterDatas
-    {
+    public ObservableCollection<SaveData> InverterDatas {
         get { return _InverterDatas; }
-        set
-        {
+        set {
             _InverterDatas = value;
             OnPropertyChanged(nameof(InverterDatas));
         }
     }
 
     private SaveData _SelectedData;
-    public SaveData SelectedData
-    {
+    public SaveData SelectedData {
         get { return _SelectedData; }
-        set
-        {
+        set {
             _SelectedData = value;
             OnPropertyChanged(nameof(SelectedData));
         }
@@ -71,17 +62,14 @@ public partial class ReadySetsV : ContentPage
 
 
     private int _fontSize = 20;
-    public int FontSize
-    {
+    public int FontSize {
         get => _fontSize;
-        set
-        {
+        set {
             _fontSize = value;
             OnPropertyChanged(nameof(FontSize));
         }
     }
-    private void vslMain_SizeChanged(object sender, EventArgs e)
-    {
+    private void vslMain_SizeChanged(object sender, EventArgs e) {
         vslMain.MaximumWidthRequest = this.Width;
         vslMain.MaximumHeightRequest = this.Height;
 
@@ -92,18 +80,13 @@ public partial class ReadySetsV : ContentPage
         hslButtons.MaximumHeightRequest = this.Height * 0.6;
     }
 
-    private async void bDelete_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
+    private async void bDelete_Clicked(object sender, EventArgs e) {
+        try {
 
-            if (SelectedData != null)
-            {
-                if (await DisplayAlert("Usuwanie", $"Czy na pewno chcesz usunąć plik {SelectedData.Name}", "Tak", "Nie"))
-                {
+            if (SelectedData != null) {
+                if (await DisplayAlert("Usuwanie", $"Czy na pewno chcesz usunąć plik {SelectedData.Name}", "Tak", "Nie")) {
                     bool result = _fm.DeleteFile(SelectedData.Path);
-                    if (result)
-                    {
+                    if (result) {
                         await DisplayAlert("Usuwanie", "Plik został usunięty", "OK");
                         _InverterDatas.Remove(SelectedData);
                         SelectedData = new();
@@ -113,26 +96,20 @@ public partial class ReadySetsV : ContentPage
                 }
 
             }
-            else
-            {
+            else {
                 await DisplayAlert("Configuracja", "Nie wybrano pliku", "OK");
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
             await DisplayAlert("Error", ex.Message, "OK");
         }
     }
 
-    private async void bLoad_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
-            if (SelectedData != null)
-            {
-                if (await DisplayAlert("Wczytywanie", $"Czy na pewno chcesz wczytać plik {SelectedData.Name}", "Tak", "Nie"))
-                {
+    private async void bLoad_Clicked(object sender, EventArgs e) {
+        try {
+            if (SelectedData != null) {
+                if (await DisplayAlert("Wczytywanie", $"Czy na pewno chcesz wczytać plik {SelectedData.Name}", "Tak", "Nie")) {
                     var json = await _fm.LoadDataPath(SelectedData.Path);
 
                     ResponseModel response = new ResponseModel(SelectedData.Name);
@@ -142,43 +119,35 @@ public partial class ReadySetsV : ContentPage
 
 
                     await Shell.Current.GoToAsync($"../{nameof(DisplayV)}?",
-                        new Dictionary<string, object>
-                        {
+                        new Dictionary<string, object> {
                             [nameof(ResponseModel)] = response,
                         });
                 }
             }
-            else
-            {
+            else {
                 await DisplayAlert("Configuracja", "Nie wybrano pliku", "OK");
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
             await DisplayAlert("Error", ex.Message, "OK");
         }
     }
-    public class SaveData
-    {
+    public class SaveData {
         public string Name { get; set; }
         public string Path { get; set; }
     }
 
-    private void sbFind_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        try
-        {
-            if (sbFind != null)
-            {
+    private void sbFind_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        try {
+            if (sbFind != null) {
                 if (!string.IsNullOrEmpty(sbFind.Text))
                     cvInverterDatas.ItemsSource = InverterDatas.Where(x => x.Name.ToUpper().Contains(sbFind.Text.ToUpper()));
                 else
                     cvInverterDatas.ItemsSource = InverterDatas;
             }
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
         }
 

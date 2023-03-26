@@ -88,6 +88,7 @@ public partial class DisplayV : ContentPage, IDisposable {
                     DataGraphs = new ObservableCollection<DataGraph>(bc.ResponseModel.OutPutString.Mapping(bc.ResponseModel).DataGraphs);
                 }
                 sSymulationTimer.Value = SActualCurrentIndex;
+
                 #region Wykresy
 
                 _graphs = new();
@@ -660,7 +661,8 @@ public partial class DisplayV : ContentPage, IDisposable {
 
             string[] nameList = new string[list.Count];
             for (int i = 0; i < list.Count; i++) {
-                nameList[i] = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", "");
+                //nameList[i] = list[i].Replace(_fm.path, "").Remove(0, 1).Replace(".txt", "");
+                nameList[i] = RemoveLast4(list[i]).ToString();
             }
 
             string result = await DisplayActionSheet("Wczytaj:", "Anuluj", null, nameList);
@@ -680,9 +682,26 @@ public partial class DisplayV : ContentPage, IDisposable {
                 response.IsReady = true;
                 response.FileDataPath = nameList[i];
 
-                await Navigation.PushAsync(new DisplayV(response));
-                Navigation.RemovePage(this);
-                Dispose();
+
+                //   await Navigation.PushAsync(new DisplayV(response));
+                //   Navigation.RemovePage(this);
+                if (symulationRunning)
+                    Symulation_Clicked(null, null);
+               // Dispose();
+
+                //  Resources.Clear();
+                //  InitializeComponent();
+                DisplayVM vm = new DisplayVM() {
+                    ResponseModel = response,
+                    FontSize = Config.FontSize,
+                };
+
+                BindingContext = new object();
+                BindingContext = vm;
+                symulationRunning = false;
+                eStrokeSize.Text = strokeSize.ToString();
+                _fm = new FileManager();
+                Initialization();
             }
         }
         catch (Exception ex) {
@@ -705,6 +724,9 @@ public partial class DisplayV : ContentPage, IDisposable {
         _lineTimeSchema = null;
     }
 
+    private ReadOnlySpan<char> RemoveLast4(ReadOnlySpan<char> value) {
+        return value.Slice(_fm.path.Length + 1, value.Length - _fm.path.Length - 5);
+    }
 
     #endregion
 
