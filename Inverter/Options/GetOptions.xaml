@@ -48,6 +48,10 @@
                 <Button Clicked="PspiceLocation_Clicked" Text="Lokalizacja Pspice" />
 
                 <Button Clicked="FontSize_Clicked" Text="Rozmiar Czcionki" />
+                <Button
+                    Clicked="GraphSize_Clicked"
+                    Text="Wykresy"
+                    ToolTipProperties.Text="Minimalna wysokośc jaką zajmują wykresy" />
 
             </VerticalStackLayout>
             <VerticalStackLayout>

@@ -16,27 +16,32 @@ public partial class MainPage : ContentPage {
         FontSize = Config.FontSize;
         BindingContext = this;
 
+        InitializeStatic();
+    }
+
+    private void InitializeStatic() {
         try {
             FontSize = int.Parse(_fm.GetConfig(MyEnums.configName.FontSize));
             Config.FontSize = FontSize;
         }
-        catch (Exception ex) {
-            _fm.SaveLog(ex.ToString());
+        catch {
         }
         try {
             Config.PspicePath = _fm.GetConfig(MyEnums.configName.PspicePath);
         }
-        catch (Exception ex) {
-            _fm.SaveLog(ex.ToString());
+        catch {
         }
         try {
             Config.OptionsVisibility = bool.Parse(_fm.GetConfig(MyEnums.configName.OptionsVisibility));
         }
-        catch (Exception ex) {
-            _fm.SaveLog(ex.ToString());
+        catch {
+        }
+        try {
+            Config.GraphSize = int.Parse(_fm.GetConfig(MyEnums.configName.GraphSize));
+        }
+        catch {
         }
     }
-
 
     private async void CreateNewInverter(object sender, EventArgs e) {
         Abort();
@@ -66,12 +71,10 @@ public partial class MainPage : ContentPage {
 
         status = await Permissions.CheckStatusAsync<Permissions.NetworkState>();
 
-        if (status == PermissionStatus.Granted)
-        {
+        if (status == PermissionStatus.Granted) {
             return;
         }
-        if (Permissions.ShouldShowRationale<Permissions.NetworkState>())
-        {
+        if (Permissions.ShouldShowRationale<Permissions.NetworkState>()) {
             await Shell.Current.DisplayAlert("Pozwolenie", "NetworkState", "Tak");
         }
 #endif

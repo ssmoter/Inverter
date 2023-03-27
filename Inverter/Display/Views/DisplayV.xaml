@@ -155,7 +155,7 @@
             x:Name="gMain"
             ColumnDefinitions="*,.8*"
             ColumnSpacing="5"
-            MinimumHeightRequest="900"
+            MinimumHeightRequest="{Binding GraphSize}"
             RowDefinitions="auto,auto,auto,auto,*"
             RowSpacing="5">
 

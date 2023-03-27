@@ -50,6 +50,7 @@ public partial class DisplayV : ContentPage, IDisposable {
         DisplayVM vm = new DisplayVM() {
             ResponseModel = responseModel,
             FontSize = Config.FontSize,
+            GraphSize = Config.GraphSize,
         };
 
         BindingContext = new object();

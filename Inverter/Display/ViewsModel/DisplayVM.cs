@@ -24,6 +24,20 @@ namespace Inverter.Display.ViewsModel {
             }
         }
 
+        private int _graphSize = 900;
+        public int GraphSize {
+            get {
+                if (_graphSize <= 0) {
+                    _graphSize = 900;
+                }
+                return _graphSize;
+            }
+            set {
+                _graphSize = value;
+                OnPropertyChanged(nameof(GraphSize));
+            }
+        }
+
         private ObservableCollection<DataGraph> _dataGraphs;
         public ObservableCollection<DataGraph> DataGraphs {
             get {
@@ -100,7 +114,7 @@ namespace Inverter.Display.ViewsModel {
             _timer.Elapsed += new ElapsedEventHandler(TimerEvent);
             NameSimulationbutton = "Uruchom";
             symulationRunning = false;
-
+            GraphSize = Config.GraphSize;
             FontSize = Config.FontSize;
 
         }

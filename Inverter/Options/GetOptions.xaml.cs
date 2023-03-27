@@ -41,7 +41,7 @@ public partial class GetOptions : ContentPage {
         try {
             string result = string.Empty;
             result = _fm.GetConfig(MyEnums.configName.PspicePath);
-            result = await DisplayPromptAsync("Konfiguracja", "Podaj ścieżkę do Pspice", "OK", "cancel", result);
+            result = await DisplayPromptAsync("Konfiguracja", "Podaj ścieżkę do Pspice", "OK", "Anuluj", result);
 
 
             if (!string.IsNullOrWhiteSpace(result)) {
@@ -71,7 +71,7 @@ public partial class GetOptions : ContentPage {
             catch (Exception ex) {
                 _fm.SaveLog(ex.ToString());
             }
-            result = await DisplayPromptAsync("Konfiguracja", "Rozmiar czcionki", "OK", "cancel", result);
+            result = await DisplayPromptAsync("Konfiguracja", "Rozmiar czcionki", "OK", "Anuluj", result);
             if (!string.IsNullOrWhiteSpace(result)) {
                 bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.FontSize);
                 if (isComplited) {
@@ -87,6 +87,26 @@ public partial class GetOptions : ContentPage {
                     await DisplayAlert("Konfiguracja", "Nie udało się zapisać konfiguracji", "OK");
             }
 
+        }
+        catch (Exception ex) {
+            _fm.SaveLog(ex.ToString());
+        }
+    }
+
+    private async void GraphSize_Clicked(object sender, EventArgs e) {
+        try {
+            string result = Config.GraphSize.ToString();
+
+            result = await DisplayPromptAsync("Konfiguracja", "Minimalna wysokość okna z wykresami", "OK", "Anuluj", result);
+            if (!string.IsNullOrWhiteSpace(result)) {
+                bool isComplited = await _fm.CreateConfig(result, MyEnums.configName.GraphSize);
+                Config.GraphSize = int.Parse(result);
+                if (isComplited) {
+                    await DisplayAlert("Konfiguracja", "Zapisano Wysokość okna" + Environment.NewLine + result, "OK");
+                }
+                else
+                    await DisplayAlert("Konfiguracja", "Nie udało się zapisać konfiguracji", "OK");
+            }
         }
         catch (Exception ex) {
             _fm.SaveLog(ex.ToString());
