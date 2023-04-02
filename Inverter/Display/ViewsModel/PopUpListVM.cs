@@ -1,4 +1,5 @@
-﻿using Inverter.Display.Model;
+﻿using Inverter.Data;
+using Inverter.Display.Model;
 using Inverter.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,39 +7,51 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 
-namespace Inverter.Display.ViewsModel {
-    public class PopUpListVM : INotifyPropertyChanged, IDisposable {
+namespace Inverter.Display.ViewsModel
+{
+    public class PopUpListVM : INotifyPropertyChanged, IDisposable
+    {
 
-        public PopUpListVM() {
+        public PopUpListVM()
+        {
             DataGraphs = new ObservableCollection<DataGraph>();
             NewEntryGraph = new ObservableCollection<string>();
+            _fm = new FileManager();
             NewEntryGraph.Add(string.Empty);
         }
-        public PopUpListVM(ObservableCollection<DataGraph> dataGraphs) {
+        public PopUpListVM(ObservableCollection<DataGraph> dataGraphs)
+        {
             DataGraphs = dataGraphs;
             NewEntryGraph = new ObservableCollection<string>();
+            _fm = new FileManager();
             NewEntryGraph.Add(string.Empty);
         }
 
         #region Parameter
-
+        FileManager _fm;
         private ObservableCollection<DataGraph> _dataGraphs;
-        public ObservableCollection<DataGraph> DataGraphs {
-            get {
+        public ObservableCollection<DataGraph> DataGraphs
+        {
+            get
+            {
                 return _dataGraphs;
             }
-            set {
+            set
+            {
                 _dataGraphs = value;
                 OnPropertyChanged(nameof(DataGraphs));
             }
         }
 
         private ObservableCollection<string> _newEntryGraph;
-        public ObservableCollection<string> NewEntryGraph {
-            get {
+        public ObservableCollection<string> NewEntryGraph
+        {
+            get
+            {
                 return _newEntryGraph;
             }
-            set {
+            set
+            {
                 if (value != null)
                     _newEntryGraph = value;
                 OnPropertyChanged(nameof(NewEntryGraph));
@@ -46,17 +59,21 @@ namespace Inverter.Display.ViewsModel {
         }
 
         private DataGraph _dataGraphSelectedItem;
-        public DataGraph DataGraphSelectedItem {
+        public DataGraph DataGraphSelectedItem
+        {
             get => _dataGraphSelectedItem;
-            set {
+            set
+            {
                 _dataGraphSelectedItem = value;
                 OnPropertyChanged(nameof(DataGraphSelectedItem));
             }
         }
         private string _eNewParameter;
-        public string ENewParameter {
+        public string ENewParameter
+        {
             get => _eNewParameter;
-            set {
+            set
+            {
                 _eNewParameter = value;
                 OnPropertyChanged(nameof(ENewParameter));
             }
@@ -65,89 +82,172 @@ namespace Inverter.Display.ViewsModel {
 
         #region Command
 
-        public ICommand DeleteCommand => new Command((parameter) => {
-            if (parameter is DataGraph)
-                DataGraphSelectedItem = (DataGraph)parameter;
-            if (DataGraphSelectedItem.CanDelete) {
-                DataGraphs.Remove(DataGraphSelectedItem);
+        public ICommand DeleteCommand => new Command((parameter) =>
+        {
+            try
+            {
+                if (parameter is DataGraph)
+                    DataGraphSelectedItem = (DataGraph)parameter;
+                if (DataGraphSelectedItem.CanDelete)
+                {
+                    DataGraphs.Remove(DataGraphSelectedItem);
+                }
             }
-        });
-        public ICommand DoubleTapCommand => new Command((parameter) => {
-            if (parameter is DataGraph)
-                DataGraphSelectedItem = (DataGraph)parameter;
-
-            AddGraphItem(DataGraphSelectedItem.DataName);
-
-        });
-        public ICommand DragCommand => new Command((parameter) => {
-            if (parameter is DataGraph)
-                DataGraphSelectedItem = (DataGraph)parameter;
-        });
-        public ICommand DropCommand => new Command(() => {
-            AddGraphItem(DataGraphSelectedItem.DataName);
-        });
-
-        public ICommand ButtonCommand => new Command((parameter) => {
-            if (parameter is not string)
-                return;
-
-            AddGraphItem((string)parameter);
-        });
-
-        public ICommand AddCommand => new Command(() => {
-
-            if (NewEntryGraph == null) {
-                return;
-            }
-            else if (NewEntryGraph.Count == 0) {
-                return;
-            }
-            else if (!DataGraphs.Any(x => x.DataName == NewEntryGraph[0])) {
-                return;
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
             }
 
-            DataGraphs.Insert(0, AddDataGraph());
-            NewEntryGraph.Clear();
-            NewEntryGraph.Add(string.Empty);
         });
-        public ICommand RemoveNewCommand => new Command((parameter) => {
-            if (parameter is not string)
-                return;
-            NewEntryGraph.Remove((string)parameter);
-            if (NewEntryGraph.Count == 0) {
+        public ICommand DoubleTapCommand => new Command((parameter) =>
+        {
+            try
+            {
+                if (parameter is DataGraph)
+                    DataGraphSelectedItem = (DataGraph)parameter;
+
+                AddGraphItem(DataGraphSelectedItem.DataName);
+            }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
+        });
+        public ICommand DragCommand => new Command((parameter) =>
+        {
+            try
+            {
+                if (parameter is DataGraph)
+                    DataGraphSelectedItem = (DataGraph)parameter;
+            }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
+        });
+        public ICommand DropCommand => new Command(() =>
+        {
+            try
+            {
+                AddGraphItem(DataGraphSelectedItem.DataName);
+            }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
+        });
+
+        public ICommand ButtonCommand => new Command((parameter) =>
+        {
+            try
+            {
+                if (parameter is not string)
+                    return;
+
+                AddGraphItem((string)parameter);
+            }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
+        });
+
+        public ICommand AddCommand => new Command(() =>
+        {
+            try
+            {
+                if (NewEntryGraph == null)
+                {
+                    return;
+                }
+                else if (NewEntryGraph.Count == 0)
+                {
+                    return;
+                }
+                else if (!DataGraphs.Any(x => x.DataName == NewEntryGraph[0]))
+                {
+                    return;
+                }
+
+                DataGraphs.Insert(0, AddDataGraph());
+                NewEntryGraph.Clear();
                 NewEntryGraph.Add(string.Empty);
             }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
         });
-        public ICommand EntryTextChangedCommand => new Command((parameter) => {
-            if (parameter is not string)
-                return;
-            AddGraphItem((string)parameter);
-            ENewParameter = string.Empty;
+        public ICommand RemoveNewCommand => new Command((parameter) =>
+        {
+            try
+            {
+                if (parameter is not string)
+                    return;
+                NewEntryGraph.Remove((string)parameter);
+                if (NewEntryGraph.Count == 0)
+                {
+                    NewEntryGraph.Add(string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
+        });
+        public ICommand EntryTextChangedCommand => new Command((parameter) =>
+        {
+            try
+            {
+                if (parameter is not string)
+                    return;
+                AddGraphItem((string)parameter);
+                ENewParameter = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _fm.SaveLog(ex.Message);
+            }
         });
         #endregion
 
         #region Methods
-        private void AddGraphItem(string parameter) {
-            if (NewEntryGraph.Count < 1) {
-                return;
+        private void AddGraphItem(string parameter)
+        {
+            try
+            {
+                if (NewEntryGraph.Count < 1)
+                {
+                    return;
+                }
+                if (NewEntryGraph[0] == string.Empty)
+                {
+                    NewEntryGraph.Clear();
+                }
+                NewEntryGraph.Add(parameter);
             }
-            if (NewEntryGraph[0] == string.Empty) {
-                NewEntryGraph.Clear();
+            catch (Exception)
+            {
+                throw;
             }
-            NewEntryGraph.Add(parameter);
         }
-        private DataGraph AddDataGraph() {
-            try {
+        private DataGraph AddDataGraph()
+        {
+            try
+            {
                 var g = DataGraphs.FirstOrDefault(x => x.DataName == NewEntryGraph.FirstOrDefault());
                 var graph = new DataGraph();
-                for (int i = 0; i < g.Y.Count; i++) {
+                for (int i = 0; i < g.Y.Count; i++)
+                {
                     graph.X.Add(g.X[i]);
                     graph.Y.Add(g.Y[i]);
                 }
 
                 List<int> signList = new List<int>();
-                for (int i = 0; i < NewEntryGraph.Count; i++) {
-                    if (PopUpList.SignList.Any(x => x == NewEntryGraph[i].ToCharArray()[0])) {
+                for (int i = 0; i < NewEntryGraph.Count; i++)
+                {
+                    if (PopUpList.SignList.Any(x => x == NewEntryGraph[i].ToCharArray()[0]))
+                    {
                         signList.Add(i);
                     }
                 }
@@ -159,18 +259,24 @@ namespace Inverter.Display.ViewsModel {
 
                 float y2 = 0;
                 int n = -1;
-                for (int i = 1; i < NewEntryGraph.Count; i++) {
-                    if (signList.Any(x => x == i)) {
+                for (int i = 1; i < NewEntryGraph.Count; i++)
+                {
+                    if (signList.Any(x => x == i))
+                    {
                         n++;
                         continue;
                     }
-                    for (int j = 0; j < DataGraphs.Last().Y.Count; j++) {
+                    for (int j = 0; j < DataGraphs.Last().Y.Count; j++)
+                    {
 
-                        if (DataGraphs.Any(x => x.DataName == NewEntryGraph[i])) {
+                        if (DataGraphs.Any(x => x.DataName == NewEntryGraph[i]))
+                        {
                             y2 = DataGraphs.FirstOrDefault(x => x.DataName == NewEntryGraph[i]).Y[j];
                         }
-                        else {
-                            if (!float.TryParse(NewEntryGraph[i], out y2)) {
+                        else
+                        {
+                            if (!float.TryParse(NewEntryGraph[i], out y2))
+                            {
                                 graph.DataName = "Error";
                                 graph.UserDataName = "Usuń zmienną";
                                 return graph;
@@ -184,87 +290,144 @@ namespace Inverter.Display.ViewsModel {
                 graph.SetMaxMin();
                 return graph;
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 throw;
             }
         }
 
-        private string GetName(ObservableCollection<string> names) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < names.Count; i++) {
-                sb.Append(names[i]);
+        private string GetName(ObservableCollection<string> names)
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < names.Count; i++)
+                {
+                    sb.Append(names[i]);
+                }
+                return sb.ToString();
             }
-            return sb.ToString();
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #region NewGraphData
 
-        private float AddNewY(string name, float y, float y2) {
-            if (name.ToCharArray()[0] == PopUpList.Add) {
-                y = Add(y, y2);
+        private float AddNewY(string name, float y, float y2)
+        {
+            try
+            {
+                if (name.ToCharArray()[0] == PopUpList.Add)
+                {
+                    y = Add(y, y2);
+                }
+                else if (name.ToCharArray()[0] == PopUpList.Sub)
+                {
+                    y = Sub(y, y2);
+                }
+                else if (name.ToCharArray()[0] == PopUpList.Multi)
+                {
+                    y = Multi(y, y2);
+                }
+                else if (name.ToCharArray()[0] == PopUpList.Div)
+                {
+                    y = Div(y, y2);
+                }
+                return y;
             }
-            else if (name.ToCharArray()[0] == PopUpList.Sub) {
-                y = Sub(y, y2);
+            catch (Exception)
+            {
+                throw;
             }
-            else if (name.ToCharArray()[0] == PopUpList.Multi) {
-                y = Multi(y, y2);
-            }
-            else if (name.ToCharArray()[0] == PopUpList.Div) {
-                y = Div(y, y2);
-            }
-            return y;
         }
-        private float Add(params float[] numbers) {
-
-            float result = numbers[0];
-            for (int i = 1; i < numbers.Length; i++) {
-                result += numbers[i];
+        private float Add(params float[] numbers)
+        {
+            try
+            {
+                float result = numbers[0];
+                for (int i = 1; i < numbers.Length; i++)
+                {
+                    result += numbers[i];
+                }
+                return result;
             }
-            return result;
+            catch (Exception)
+            {
+                throw;
+            }
         }
-        private float Sub(params float[] numbers) {
-
-            float result = numbers[0];
-            for (int i = 1; i < numbers.Length; i++) {
-                result -= numbers[i];
+        private float Sub(params float[] numbers)
+        {
+            try
+            {
+                float result = numbers[0];
+                for (int i = 1; i < numbers.Length; i++)
+                {
+                    result -= numbers[i];
+                }
+                return result;
             }
-            return result;
+            catch (Exception)
+            {
+                throw;
+            }
         }
-        private float Multi(params float[] numbers) {
+        private float Multi(params float[] numbers)
+        {
+            try
+            {
+                float result = numbers[0];
+                if (result == 0)
+                    result = 1;
 
-            float result = numbers[0];
-            if (result == 0)
-                result = 1;
-
-            for (int i = 1; i < numbers.Length; i++) {
-                result *= numbers[i];
+                for (int i = 1; i < numbers.Length; i++)
+                {
+                    result *= numbers[i];
+                }
+                return result;
             }
-            return result;
+            catch (Exception)
+            {
+                throw;
+            }
         }
-        private float Div(params float[] numbers) {
+        private float Div(params float[] numbers)
+        {
+            try
+            {
+                float result = numbers[0];
+                if (result == 0)
+                    result = 1;
 
-            float result = numbers[0];
-            if (result == 0)
-                result = 1;
-
-            for (int i = 1; i < numbers.Length; i++) {
-                result /= numbers[i];
+                for (int i = 1; i < numbers.Length; i++)
+                {
+                    result /= numbers[i];
+                }
+                return result;
             }
-            return result;
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #endregion
 
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             _dataGraphs = null;
             _dataGraphSelectedItem = null;
             _eNewParameter = null;
             _newEntryGraph = null;
+            _fm = null;
         }
     }
 }
